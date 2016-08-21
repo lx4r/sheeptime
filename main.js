@@ -1,19 +1,22 @@
-const electron = require('electron')
+const electron = require('electron');
 // Module to control application life.
-const app = electron.app
+const app = electron.app;
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
+const BrowserWindow = electron.BrowserWindow;
+// Module for communication between the processes
+var ipcMain = require('electron').ipcMain;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
+let projectsWindow;
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 800, height: 600});
 
   // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/app/index.html`)
+  mainWindow.loadURL(`file://${__dirname}/app/index.html`);
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
@@ -49,5 +52,21 @@ app.on('activate', function () {
   }
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+ipcMain.on('open-projects-window', function () {
+  if (projectsWindow) {
+    return;
+  }
+
+  projectsWindow = new BrowserWindow({
+    height: 600,
+    width: 400
+  });
+
+  projectsWindow.loadURL(`file://${__dirname}/app/editProjects.html`);
+
+  projectsWindow.webContents.openDevTools();
+
+  projectsWindow.on('closed', function () {
+    projectsWindow = null;
+  });
+});

@@ -4,35 +4,37 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SheepTrack</title>
-    <link href="bootstrap.min.css" rel="stylesheet">
-    <link href="additional.css" rel="stylesheet">
+    <title>SheepTime</title>
+    <link href="css/additional.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12"><h1 id="timer">00:00:00</h1></div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-md-offset-3">
-                <form>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="activity" placeholder="activity">
-                        <button class="btn btn-success" id="startButton" type="button">Start</button>
-                        <button class="btn btn-danger" id="stopButton" type="button">Stop</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <div id="activityList"></div>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12"><h1 id="timer">00:00:00</h1></div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form class="form-inline">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="activity" placeholder="activity">
+                </div>
+                <select id="projects"></select>
+            </form>
+            <button class="btn btn-success" id="startButton">Start</button>
+            <button class="btn btn-danger" id="stopButton">Stop</button>
+            <button class="btn btn-info" id="projectsButton">Projects</button>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div id="activityList"></div>
+        </div>
+    </div>
+</div>
 </body>
 
 <script>
-  require('./index.js')
+    require('./index.js')
 </script>
 </html>

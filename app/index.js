@@ -1,12 +1,24 @@
 /**
  * Created by lx4r on 18.08.16.
  */
+'use strict';
+
 var fs = require('fs');
+var projectsStorage = require('./projectsStorage.js');
+var activitiesStorage = require('./activitiesStorage.js');
+var ipcRenderer = require('electron').ipcRenderer
+
 var currentSeconds = 0;
 var intervalID;
-var loggedActivities = [];
+var loggedActivities = activitiesStorage.readActivities();
+
+// Initialise the view after getting the activities from the save file
+updateActivitiesTable();
+updateProjectsDropdown();
 
 startButton.addEventListener("click", function () {
+    // When the start button is pressed start the "stopwatch":
+    // Update the "stopwatch" every second with the human-readable representation of the current number of seconds on the "stopwatch"
     intervalID = setInterval(function(){
         currentSeconds++;
         timer.innerHTML = formatTime(currentSeconds)
@@ -14,14 +26,19 @@ startButton.addEventListener("click", function () {
 });
 
 stopButton.addEventListener("click", function () {
+    // When the stop button is pressed stop the "stopwatch"
     clearInterval(intervalID);
+    // Add the new activitiy to the activities array, reset the "stopwatch" and save the activities to the save file
     loggedActivities.push({name: activity.value, duration: currentSeconds});
     currentSeconds = 0;
     timer.innerHTML = "00:00:00";
     activity.value = "";
-    console.log(loggedActivities);
     updateActivitiesTable();
-    //log.insertAdjacentHTML("<tr><td>" + activity.value + "</td><td>" + formatTime(currentSeconds) + "</td>");
+    activitiesStorage.saveActivities(loggedActivities);
+});
+
+projectsButton.addEventListener("click", function () {
+    ipcRenderer.send('open-projects-window');
 });
 
 function formatTime(seconds) {
@@ -37,18 +54,23 @@ function updateActivitiesTable() {
                     elem.name +
                 "</td>" +
                 "<td>" +
-                    elem.duration +
+                    formatTime(elem.duration) +
                 "</td>" +
             "</tr>";
-        ;
     });
     output += "</table>";
     activityList.innerHTML = output;
+}
 
-    fs.writeFile("test.json", JSON.stringify(loggedActivities), function(err) {
-        if(err) {
-            return console.log(err);
-        }
-        console.log("The file was saved!");
+function updateProjectsDropdown() {
+    var output = '<select name="projects">';
+    var savedProjects = projectsStorage.readProjects()
+    savedProjects.forEach(function (elem) {
+        output +=
+            "<option>" +
+            (elem.name) +
+            "</option>";
     });
+    output += "</select>";
+    projects.innerHTML = output;
 }
