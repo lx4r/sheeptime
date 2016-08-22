@@ -20,7 +20,7 @@ function readActivities(){
         console.log(JSON.parse(activities));
         return JSON.parse(activities);
     } else {
-        return [];
+        return false;
     }
 }
 

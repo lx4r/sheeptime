@@ -4,24 +4,31 @@
 'use strict';
 
 var fs = require('fs');
-var projectsStorage = require('./projectsStorage.js');
-var activitiesStorage = require('./activitiesStorage.js');
-var ipcRenderer = require('electron').ipcRenderer
+var projectsStorage = require('./projectsStorage');
+var activitiesStorage = require('./activitiesStorage');
+var ipcRenderer = require('electron').ipcRenderer;
+var formatTime = require('./formatTime');
 
 var currentSeconds = 0;
 var intervalID;
 var loggedActivities = activitiesStorage.readActivities();
+var errors = [];
+
 
 // Initialise the view after getting the activities from the save file
 updateActivitiesTable();
 updateProjectsDropdown();
+
+errors.forEach(function (err) {
+    console.error(err);
+});
 
 startButton.addEventListener("click", function () {
     // When the start button is pressed start the "stopwatch":
     // Update the "stopwatch" every second with the human-readable representation of the current number of seconds on the "stopwatch"
     intervalID = setInterval(function(){
         currentSeconds++;
-        timer.innerHTML = formatTime(currentSeconds)
+        timer.innerHTML = formatTime.formatSeconds(currentSeconds);
     }, 1000);
 });
 
@@ -46,6 +53,10 @@ function formatTime(seconds) {
 }
 
 function updateActivitiesTable() {
+    if (loggedActivities.length == 1){
+        activityTable.innerHTML = "No activities yet";
+        return;
+    }
     var output = '<table class="table" id="log"><tr><th>Activity</th><th>Time</th></tr>';
     loggedActivities.forEach(function (elem) {
         output +=
@@ -59,13 +70,18 @@ function updateActivitiesTable() {
             "</tr>";
     });
     output += "</table>";
-    activityList.innerHTML = output;
+    activityTable.innerHTML = output;
 }
 
 function updateProjectsDropdown() {
     var output = '<select name="projects">';
-    var savedProjects = projectsStorage.readProjects()
-    savedProjects.forEach(function (elem) {
+    var savedProjects = projectsStorage.readProjects();
+    // If the projects file only contains the fresh id
+    if (savedProjects.length == 1){
+        errors.push("Please add a project before tracking activities");
+        return;
+    }
+    savedProjects.slice(1).forEach(function (elem) {
         output +=
             "<option>" +
             (elem.name) +
@@ -74,3 +90,4 @@ function updateProjectsDropdown() {
     output += "</select>";
     projects.innerHTML = output;
 }
+

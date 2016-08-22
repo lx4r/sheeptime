@@ -14,12 +14,13 @@ function saveProjects(projects) {
     });
 }
 
+// Returns an array with the ID for the next project in first position followed by the saved projects (if exisiting)
 function readProjects(){
     var projects = fs.readFileSync('sheeptime_projects.json', 'utf8');
     if (projects) {
         return JSON.parse(projects);
     } else {
-        return [];
+        return false;
     }
 }
 
