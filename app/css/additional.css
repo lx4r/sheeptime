@@ -1,3 +1,8 @@
 h1 {
     text-align: center;
 }
+#buttonRow{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+}

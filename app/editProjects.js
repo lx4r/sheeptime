@@ -13,7 +13,7 @@ addProjectButton.addEventListener('click', function () {
         return;
     }
     // Add the new project to the project list with the fresh ID from the save file as ID
-    projects.push({ID: projects[0], name: projectName.value});
+    projects.push({ID: projects[0], name: projectName.value, totalTime: 0});
     // Increment the fresh ID
     projects[0]++;
     projectName.value = "";

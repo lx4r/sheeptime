@@ -2,42 +2,63 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <title>SheepTime</title>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SheepTime</title>
-    <link href="css/additional.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/additional.css" rel="stylesheet">
 </head>
 <body>
+
 <div class="container">
     <div class="row">
-        <div class="col-md-12"><h1 id="timer">00:00:00</h1></div>
+        <h1 id="timer">00:00:00</h1>
     </div>
     <div class="row">
         <div class="col-md-12" id="errors"></div>
     </div>
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <form class="form-inline">
-                <div class="form-group">
-                    <input type="text" class="form-control" id="activity" placeholder="activity">
-                </div>
-                <select id="projects"></select>
-            </form>
-            <button class="btn btn-success" id="startButton">Start</button>
-            <button class="btn btn-danger" id="stopButton">Stop</button>
-            <button class="btn btn-info" id="projectsButton">Projects</button>
+        <form>
+            <div class="col-md-3 col-sm-12 col-xs-12 col-md-offset-3">
+                <input type="text" class="form-control" id="activity" placeholder="activity">
+            </div>
+            <div class="col-md-3 col-sm-12 col-xs-12">
+                <select id="projects" class="form-control"></select>
+            </div>
+        </form>
+    </div>
+    <div class="row" id="buttonRow">
+        <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3">
+            <button class="btn btn-success" id="startStopButton">Start</button>
+            <button class="btn btn-primary" id="projectsButton">Projects</button>
+            <button class="btn btn-default" id="settingsButton">Settings</button>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <div id="activityTable"></div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Activities</h3>
+                </div>
+                <div class="panel-body">
+                    <div id="activityTable"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 </body>
 
+<!-- Insert this line above script imports  -->
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script>
     require('./index.js')
 </script>
+
+<!-- Insert this line after script imports -->
+<script>if (window.module) module = window.module;</script>
 </html>

@@ -24,6 +24,13 @@ function readProjects(){
     }
 }
 
+// Adds time to the toal time of a project
+function addTime(projectID, seconds) {
+    var projects = readProjects();
+    var index = projects.indexOf({})
+
+}
+
 module.exports = {
     saveProjects: saveProjects,
     readProjects: readProjects

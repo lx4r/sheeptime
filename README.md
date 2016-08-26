@@ -7,7 +7,7 @@ a simple time tracker powered by Electron
 ## Features
 
 ## Powered by
-[Electron](http://electron.atom.io) and [Bootstrap](http://getbootstrap.com)
+[Electron](http://electron.atom.io), [Bootstrap](http://getbootstrap.com) and [Paper](http://bootswatch.com/paper/)
 
 ----
 Author: lx4r <https://l3r.de>

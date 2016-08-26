@@ -13,6 +13,7 @@ var currentSeconds = 0;
 var intervalID;
 var loggedActivities = activitiesStorage.readActivities();
 var errors = [];
+var stopwatchRunning = false;
 
 
 // Initialise the view after getting the activities from the save file
@@ -23,7 +24,44 @@ errors.forEach(function (err) {
     console.error(err);
 });
 
-startButton.addEventListener("click", function () {
+startStopButton.addEventListener("click", function () {
+    // Stopwatch is running -> buttons acts as stop button
+    if (stopwatchRunning){
+        // Stop the stopwatch
+        clearInterval(intervalID);
+        // Add the new activitiy to the activities array, reset the stopwatch and save the activities to the save file
+        loggedActivities.push({ID: loggedActivities[0], projectID: parseInt(projects.value), name: activity.value, duration: currentSeconds});
+        // Increment the fresh ID
+        loggedActivities[0]++;
+        currentSeconds = 0;
+        timer.innerHTML = "00:00:00";
+        activity.value = "";
+        updateActivitiesTable();
+        activitiesStorage.saveActivities(loggedActivities);
+
+        // Update the button's color and change it's text -> start button
+        startStopButton.className = "btn btn-success";
+        startStopButton.innerHTML = "Start";
+        // Update the stopwatch's status
+        stopwatchRunning = false;
+
+        // Stopwatch is not running -> buttons acts as start button
+    } else {
+        // Update the stopwatch every second with the human-readable representation of the current number of seconds on the "stopwatch"
+        intervalID = setInterval(function(){
+            currentSeconds++;
+            timer.innerHTML = formatTime.formatSeconds(currentSeconds);
+        }, 1000);
+
+        // Update the button's color and change it's text -> stop button
+        startStopButton.className = "btn btn-danger";
+        startStopButton.innerHTML = "Stop";
+        // Update the stopwatch's status
+        stopwatchRunning = true;
+    }
+});
+
+/* startButton.addEventListener("click", function () {
     // When the start button is pressed start the "stopwatch":
     // Update the "stopwatch" every second with the human-readable representation of the current number of seconds on the "stopwatch"
     intervalID = setInterval(function(){
@@ -36,21 +74,23 @@ stopButton.addEventListener("click", function () {
     // When the stop button is pressed stop the "stopwatch"
     clearInterval(intervalID);
     // Add the new activitiy to the activities array, reset the "stopwatch" and save the activities to the save file
-    loggedActivities.push({name: activity.value, duration: currentSeconds});
+    loggedActivities.push({ID: loggedActivities[0], projectID: parseInt(projects.value), name: activity.value, duration: currentSeconds});
+    // Increment the fresh ID
+    loggedActivities[0]++;
     currentSeconds = 0;
     timer.innerHTML = "00:00:00";
     activity.value = "";
     updateActivitiesTable();
     activitiesStorage.saveActivities(loggedActivities);
+
+    // Add the duration of the activity to the total time of the project
+    var savedProjects = projectsStorage.readProjects();
 });
+*/
 
 projectsButton.addEventListener("click", function () {
     ipcRenderer.send('open-projects-window');
 });
-
-function formatTime(seconds) {
-    return new Date(seconds * 1000).toISOString().substr(11, 8);
-}
 
 function updateActivitiesTable() {
     if (loggedActivities.length == 1){
@@ -58,14 +98,14 @@ function updateActivitiesTable() {
         return;
     }
     var output = '<table class="table" id="log"><tr><th>Activity</th><th>Time</th></tr>';
-    loggedActivities.forEach(function (elem) {
+    loggedActivities.slice(1).forEach(function (elem) {
         output +=
             "<tr>" +
                 "<td>" +
                     elem.name +
                 "</td>" +
                 "<td>" +
-                    formatTime(elem.duration) +
+                    formatTime.formatSeconds(elem.duration) +
                 "</td>" +
             "</tr>";
     });
@@ -83,9 +123,9 @@ function updateProjectsDropdown() {
     }
     savedProjects.slice(1).forEach(function (elem) {
         output +=
-            "<option>" +
+            '<option value="' + elem.ID + '">' +
             (elem.name) +
-            "</option>";
+            '</option>';
     });
     output += "</select>";
     projects.innerHTML = output;
