@@ -23,7 +23,7 @@ errors.forEach(function (err) {
     console.error(err);
 });
 
-startStopButton.addEventListener("click", function () {
+$('#startStopButton').on('click', function () {
     // Stopwatch is running -> buttons acts as stop button
     if (stopwatchRunning){
         // Stop the stopwatch
@@ -61,8 +61,16 @@ startStopButton.addEventListener("click", function () {
     }
 });
 
-projectsButton.addEventListener("click", function () {
+$('#projectsButton').on("click", function () {
     ipcRenderer.send('open-projects-window');
+});
+
+$('.deleteActivityButton').on('click', function () {
+    // Delete the activity with the ID stored in the clicked button from the activity map and update the activities table
+    var id = $(this).data('id');
+   loggedActivities[1].delete(id);
+    updateActivitiesTable();
+    activitiesStorage.saveActivities(loggedActivities);
 });
 
 function updateActivitiesTable() {
@@ -70,8 +78,8 @@ function updateActivitiesTable() {
         activityTable.innerHTML = "No activities yet";
         return;
     }
-    var output = '<table class="table" id="log"><tr><th>Activity</th><th>Time</th></tr>';
-    loggedActivities[1].forEach(function (elem) {
+    var output = '<table class="table" id="log"><tr><th>Activity</th><th>Time</th><th></th></tr>';
+    loggedActivities[1].forEach(function (elem, id) {
         output +=
             "<tr>" +
                 "<td>" +
@@ -80,6 +88,11 @@ function updateActivitiesTable() {
                 "<td>" +
                     formatTime.formatSeconds(elem.duration) +
                 "</td>" +
+                '<td>' +
+                    '<button type="button" class="btn btn-xs btn-danger deleteActivityButton" aria-label="Left Align" data-id="' + id + '">' +
+                        '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete' +
+                    '</button>' +
+                '</td>' +
             "</tr>";
     });
     output += "</table>";
