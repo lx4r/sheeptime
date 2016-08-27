@@ -12,6 +12,7 @@ var formatTime = require('./formatTime');
 var currentSeconds = 0;
 var intervalID;
 var loggedActivities = activitiesStorage.readActivities();
+var savedProjects = projectsStorage.readProjects();
 var errors = [];
 var stopwatchRunning = false;
 
@@ -65,12 +66,22 @@ $('#projectsButton').on("click", function () {
     ipcRenderer.send('open-projects-window');
 });
 
-$('.deleteActivityButton').on('click', function () {
+$('#activityTable').on('click', 'button.deleteActivityButton', function () {
     // Delete the activity with the ID stored in the clicked button from the activity map, update the activities table and save the new storage array to the JSON file
+    console.log("Löschen!");
     var id = $(this).data('id');
-   loggedActivities[1].delete(id);
+    console.log(id);
+    loggedActivities[1].delete(id);
+    console.log(loggedActivities[1]);
     updateActivitiesTable();
     activitiesStorage.saveActivities(loggedActivities);
+});
+
+// If a project is added in the project window, update the project dropdown in this window
+ipcRenderer.on('project-added', function (event, arg) {
+    savedProjects = arg;
+    console.log(arg);
+    updateProjectsDropdown();
 });
 
 function updateActivitiesTable() {
@@ -101,7 +112,6 @@ function updateActivitiesTable() {
 
 function updateProjectsDropdown() {
     var output = '<select name="projects">';
-    var savedProjects = projectsStorage.readProjects();
     // If the projects file only contains the fresh id
     if (savedProjects.length == 1){
         errors.push("Please add a project before tracking activities");

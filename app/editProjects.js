@@ -3,6 +3,7 @@
  */
 
 var fs = require('fs');
+var ipcRenderer = require('electron').ipcRenderer;
 var projectsStorage = require('./projectsStorage.js');
 var projects = projectsStorage.readProjects();
 console.log(projects);
@@ -20,6 +21,7 @@ $('#addProjectButton').on('click', function () {
     projectName.value = "";
     updateProjectsTable();
     projectsStorage.saveProjects(projects);
+    ipcRenderer.send('project-added', projects);
 });
 
 $('.deleteProjectButton').on('click', function () {
