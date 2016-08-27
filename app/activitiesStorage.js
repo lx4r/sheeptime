@@ -5,6 +5,7 @@
 
 var fs = require('fs');
 
+// Saves the activities into a JSON file
 function saveActivities(activities) {
     var freshID = activities[0];
     var map = activities[1];
@@ -17,6 +18,7 @@ function saveActivities(activities) {
     });
 }
 
+// Returns an array with the ID for the next activity in first position followed by the saved activities as a map (if existing)
 function readActivities(){
     var activities = fs.readFileSync('sheeptime_activities.json', 'utf8');
     if (activities) {
@@ -24,7 +26,7 @@ function readActivities(){
         // length == 1 -> no map included yet -> initialise empty map
         if (parse.length == 1){
             return parse.concat(new Map());
-            // length > 11 -> map already included -> construct map from JSON
+            // length > 1 -> map already included -> construct map from JSON
         } else {
             return [parse[0], new Map(parse[1])];
         }

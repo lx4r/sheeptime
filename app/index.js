@@ -66,7 +66,7 @@ $('#projectsButton').on("click", function () {
 });
 
 $('.deleteActivityButton').on('click', function () {
-    // Delete the activity with the ID stored in the clicked button from the activity map and update the activities table
+    // Delete the activity with the ID stored in the clicked button from the activity map, update the activities table and save the new storage array to the JSON file
     var id = $(this).data('id');
    loggedActivities[1].delete(id);
     updateActivitiesTable();
@@ -107,9 +107,9 @@ function updateProjectsDropdown() {
         errors.push("Please add a project before tracking activities");
         return;
     }
-    savedProjects.slice(1).forEach(function (elem) {
+    savedProjects[1].forEach(function (elem, id) {
         output +=
-            '<option value="' + elem.ID + '">' +
+            '<option value="' + id + '">' +
             (elem.name) +
             '</option>';
     });
