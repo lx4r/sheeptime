@@ -5,8 +5,11 @@
 var fs = require('fs');
 var ipcRenderer = require('electron').ipcRenderer;
 var projectsStorage = require('./projectsStorage.js');
+var mapHandling = require('./mapHandling');
+
 var projects = projectsStorage.readProjects();
-console.log(projects);
+
+// Initialise the view after getting the projects from the save file
 updateProjectsTable();
 
 $('#addProjectButton').on('click', function () {
@@ -21,10 +24,11 @@ $('#addProjectButton').on('click', function () {
     projectName.value = "";
     updateProjectsTable();
     projectsStorage.saveProjects(projects);
-    ipcRenderer.send('project-added', projects);
+    console.log(projects);
+    ipcRenderer.send('project-added', mapHandling.mapToArray(projects[1]));
 });
 
-$('.deleteProjectButton').on('click', function () {
+$('#projectsTable').on('click', 'button.deleteProjectButton', function () {
     // Delete the activity with the ID stored in the clicked button from the activity map, update the activities table and save the new storage array to the JSON file
     var id = $(this).data('id');
     projects[1].delete(id);
@@ -34,7 +38,7 @@ $('.deleteProjectButton').on('click', function () {
 
 function updateProjectsTable() {
     // If the projects file only contains the fresh id
-    if (projects.length == 1){
+    if (projects[1].size == 0){
         projectsTable.innerHTML = "No projects";
         return;
     }

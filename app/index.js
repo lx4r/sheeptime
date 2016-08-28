@@ -8,15 +8,16 @@ var projectsStorage = require('./projectsStorage');
 var activitiesStorage = require('./activitiesStorage');
 var ipcRenderer = require('electron').ipcRenderer;
 var formatTime = require('./formatTime');
+var mapHandling = require('./mapHandling');
 
 var currentSeconds = 0;
 var intervalID;
 var loggedActivities = activitiesStorage.readActivities();
-var savedProjects = projectsStorage.readProjects();
+var savedProjects = projectsStorage.readProjects()[1];
 var errors = [];
 var stopwatchRunning = false;
 
-// Initialise the view after getting the activities from the save file
+// Initialise the view after getting the activities and projects from the save file
 updateActivitiesTable();
 updateProjectsDropdown();
 
@@ -68,27 +69,27 @@ $('#projectsButton').on("click", function () {
 
 $('#activityTable').on('click', 'button.deleteActivityButton', function () {
     // Delete the activity with the ID stored in the clicked button from the activity map, update the activities table and save the new storage array to the JSON file
-    console.log("Löschen!");
     var id = $(this).data('id');
-    console.log(id);
     loggedActivities[1].delete(id);
-    console.log(loggedActivities[1]);
     updateActivitiesTable();
     activitiesStorage.saveActivities(loggedActivities);
 });
 
 // If a project is added in the project window, update the project dropdown in this window
 ipcRenderer.on('project-added', function (event, arg) {
-    savedProjects = arg;
-    console.log(arg);
+    savedProjects = mapHandling.arrayToMap(arg);
+    console.log(savedProjects);
+    console.log("hallo");
     updateProjectsDropdown();
 });
 
 function updateActivitiesTable() {
-    if (loggedActivities.length == 1){
+    // If the acitivities map is empty don't show the table but a string instead
+    if (loggedActivities[1].size == 0){
         activityTable.innerHTML = "No activities yet";
         return;
     }
+    // If the acitivities map is not empty generate the activities table
     var output = '<table class="table" id="log"><tr><th>Activity</th><th>Time</th><th></th></tr>';
     loggedActivities[1].forEach(function (elem, id) {
         output +=
@@ -100,6 +101,7 @@ function updateActivitiesTable() {
                     formatTime.formatSeconds(elem.duration) +
                 "</td>" +
                 '<td>' +
+                    // Each button holds the acitivity's ID in his "data-id" attribute
                     '<button type="button" class="btn btn-xs btn-danger deleteActivityButton" aria-label="Left Align" data-id="' + id + '">' +
                         '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete' +
                     '</button>' +
@@ -111,14 +113,18 @@ function updateActivitiesTable() {
 }
 
 function updateProjectsDropdown() {
+    console.log("updateprojects");
     var output = '<select name="projects">';
-    // If the projects file only contains the fresh id
-    if (savedProjects.length == 1){
+    // If the projects map is empty add an error to the error list
+    if (savedProjects.size == 0){
         errors.push("Please add a project before tracking activities");
         return;
     }
-    savedProjects[1].forEach(function (elem, id) {
+    // Otherwise generate the projects dropdown
+    savedProjects.forEach(function (elem, id) {
+        console.log(elem.name);
         output +=
+            // Each option hild the project's ID in his "value" attribute
             '<option value="' + id + '">' +
             (elem.name) +
             '</option>';

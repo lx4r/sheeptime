@@ -4,28 +4,19 @@
 'use strict';
 
 var fs = require('fs');
+var mapHandling = require('./mapHandling');
 
 // Saves the projects into a JSON file
 function saveProjects(projects) {
     var freshID = projects[0];
     var map = projects[1];
-    var saveData = [freshID, [...map]];
+    var saveData = [freshID, mapHandling.mapToArray(map)];
     fs.writeFile("sheeptime_projects.json", JSON.stringify(saveData), function(err) {
         if(err) {
             return console.log(err);
         }
         console.log("The file was saved!");
     });
-}
-
-// Returns an array with the ID for the next project in first position followed by the saved projects (if exisiting)
-function readProjectsOld(){
-    var projects = fs.readFileSync('sheeptime_projects.json', 'utf8');
-    if (projects) {
-        return JSON.parse(projects);
-    } else {
-        return false;
-    }
 }
 
 // Returns an array with the ID for the next project in first position followed by the saved projects as a map (if existing)
@@ -38,10 +29,10 @@ function readProjects(){
             return parse.concat(new Map());
             // length > 1 -> map already included -> construct map from JSON
         } else {
-            return [parse[0], new Map(parse[1])];
+            return [parse[0], mapHandling.arrayToMap(parse[1])];
         }
     } else {
-        return false;
+        return [0, new Map()];
     }
 }
 
