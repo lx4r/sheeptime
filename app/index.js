@@ -13,7 +13,7 @@ var mapHandling = require('./mapHandling');
 var currentSeconds = 0;
 var intervalID;
 var loggedActivities = activitiesStorage.readActivities();
-var savedProjects = projectsStorage.readProjects()[1];
+var savedProjects = projectsStorage.readProjects();
 var errors = [];
 var stopwatchRunning = false;
 
@@ -30,22 +30,33 @@ $('#startStopButton').on('click', function () {
     if (stopwatchRunning){
         // Stop the stopwatch
         clearInterval(intervalID);
-        // Add the new activitiy to the activities array, reset the stopwatch and save the activities to the save file
-        // loggedActivities.push({ID: loggedActivities[0], projectID: parseInt(projects.value), name: activity.value, duration: currentSeconds});
-        loggedActivities[1].set(loggedActivities[0], {projectID: parseInt(projects.value), name: activity.value, duration: currentSeconds});
+
+        var activityProjectID = parseInt(projects.value);
+        // Add the new activitiy to the activities map
+        loggedActivities[1].set(loggedActivities[0], {projectID: activityProjectID, name: activity.value, duration: currentSeconds});
         // Increment the fresh ID
         loggedActivities[0]++;
+        // Update the total time of the activity's project in the project map by adding the number of elapsed seconds
+        var activityProject = savedProjects[1].get(activityProjectID);
+        activityProject.totalSeconds+=currentSeconds;
+        savedProjects[1].set(activityProjectID, activityProject);
+
+        // Reset the stopwatch
         currentSeconds = 0;
+        // Update the view
         timer.innerHTML = "00:00:00";
         activity.value = "";
         updateActivitiesTable();
-        activitiesStorage.saveActivities(loggedActivities);
-
         // Update the button's color and change it's text -> start button
         startStopButton.className = "btn btn-success";
         startStopButton.innerHTML = "Start";
         // Update the stopwatch's status
         stopwatchRunning = false;
+
+        // Save the new activity to the JSON file
+        activitiesStorage.saveActivities(loggedActivities);
+        // Save the updated project to the JSON file
+        projectsStorage.saveProjects(savedProjects);
 
         // Stopwatch is not running -> buttons acts as start button
     } else {
@@ -77,7 +88,7 @@ $('#activityTable').on('click', 'button.deleteActivityButton', function () {
 
 // If a project is added in the project window, update the project dropdown in this window
 ipcRenderer.on('project-added', function (event, arg) {
-    savedProjects = mapHandling.arrayToMap(arg);
+    savedProjects[1] = mapHandling.arrayToMap(arg);
     console.log(savedProjects);
     console.log("hallo");
     updateProjectsDropdown();
@@ -116,12 +127,12 @@ function updateProjectsDropdown() {
     console.log("updateprojects");
     var output = '<select name="projects">';
     // If the projects map is empty add an error to the error list
-    if (savedProjects.size == 0){
+    if (savedProjects[1].size == 0){
         errors.push("Please add a project before tracking activities");
         return;
     }
     // Otherwise generate the projects dropdown
-    savedProjects.forEach(function (elem, id) {
+    savedProjects[1].forEach(function (elem, id) {
         console.log(elem.name);
         output +=
             // Each option hild the project's ID in his "value" attribute

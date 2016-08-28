@@ -6,6 +6,7 @@ var fs = require('fs');
 var ipcRenderer = require('electron').ipcRenderer;
 var projectsStorage = require('./projectsStorage.js');
 var mapHandling = require('./mapHandling');
+var formatTime = require('./formatTime');
 
 var projects = projectsStorage.readProjects();
 
@@ -18,7 +19,7 @@ $('#addProjectButton').on('click', function () {
         return;
     }
     // Add the new project to the project map with the fresh ID from the save file as ID
-    projects[1].set(projects[0], {name: projectName.value, totalTime: 0});
+    projects[1].set(projects[0], {name: projectName.value, totalSeconds: 0});
     // Increment the fresh ID
     projects[0]++;
     projectName.value = "";
@@ -42,19 +43,22 @@ function updateProjectsTable() {
         projectsTable.innerHTML = "No projects";
         return;
     }
-    var output = '<table class="table"><tr><th>Project name</th><th></th></tr>';
+    var output = '<table class="table"><tr><th>Project name</th><th>Total time</th><th></th></tr>';
     // Loop over the projects map
     projects[1].forEach(function (elem, id) {
         output +=
-            "<tr>" +
-            "<td>" +
-            elem.name +
-            "</td>" +
-            '<td>' +
-                '<button type="button" class="btn btn-xs btn-danger deleteProjectButton" aria-label="Left Align" data-id="' + id + '">' +
-                    '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete' +
-                '</button>' +
-            '</td>';
+            '<tr>' +
+                '<td>' +
+                    elem.name +
+                '</td>' +
+                '<td>' +
+                    formatTime.formatSeconds(elem.totalSeconds) +
+                '</td>' +
+                '<td>' +
+                    '<button type="button" class="btn btn-xs btn-danger deleteProjectButton" aria-label="Left Align" data-id="' + id + '">' +
+                        '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete' +
+                    '</button>' +
+                '</td>';
     });
     output += "</table>";
     projectsTable.innerHTML = output;
