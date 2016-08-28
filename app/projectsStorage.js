@@ -6,7 +6,7 @@
 var fs = require('fs');
 var mapHandling = require('./mapHandling');
 
-// Saves the projects into a JSON file
+// Saves the savedProjects into a JSON file
 function saveProjects(projects) {
     var freshID = projects[0];
     var map = projects[1];
@@ -19,7 +19,7 @@ function saveProjects(projects) {
     });
 }
 
-// Returns an array with the ID for the next project in first position followed by the saved projects as a map (if existing)
+// Returns an array with the ID for the next project in first position followed by the saved savedProjects as a map (if existing)
 function readProjects(){
     var projects = fs.readFileSync('sheeptime_projects.json', 'utf8');
     if (projects) {

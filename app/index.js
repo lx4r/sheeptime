@@ -17,7 +17,7 @@ var savedProjects = projectsStorage.readProjects();
 var errors = [];
 var stopwatchRunning = false;
 
-// Initialise the view after getting the activities and projects from the save file
+// Initialise the view after getting the activities and savedProjects from the save file
 updateActivitiesTable();
 updateProjectsDropdown();
 
@@ -31,7 +31,7 @@ $('#startStopButton').on('click', function () {
         // Stop the stopwatch
         clearInterval(intervalID);
 
-        var activityProjectID = parseInt(projects.value);
+        var activityProjectID = parseInt(projectsDropdown.value);
         // Add the new activitiy to the activities map
         loggedActivities[1].set(loggedActivities[0], {projectID: activityProjectID, name: activity.value, duration: currentSeconds});
         // Increment the fresh ID
@@ -58,6 +58,9 @@ $('#startStopButton').on('click', function () {
         // Save the updated project to the JSON file
         projectsStorage.saveProjects(savedProjects);
 
+        // Inform the project window of the new total time of one of the savedProjects
+        ipcRenderer.send('activity-tracked', mapHandling.mapToArray(savedProjects[1]));
+
         // Stopwatch is not running -> buttons acts as start button
     } else {
         // Update the stopwatch every second with the human-readable representation of the current number of seconds on the "stopwatch"
@@ -75,7 +78,7 @@ $('#startStopButton').on('click', function () {
 });
 
 $('#projectsButton').on("click", function () {
-    ipcRenderer.send('open-projects-window');
+    ipcRenderer.send('open-savedProjects-window');
 });
 
 $('#activityTable').on('click', 'button.deleteActivityButton', function () {
@@ -125,13 +128,13 @@ function updateActivitiesTable() {
 
 function updateProjectsDropdown() {
     console.log("updateprojects");
-    var output = '<select name="projects">';
-    // If the projects map is empty add an error to the error list
+    var output = '<select name="savedProjects">';
+    // If the savedProjects map is empty add an error to the error list
     if (savedProjects[1].size == 0){
         errors.push("Please add a project before tracking activities");
         return;
     }
-    // Otherwise generate the projects dropdown
+    // Otherwise generate the savedProjects dropdown
     savedProjects[1].forEach(function (elem, id) {
         console.log(elem.name);
         output +=
@@ -141,6 +144,6 @@ function updateProjectsDropdown() {
             '</option>';
     });
     output += "</select>";
-    projects.innerHTML = output;
+    projectsDropdown.innerHTML = output;
 }
 

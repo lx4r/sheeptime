@@ -55,7 +55,7 @@ app.on('activate', function () {
   }
 });
 
-ipcMain.on('open-projects-window', function () {
+ipcMain.on('open-savedProjects-window', function () {
   if (projectsWindow) {
     return;
   }
@@ -74,6 +74,16 @@ ipcMain.on('open-projects-window', function () {
   });
 });
 
+// Pass notifications on
+// "project added": savedProjects window -> main window
 ipcMain.on('project-added', function (event, arg) {
-  mainWindow.webContents.send('project-added', arg);
+  if (mainWindow){
+    mainWindow.webContents.send('project-added', arg);
+  }
+});
+// "activity tracked": main window -> savedProjects window
+ipcMain.on('activity-tracked', function (event, arg) {
+  if (projectsWindow){
+    projectsWindow.webContents.send('activity-tracked', arg);
+  }
 });
