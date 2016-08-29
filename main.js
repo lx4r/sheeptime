@@ -87,3 +87,9 @@ ipcMain.on('activity-tracked', function (event, arg) {
     projectsWindow.webContents.send('activity-tracked', arg);
   }
 });
+// "activity deleted": main window -> savedProjects window
+ipcMain.on('activity-deleted', function (event, arg) {
+  if (projectsWindow){
+    projectsWindow.webContents.send('activity-deleted', arg);
+  }
+});

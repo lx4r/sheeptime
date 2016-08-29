@@ -45,6 +45,14 @@ ipcRenderer.on('activity-tracked', function (event, arg) {
     updateProjectsTable();
 });
 
+// If an activity is deleted in the main window, update the project list in this window
+ipcRenderer.on('activity-deleted', function (event, arg) {
+    savedProjects[1] = mapHandling.arrayToMap(arg);
+    console.log(savedProjects);
+    console.log("hallo");
+    updateProjectsTable();
+});
+
 function updateProjectsTable() {
     // If the savedProjects file only contains the fresh id
     if (savedProjects[1].size == 0){
