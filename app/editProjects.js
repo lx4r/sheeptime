@@ -40,23 +40,19 @@ $('#projectsTable').on('click', 'button.deleteProjectButton', function () {
 // If an activity is added in the main window, update the project list in this window
 ipcRenderer.on('activity-tracked', function (event, arg) {
     savedProjects[1] = mapHandling.arrayToMap(arg);
-    console.log(savedProjects);
-    console.log("hallo");
     updateProjectsTable();
 });
 
 // If an activity is deleted in the main window, update the project list in this window
 ipcRenderer.on('activity-deleted', function (event, arg) {
     savedProjects[1] = mapHandling.arrayToMap(arg);
-    console.log(savedProjects);
-    console.log("hallo");
     updateProjectsTable();
 });
 
 function updateProjectsTable() {
     // If the savedProjects file only contains the fresh id
     if (savedProjects[1].size == 0){
-        projectsTable.innerHTML = "No savedProjects";
+        projectsTable.innerHTML = "No projects";
         return;
     }
     var output = '<table class="table"><tr><th>Project name</th><th>Total time</th><th></th></tr>';

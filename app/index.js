@@ -109,8 +109,6 @@ $('#activityTable').on('click', 'button.deleteActivityButton', function () {
 // If a project is added in the project window, update the project dropdown in this window
 ipcRenderer.on('project-added', function (event, arg) {
     savedProjects[1] = mapHandling.arrayToMap(arg);
-    console.log(savedProjects);
-    console.log("hallo");
     updateProjectsDropdown();
 });
 
@@ -121,13 +119,17 @@ function updateActivitiesTable() {
         return;
     }
     // If the acitivities map is not empty generate the activities table
-    var output = '<table class="table" id="log"><tr><th>Activity</th><th>Time</th><th></th></tr>';
+    var output = '<table class="table" id="log"><tr><th>Activity</th><th>Project</th><th>Time</th><th></th></tr>';
     loggedActivities[1].forEach(function (elem, id) {
+        var activityProject = savedProjects[1].get(elem.projectID);
         output +=
             "<tr>" +
                 '<td>' +
                     elem.name +
                 "</td>" +
+                '<td>'+
+                    '<span class="badge">' + activityProject.name + '</span>' +
+                '</td>' +
                 "<td>" +
                     '<a type="button" href="#activity-' + id + '" data-toggle="collapse" data-target="#activity-' + id + '">' + formatTime.formatSeconds(elem.duration) + '</a>'+
                     '<div class="collapse" id="activity-' + id + '">' +
