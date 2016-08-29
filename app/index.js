@@ -9,8 +9,10 @@ var activitiesStorage = require('./activitiesStorage');
 var ipcRenderer = require('electron').ipcRenderer;
 var formatTime = require('./formatTime');
 var mapHandling = require('./mapHandling');
+var strftime = require('./js/strftime');
 
 var currentSeconds = 0;
+var startTime;
 var intervalID;
 var loggedActivities = activitiesStorage.readActivities();
 var savedProjects = projectsStorage.readProjects();
@@ -28,12 +30,14 @@ errors.forEach(function (err) {
 $('#startStopButton').on('click', function () {
     // Stopwatch is running -> buttons acts as stop button
     if (stopwatchRunning){
+        var endTime = Date.now();
+
         // Stop the stopwatch
         clearInterval(intervalID);
 
         var activityProjectID = parseInt(projectsDropdown.value);
         // Add the new activitiy to the activities map
-        loggedActivities[1].set(loggedActivities[0], {projectID: activityProjectID, name: activity.value, duration: currentSeconds});
+        loggedActivities[1].set(loggedActivities[0], {projectID: activityProjectID, name: activity.value, duration: currentSeconds, startTime: startTime, endTime: endTime});
         // Increment the fresh ID
         loggedActivities[0]++;
         // Update the total time of the activity's project in the project map by adding the number of elapsed seconds
@@ -63,6 +67,9 @@ $('#startStopButton').on('click', function () {
 
         // Stopwatch is not running -> buttons acts as start button
     } else {
+        // Save the time the activity was started
+        startTime = Date.now();
+
         // Update the stopwatch every second with the human-readable representation of the current number of seconds on the "stopwatch"
         intervalID = setInterval(function(){
             currentSeconds++;
@@ -108,11 +115,14 @@ function updateActivitiesTable() {
     loggedActivities[1].forEach(function (elem, id) {
         output +=
             "<tr>" +
-                "<td>" +
+                '<td>' +
                     elem.name +
                 "</td>" +
                 "<td>" +
-                    formatTime.formatSeconds(elem.duration) +
+                    '<a type="button" href="#activity-' + id + '" data-toggle="collapse" data-target="#activity-' + id + '">' + formatTime.formatSeconds(elem.duration) + '</a>'+
+                    '<div class="collapse" id="activity-' + id + '">' +
+                        strftime("%d.%m.%y, %H:%M", new Date(elem.startTime)) + ' - ' + strftime('%d.%m.%y, %H:%M', new Date(elem.endTime)) +
+                    '</div>' +
                 "</td>" +
                 '<td>' +
                     // Each button holds the acitivity's ID in his "data-id" attribute
@@ -120,7 +130,7 @@ function updateActivitiesTable() {
                         '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete' +
                     '</button>' +
                 '</td>' +
-            "</tr>";
+            '</tr>';
     });
     output += "</table>";
     activityTable.innerHTML = output;
