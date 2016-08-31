@@ -8,7 +8,7 @@ var activitiesStorage = require('./activitiesStorage')
 var ipcRenderer = require('electron').ipcRenderer
 var formatSeconds = require('./formatSeconds')
 var mapHandling = require('./mapHandling')
-var strftime = require('./js/strftime')
+var strftime = require('./js/strftime.min')
 var getElementByID = require('./getElementByID')
 
 var currentSeconds = 0
