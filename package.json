@@ -1,0 +1,21 @@
+{
+  "name": "SheepTime",
+  "version": "v0.1.0",
+  "description": "A simple time tracker",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "standard && ./node_modules/.bin/mocha test/test.js"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "electron-prebuilt": "^1.2.0",
+    "mocha": "^3.0.2",
+    "standard": "*"
+  },
+  "standard": {
+    "globals": [
+      "$"
+    ]
+  }
+}
