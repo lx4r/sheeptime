@@ -93,6 +93,10 @@ $('#projectsButton').on('click', function () {
   ipcRenderer.send('open-savedProjects-window')
 })
 
+$('#settingsButton').on('click', function () {
+  ipcRenderer.send('open-settings-window')
+})
+
 $('#activityTable').on('click', 'button.deleteActivityButton', function () {
   // Delete the activity with the ID stored in the clicked button from the activity map, update the activities table and save the new storage array to the JSON file
   var id = $(this).data('id')

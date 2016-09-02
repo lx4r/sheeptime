@@ -5,11 +5,14 @@ const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 // Module for communication between the processes
 var ipcMain = require('electron').ipcMain
+// Module for reading and storing the settings
+var configuration = require('./app/configuration')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let projectsWindow
+let settingsWindow
 
 function createWindow () {
   // Create the browser window.
@@ -36,7 +39,16 @@ function createWindow () {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', function () {
+  // Save default settings to the config file if these settings haven't been set yet
+  if (!configuration.readSettings('time-format')) {
+    configuration.saveSettings('time-format', 'european')
+  }
+  if (!configuration.readSettings('savefile-directory')) {
+    configuration.saveSettings('savefile-directory', configuration.getUserHome())
+  }
+  createWindow()
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -71,6 +83,25 @@ ipcMain.on('open-savedProjects-window', function () {
 
   projectsWindow.on('closed', function () {
     projectsWindow = null
+  })
+})
+
+ipcMain.on('open-settings-window', function () {
+  if (settingsWindow) {
+    return
+  }
+
+  settingsWindow = new BrowserWindow({
+    height: 600,
+    width: 400
+  })
+
+  settingsWindow.loadURL(`file://${__dirname}/app/settings.html`)
+
+  settingsWindow.webContents.openDevTools()
+
+  settingsWindow.on('closed', function () {
+    settingsWindow = null
   })
 })
 

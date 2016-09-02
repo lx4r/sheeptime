@@ -17,5 +17,8 @@
     "globals": [
       "$"
     ]
+  },
+  "dependencies": {
+    "nconf": "^0.8.4"
   }
 }
