@@ -1,6 +1,11 @@
-# SheepTime
+<div align='center'>
+  <img width='500px' src='http://files.l3r.de/SheepTime_Banner.png'>
+</div>
 
-a simple time tracker powered by Electron
+<p align='center'>
+  a simple time tracker powered by Electron
+</p>
+
 
 ## Download
 
