@@ -6,10 +6,11 @@
   a simple time tracker powered by Electron
 </p>
 
-
-## Download
+## Screenshots
 
 ## Features
+
+## Download
 
 ## Coding Style
 
