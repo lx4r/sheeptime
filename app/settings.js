@@ -10,6 +10,7 @@ var fs = require('fs')
 var savedTimeFormat = configuration.readSettings('time-format')
 var timeFormatRadios = document.querySelectorAll('.timeFormatRadio')
 var savefileDirectory = getElementByID('savefileDirectory')
+var savePathButton = getElementByID('savePathButton')
 
 // Set the time format radio to checked that represents the saved time format and update the settings when a radio button is pressed
 timeFormatRadios.forEach(function (radio) {
@@ -21,7 +22,7 @@ timeFormatRadios.forEach(function (radio) {
 })
 
 savefileDirectory.value = configuration.readSettings('savefile-directory')
-$(savefileDirectory).change(function () {
+$(savePathButton).on('click', function () {
   fs.access(savefileDirectory.value, fs.W_OK, function (err) {
     if (!err) {
       // path exists and can be written -> remove error message and save path

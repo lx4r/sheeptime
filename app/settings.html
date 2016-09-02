@@ -49,9 +49,11 @@
                 <div class="panel-body">
                     <div id="errorMessage"></div>
                     <form>
-                        <input type="text" class="form-control" id="savefileDirectory" placeholder="loading">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="savefileDirectory" placeholder="loading">
                             <p class="help-block">The files <b>sheeptime_activities.json</b> and <b>sheeptime_projects.json</b> will be stored in this directory.</p>
-
+                        </div>
+                        <button type="button" class="btn btn-success" id="savePathButton">save path</button>
                     </form>
                 </div>
             </div>

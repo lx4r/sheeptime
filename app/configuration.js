@@ -1,5 +1,9 @@
 /**
  * Created by lx4r on 01.09.16.
+ *
+ * Settings in the settings file:
+ * savefile-directory
+ * time-format ('european'|'american')
  */
 'use strict'
 

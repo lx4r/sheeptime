@@ -5,13 +5,14 @@
 
 var fs = require('fs')
 var mapHandling = require('./mapHandling')
+var config = require('./configuration')
 
 // Saves the activities into a JSON file
 function saveActivities (activities) {
   var freshID = activities[0]
   var map = activities[1]
   var saveData = [freshID, mapHandling.mapToArray(map)]
-  fs.writeFile('sheeptime_activities.json', JSON.stringify(saveData), function (err) {
+  fs.writeFile(config.readSettings('savefile-directory') + '/sheeptime_activities.json', JSON.stringify(saveData), function (err) {
     if (err) {
       return console.log(err)
     }
@@ -21,7 +22,7 @@ function saveActivities (activities) {
 
 // Returns an array with the ID for the next activity in first position followed by the saved activities as a map (if existing)
 function readActivities () {
-  var activities = fs.readFileSync('sheeptime_activities.json', 'utf8')
+  var activities = fs.readFileSync(config.readSettings('savefile-directory') + '/sheeptime_activities.json', 'utf8')
   if (activities) {
     var parse = JSON.parse(activities)
     // length == 1 -> no map included yet -> initialise empty map
