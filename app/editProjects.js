@@ -5,7 +5,7 @@
 var ipcRenderer = require('electron').ipcRenderer
 var projectsStorage = require('./projectsStorage.js')
 var mapHandling = require('./mapHandling')
-var formatSeconds = require('./formatSeconds')
+var formatTime = require('./formatTime')
 var getElementByID = require('./getElementByID')
 
 var savedProjects = projectsStorage.readProjects()
@@ -66,7 +66,7 @@ function updateProjectsTable () {
       elem.name +
       '</td>' +
       '<td>' +
-      formatSeconds(elem.totalSeconds) +
+        formatTime.secondsToTime(elem.totalSeconds) +
       '</td>' +
       '<td>' +
       '<button type="button" class="btn btn-xs btn-danger deleteProjectButton" aria-label="Left Align" data-id="' + id + '">' +

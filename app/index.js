@@ -6,9 +6,8 @@
 var projectsStorage = require('./projectsStorage')
 var activitiesStorage = require('./activitiesStorage')
 var ipcRenderer = require('electron').ipcRenderer
-var formatSeconds = require('./formatSeconds')
+var formatTime = require('./formatTime')
 var mapHandling = require('./mapHandling')
-var strftime = require('./js/strftime.min')
 var getElementByID = require('./getElementByID')
 
 var currentSeconds = 0
@@ -77,7 +76,7 @@ $('#startStopButton').on('click', function () {
     // Update the stopwatch every second with the human-readable representation of the current number of seconds on the "stopwatch"
     intervalID = setInterval(function () {
       currentSeconds++
-      getElementByID('timer').innerHTML = formatSeconds(currentSeconds)
+      getElementByID('timer').innerHTML = formatTime.secondsToTime(currentSeconds)
     }, 1000)
 
     // Update the button's color and change it's text -> stop button
@@ -140,9 +139,9 @@ function updateActivitiesTable () {
           '<span class="badge">' + activityProject.name + '</span>' +
         '</td>' +
         '<td>' +
-          '<a type="button" href="#activity-' + id + '" data-toggle="collapse" data-target="#activity-' + id + '">' + formatSeconds(elem.duration) + '</a>' +
+          '<a type="button" href="#activity-' + id + '" data-toggle="collapse" data-target="#activity-' + id + '">' + formatTime.secondsToTime(elem.duration) + '</a>' +
           '<div class="collapse" id="activity-' + id + '">' +
-            strftime('%d.%m.%y, %H:%M', new Date(elem.startTime)) + ' - ' + strftime('%d.%m.%y, %H:%M', new Date(elem.endTime)) +
+            formatTime.timestampToDate(elem.startTime) + ' - ' + formatTime.timestampToDate(elem.endTime) +
           '</div>' +
         '</td>' +
         '<td>' +
