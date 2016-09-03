@@ -123,8 +123,7 @@ ipcRenderer.on('project-added', function (event, arg) {
 // If a project is deleted in the project window, delete all activities associated with that project
 ipcRenderer.on('project-deleted', function (event, arg) {
   loggedActivities[1].forEach(function (elem, id) {
-    if (elem.projectID === arg.deletedProjectID){
-      console.log("Activity " + elem.name + " deleted")
+    if (elem.projectID === arg.deletedProjectID) {
       loggedActivities[1].delete(id)
     }
   })

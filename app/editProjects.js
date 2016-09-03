@@ -42,7 +42,7 @@ $('#addProjectButton').on('click', function () {
 $('#projectsTable').on('click', 'button.deleteProjectButton', function () {
   projectToBeDeletedID = $(this).data('id')
   // Immediately delete the project if the setting for showing the confirmation is false
-  if (config.readSettings('show-deletion-confirmation') === false){
+  if (config.readSettings('show-deletion-confirmation') === false) {
     deleteProject()
   }
 })
@@ -105,9 +105,9 @@ function deleteProject () {
   ipcRenderer.send('project-deleted', arg)
 
   // If the modal was shown ...
-  if (openAreYouSure != ''){
+  if (openAreYouSure !== '') {
     // ... and the checkbox was checked ...
-    if ($('#dontShowDeletionConfirmationAgain').prop('checked') === true){
+    if ($('#dontShowDeletionConfirmationAgain').prop('checked') === true) {
       // ... save the users decision and remove the links from the deletion buttons to the modal
       config.saveSettings('show-deletion-confirmation', false)
       openAreYouSure = ''

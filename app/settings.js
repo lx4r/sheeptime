@@ -41,7 +41,7 @@ $(savePathButton).on('click', function () {
 
 $('#showDeletionConfirmation').on('click', function () {
   // upate the settings to reflect the user's choice
-  if ($('#showDeletionConfirmation').prop('checked')){
+  if ($('#showDeletionConfirmation').prop('checked')) {
     // don't show modal again
     config.saveSettings('show-deletion-confirmation', false)
   } else {
@@ -49,5 +49,3 @@ $('#showDeletionConfirmation').on('click', function () {
     config.saveSettings('show-deletion-confirmation', true)
   }
 })
-
-
