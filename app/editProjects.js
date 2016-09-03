@@ -7,10 +7,18 @@ var projectsStorage = require('./projectsStorage.js')
 var mapHandling = require('./mapHandling')
 var formatTime = require('./formatTime')
 var getElementByID = require('./getElementByID')
+var config = require('./configuration')
 
 var savedProjects = projectsStorage.readProjects()
+var projectToBeDeletedID
+var openAreYouSure = ''
 
-// Initialise the view after getting the savedProjects from the save file
+// Only show the "Are you sure" modal if the setting for showing it is true
+if (config.readSettings('show-deletion-confirmation') === true) {
+  openAreYouSure = 'data-toggle="modal" data-target="#areYouSure"'
+}
+
+// Initialise the view
 updateProjectsTable()
 
 $('#addProjectButton').on('click', function () {
@@ -30,13 +38,21 @@ $('#addProjectButton').on('click', function () {
   ipcRenderer.send('project-added', mapHandling.mapToArray(savedProjects[1]))
 })
 
+/* Save the ID of the project that could be deleted when the delete button is clicked -> the modal is opened */
 $('#projectsTable').on('click', 'button.deleteProjectButton', function () {
-  // Delete the activity with the ID stored in the clicked button from the activity map, update the activities table and save the new storage array to the JSON file
-  var id = $(this).data('id')
-  savedProjects[1].delete(id)
-  updateProjectsTable()
-  projectsStorage.saveProjects(savedProjects)
+  projectToBeDeletedID = $(this).data('id')
+  // Immediately delete the project if the setting for showing the confirmation is false
+  if (config.readSettings('show-deletion-confirmation') === false){
+    deleteProject()
+  }
 })
+
+// click on confirm button deletes project
+$('#confirmProjectDeletion').on('click', function () {
+  deleteProject()
+})
+
+// Save the decison and remove the link to the modal if the user chooses to hide the deletion confirmation
 
 // If an activity is added in the main window, update the project list in this window
 ipcRenderer.on('activity-tracked', function (event, arg) {
@@ -62,18 +78,40 @@ function updateProjectsTable () {
   savedProjects[1].forEach(function (elem, id) {
     output +=
       '<tr>' +
-      '<td>' +
-      elem.name +
-      '</td>' +
-      '<td>' +
-        formatTime.secondsToTime(elem.totalSeconds) +
-      '</td>' +
-      '<td>' +
-      '<button type="button" class="btn btn-xs btn-danger deleteProjectButton" aria-label="Left Align" data-id="' + id + '">' +
-      '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete' +
-      '</button>' +
-      '</td>'
+        '<td>' +
+          elem.name +
+        '</td>' +
+        '<td>' +
+          formatTime.secondsToTime(elem.totalSeconds) +
+        '</td>' +
+        '<td>' +
+          '<button type="button" class="btn btn-xs btn-danger deleteProjectButton" ' + openAreYouSure + ' data-id="' + id + '">' +
+            '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete' +
+          '</button>' +
+        '</td>' +
+      '</tr>'
   })
   output += '</table>'
   projectsTable.innerHTML = output
+}
+
+function deleteProject () {
+  // Delete the activity with the ID of the before clicked delete button from the project map, update the projects table and save the new storage array to the JSON file
+  savedProjects[1].delete(projectToBeDeletedID)
+  updateProjectsTable()
+  projectsStorage.saveProjects(savedProjects)
+
+  var arg = ({deletedProjectID: projectToBeDeletedID, newSavedProjects: mapHandling.mapToArray(savedProjects[1])})
+  ipcRenderer.send('project-deleted', arg)
+
+  // If the modal was shown ...
+  if (openAreYouSure != ''){
+    // ... and the checkbox was checked ...
+    if ($('#dontShowDeletionConfirmationAgain').prop('checked') === true){
+      // ... save the users decision and remove the links from the deletion buttons to the modal
+      config.saveSettings('show-deletion-confirmation', false)
+      openAreYouSure = ''
+      updateProjectsTable()
+    }
+  }
 }

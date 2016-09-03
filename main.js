@@ -3,9 +3,8 @@ const electron = require('electron')
 const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
-// Module for communication between the processes
+
 var ipcMain = require('electron').ipcMain
-// Module for reading and storing the settings
 var configuration = require('./app/configuration')
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -36,9 +35,6 @@ function createWindow () {
   })
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on('ready', function () {
   // Save default settings to the config file if these settings haven't been set yet
   if (!configuration.readSettings('time-format')) {
@@ -46,6 +42,9 @@ app.on('ready', function () {
   }
   if (!configuration.readSettings('savefile-directory')) {
     configuration.saveSettings('savefile-directory', configuration.getUserHome())
+  }
+  if (!configuration.readSettings('show-deletion-confirmation')) {
+    configuration.saveSettings('show-deletion-confirmation', true)
   }
   createWindow()
 })
@@ -122,5 +121,11 @@ ipcMain.on('activity-tracked', function (event, arg) {
 ipcMain.on('activity-deleted', function (event, arg) {
   if (projectsWindow) {
     projectsWindow.webContents.send('activity-deleted', arg)
+  }
+})
+// "project deleted": savedProjects window -> main window
+ipcMain.on('project-deleted', function (event, arg) {
+  if (mainWindow) {
+    mainWindow.webContents.send('project-deleted', arg)
   }
 })

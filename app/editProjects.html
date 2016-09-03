@@ -38,11 +38,39 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="areYouSure" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Are you sure?</h4>
+            </div>
+            <div class="modal-body">
+                Deleting this project will also delete all activities associated with it.
+                <form>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="dontShowDeletionConfirmationAgain">
+                            Don't show this dialogue again
+                            <small>(It can be re-enabled in the settings.)</small>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmProjectDeletion" data-dismiss="modal">Delete project</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <!-- Insert this line above script imports  -->
 <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
 <script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script>
     require('./editProjects.js')
 </script>

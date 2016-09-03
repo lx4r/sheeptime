@@ -120,6 +120,22 @@ ipcRenderer.on('project-added', function (event, arg) {
   updateProjectsDropdown()
 })
 
+// If a project is deleted in the project window, delete all activities associated with that project
+ipcRenderer.on('project-deleted', function (event, arg) {
+  loggedActivities[1].forEach(function (elem, id) {
+    if (elem.projectID === arg.deletedProjectID){
+      console.log("Activity " + elem.name + " deleted")
+      loggedActivities[1].delete(id)
+    }
+  })
+  updateActivitiesTable()
+  activitiesStorage.saveActivities(loggedActivities)
+
+  // Update the saved projects and then the view
+  savedProjects[1] = mapHandling.arrayToMap(arg.newSavedProjects)
+  updateProjectsDropdown()
+})
+
 function updateActivitiesTable () {
   // If the acitivities map is empty don't show the table but a string instead
   if (loggedActivities[1].size === 0) {
