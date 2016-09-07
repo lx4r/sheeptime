@@ -19,7 +19,7 @@ SheepTime is following the [Javascript Standard Styleguide](https://github.com/f
 [![JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 ## Powered by
-[Electron](http://electron.atom.io), [Bootstrap](http://getbootstrap.com), [Paper](http://bootswatch.com/paper/), [jQuery](http://jquery.com), [strftime](https://github.com/samsonjs/strftime), [mocha](https://mochajs.org), [chai](http://chaijs.com)
+[Electron](http://electron.atom.io), [Bootstrap](http://getbootstrap.com), [Paper](http://bootswatch.com/paper/), [jQuery](http://jquery.com), [strftime](https://github.com/samsonjs/strftime), [mocha](https://mochajs.org), [chai](http://chaijs.com), [Vue](http://vuejs.org/)
 
 ----
 Author: lx4r <https://l3r.de>
