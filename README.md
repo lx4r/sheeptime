@@ -3,9 +3,10 @@
 </div>
 
 <p align='center'>
-  a simple time tracker powered by Electron<br>
-  <img src="http://forthebadge.com/images/badges/built-with-love.svg" alt="Built with love">
+  a simple time tracker powered by Electron
 </p>
+
+[![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
 
 ## Screenshots
 
@@ -13,11 +14,6 @@
 
 ## Download
 
-## Coding Style
-
-SheepTime is following the [Javascript Standard Styleguide](https://github.com/feross/standard)
-
-[![JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 ## Powered by
 [Electron](http://electron.atom.io), [Bootstrap](http://getbootstrap.com), [Paper](http://bootswatch.com/paper/), [jQuery](http://jquery.com), [strftime](https://github.com/samsonjs/strftime), [mocha](https://mochajs.org), [chai](http://chaijs.com), [Vue](http://vuejs.org/)
