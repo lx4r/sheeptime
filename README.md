@@ -3,7 +3,8 @@
 </div>
 
 <p align='center'>
-  a simple time tracker powered by Electron
+  a simple time tracker powered by Electron<br>
+  <img src="http://forthebadge.com/images/badges/built-with-love.svg" alt="Built with love">
 </p>
 
 ## Screenshots
