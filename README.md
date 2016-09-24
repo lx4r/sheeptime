@@ -6,7 +6,7 @@
   a simple time tracker powered by Electron
 </p>
 
-[![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
+[![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) ![Built with love](https://img.shields.io/badge/built%20with-love-red.svg)
 
 ## Screenshots
 
