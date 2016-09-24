@@ -13,6 +13,11 @@ let mainWindow
 let projectsWindow
 let settingsWindow
 
+//DEV
+var activitiesStorage = require('./app/activitiesStorage')
+var mapHandling = require('./app/mapHandling')
+var activities = {activitiesArray: mapHandling.mapToArray(activitiesStorage.readActivities()[1])}
+
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -47,6 +52,8 @@ app.on('ready', function () {
     configuration.saveSettings('show-deletion-confirmation', true)
   }
   createWindow()
+
+
 })
 
 // Quit when all windows are closed.
@@ -128,4 +135,21 @@ ipcMain.on('project-deleted', function (event, arg) {
   if (mainWindow) {
     mainWindow.webContents.send('project-deleted', arg)
   }
+})
+
+// "activity deleted": main window -> savedProjects window
+ipcMain.on('sheeptime:delete-activity', function (event, arg) {
+  console.log("Deleted: " + arg)
+  console.log(app.test)
+})
+
+//DEV
+
+ipcMain.on('sheeptime:activities:send', function (event, arg) {
+  console.log("send them")
+  mainWindow.webContents.send('sheeptime:activities:get', activities)
+})
+
+ipcMain.on('test', function (event, arg) {
+  test = {array: [[61,{"projectID":5,"name":"asdfYAY","duration":2,"startTime":1472929376284,"endTime":1472929378533}]]}
 })

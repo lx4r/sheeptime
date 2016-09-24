@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="main">
     <div class="row">
         <h1 id="timer">00:00:00</h1>
     </div>
@@ -37,14 +37,7 @@
     </div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Activities</h3>
-                </div>
-                <div class="panel-body">
-                    <div id="activityTable"></div>
-                </div>
-            </div>
+            <activity-list :al="activitiesArray"></activity-list>
         </div>
     </div>
 </div>
@@ -54,8 +47,10 @@
 
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="assets/js/main.js"></script>
 <script>
-    require('./index.js')
+    //require('./index.js')
+    //require('./assets/js/main.js')
 </script>
 
 <!-- Insert this line after script imports -->

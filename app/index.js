@@ -18,6 +18,30 @@ var savedProjects = projectsStorage.readProjects()
 var errors = []
 var stopwatchRunning = false
 
+// ---- DEV ----
+const Vue = require('vue')
+
+var test
+ipcRenderer.send('sheeptime:activities:send')
+ipcRenderer.on('sheeptime:activities:get', function (event, arg) {
+  test = arg
+  Vue.component('activity-list', require('./vue/activity-list.vue'))
+  var vm = new Vue({
+    el: '#main',
+    data: test
+  })
+})
+
+/*
+var testObject = {array: mapHandling.mapToArray(loggedActivities[1])}
+const Vue = require('vue')
+Vue.component('activity-list', require('./vue/activity-list.vue'))
+var vm = new Vue({
+  el: '#main',
+  data: testObject
+}) */
+// -------------
+
 // Initialise the view after getting the activities and savedProjects from the save file
 updateActivitiesTable()
 updateProjectsDropdown()
@@ -68,6 +92,8 @@ $('#startStopButton').on('click', function () {
     // Inform the project window of the new total time of one of the savedProjects
     ipcRenderer.send('activity-tracked', mapHandling.mapToArray(savedProjects[1]))
 
+    test.activitiesArray = mapHandling.mapToArray(loggedActivities[1])
+
     // Stopwatch is not running -> buttons acts as start button
   } else {
     // Save the time the activity was started
@@ -93,7 +119,12 @@ $('#projectsButton').on('click', function () {
 })
 
 $('#settingsButton').on('click', function () {
-  ipcRenderer.send('open-settings-window')
+  //ipcRenderer.send('open-settings-window')
+  //DEV
+  console.log(test.activitiesArray)
+  test.activitiesArray = [[61,{"projectID":5,"name":"asdfYAY","duration":2,"startTime":1472929376284,"endTime":1472929378533}]]
+
+  //ipcRenderer.send('test')
 })
 
 $('#activityTable').on('click', 'button.deleteActivityButton', function () {
@@ -168,7 +199,7 @@ function updateActivitiesTable () {
       '</tr>'
   })
   output += '</table>'
-  getElementByID('activityTable').innerHTML = output
+  //getElementByID('activityTable').innerHTML = output
 }
 
 function updateProjectsDropdown () {
