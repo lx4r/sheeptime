@@ -1,5 +1,9 @@
 /**
  * Created by lx4r on 21.08.16.
+ *
+ * Storage of activities:
+ * Object that contains a fresh ID and a map of the activities represented as an array:
+ * {freshID: [...], activitiesArray: [...]}
  */
 'use strict'
 
@@ -7,12 +11,9 @@ var fs = require('fs')
 var mapHandling = require('./mapHandling')
 var config = require('./configuration')
 
-// Saves the activities into a JSON file
+// Saves the loggedActivities into a JSON file
 function saveActivities (activities) {
-  var freshID = activities[0]
-  var map = activities[1]
-  var saveData = [freshID, mapHandling.mapToArray(map)]
-  fs.writeFile(config.readSettings('savefile-directory') + '/sheeptime-activities.json', JSON.stringify(saveData), function (err) {
+  fs.writeFile(config.readSettings('savefile-directory') + '/sheeptime-activities.json', JSON.stringify(activities), function (err) {
     if (err) {
       return console.log(err)
     }
@@ -20,20 +21,13 @@ function saveActivities (activities) {
   })
 }
 
-// Returns an array with the ID for the next activity in first position followed by the saved activities as a map (if existing)
+// Returns an array with the ID for the next activity in first position followed by the saved loggedActivities as a map (if existing)
 function readActivities () {
   var activities = fs.readFileSync(config.readSettings('savefile-directory') + '/sheeptime-activities.json', 'utf8')
   if (activities) {
-    var parse = JSON.parse(activities)
-    // length == 1 -> no map included yet -> initialise empty map
-    if (parse.length === 1) {
-      return parse.concat(new Map())
-      // length > 1 -> map already included -> construct map from JSON
-    } else {
-      return [parse[0], mapHandling.arrayToMap(parse[1])]
-    }
+    return JSON.parse(activities)
   } else {
-    return [0, new Map()]
+    return {freshID: 0, activitiesArray: []}
   }
 }
 

@@ -47,7 +47,7 @@
                 return formatTime.timestampToDate(timestamp)
             },
             deleteActivity: function (activityID) {
-                ipcRenderer.send('sheeptime:delete-activity', activityID)
+                ipcRenderer.send('sheeptime:activity:delete', activityID)
             }
         }
     }

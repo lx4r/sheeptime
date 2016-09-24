@@ -16,7 +16,7 @@ let settingsWindow
 //DEV
 var activitiesStorage = require('./app/activitiesStorage')
 var mapHandling = require('./app/mapHandling')
-var activities = {activitiesArray: mapHandling.mapToArray(activitiesStorage.readActivities()[1])}
+var loggedActivities = activitiesStorage.readActivities()
 
 function createWindow () {
   // Create the browser window.
@@ -145,9 +145,17 @@ ipcMain.on('sheeptime:delete-activity', function (event, arg) {
 
 //DEV
 
-ipcMain.on('sheeptime:activities:send', function (event, arg) {
-  console.log("send them")
-  mainWindow.webContents.send('sheeptime:activities:get', activities)
+ipcMain.on('sheeptime:loggedActivities:send', function (event, arg) {
+  mainWindow.webContents.send('sheeptime:loggedActivities:get', loggedActivities)
+})
+
+ipcMain.on('sheeptime:activity:delete', function (event, arg) {
+  console.log("Delete " + arg)
+  loggedActivities.activitiesArray = mapHandling.deleteElement(loggedActivities.activitiesArray, arg)
+  if (mainWindow) {
+    mainWindow.webContents.send('sheeptime:activity:deleted', loggedActivities.activitiesArray)
+  }
+  activitiesStorage.saveActivities(loggedActivities)
 })
 
 ipcMain.on('test', function (event, arg) {
