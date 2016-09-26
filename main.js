@@ -14,9 +14,11 @@ let projectsWindow
 let settingsWindow
 
 //DEV
-var activitiesStorage = require('./app/activitiesStorage')
-var mapHandling = require('./app/mapHandling')
+const activitiesStorage = require('./app/storage/activitiesStorage')
+const projectsStorage = require('./app/storage/projectsStorage')
+const mapHandling = require('./app/mapHandling')
 var loggedActivities = activitiesStorage.readActivities()
+var savedProjects = projectsStorage.readProjects()
 
 function createWindow () {
   // Create the browser window.
@@ -147,6 +149,11 @@ ipcMain.on('sheeptime:delete-activity', function (event, arg) {
 
 ipcMain.on('sheeptime:loggedActivities:send', function (event, arg) {
   mainWindow.webContents.send('sheeptime:loggedActivities:get', loggedActivities)
+})
+
+ipcMain.on('sheeptime:savedProjects:send', function (event, arg) {
+  console.log("Sent projects")
+  mainWindow.webContents.send('sheeptime:savedProjects:get', savedProjects)
 })
 
 ipcMain.on('sheeptime:activity:delete', function (event, arg) {

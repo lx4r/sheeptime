@@ -3,7 +3,7 @@
  */
 
 var ipcRenderer = require('electron').ipcRenderer
-var projectsStorage = require('./projectsStorage.js')
+var projectsStorage = require('./storage/projectsStorage.js')
 var mapHandling = require('./mapHandling')
 var formatTime = require('./formatTime')
 var getElementByID = require('./getElementByID')

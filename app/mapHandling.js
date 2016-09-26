@@ -10,7 +10,7 @@ function arrayToMap (array) {
   return new Map(array)
 }
 
-function addElement(mapAsArray, key, value) {
+function setElement(mapAsArray, key, value) {
   var map = arrayToMap(mapAsArray)
   map.set(key, value)
   return mapToArray(map)
@@ -22,9 +22,15 @@ function deleteElement(mapAsArray, key) {
   return mapToArray(map)
 }
 
+function getElement(mapAsArray, key) {
+  var map = arrayToMap(mapAsArray)
+  return map.get(key)
+}
+
 module.exports = {
   mapToArray: mapToArray,
   arrayToMap: arrayToMap,
-  addElement: addElement,
-  deleteElement: deleteElement
+  setElement: setElement,
+  deleteElement: deleteElement,
+  getElement: getElement
 }

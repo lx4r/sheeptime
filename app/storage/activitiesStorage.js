@@ -8,8 +8,7 @@
 'use strict'
 
 var fs = require('fs')
-var mapHandling = require('./mapHandling')
-var config = require('./configuration')
+var config = require('./../configuration')
 
 // Saves the loggedActivities into a JSON file
 function saveActivities (activities) {
@@ -21,7 +20,7 @@ function saveActivities (activities) {
   })
 }
 
-// Returns an array with the ID for the next activity in first position followed by the saved loggedActivities as a map (if existing)
+// Returns an object with the saved activities and the fresh ID (see top)
 function readActivities () {
   var activities = fs.readFileSync(config.readSettings('savefile-directory') + '/sheeptime-activities.json', 'utf8')
   if (activities) {

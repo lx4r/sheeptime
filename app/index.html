@@ -23,8 +23,8 @@
             <div class="col-md-4 col-sm-12 col-xs-12 col-md-offset-2">
                 <input type="text" class="form-control" id="activityName" placeholder="activity">
             </div>
-            <div class="col-md-4 col-sm-12 col-xs-12">
-                <select id="projectsDropdown" class="form-control"></select>
+            <div class="col-md-4 col-sm-12 col-xs-12 col-md-offset-2">
+                <projects-dropdown :pl="projects.projectsArray"></projects-dropdown>
             </div>
         </form>
     </div>
@@ -37,7 +37,7 @@
     </div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <activity-list :al="activitiesArray"></activity-list>
+            <activity-list :al="activities.activitiesArray"></activity-list>
         </div>
     </div>
 </div>

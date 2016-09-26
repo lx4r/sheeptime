@@ -3,46 +3,62 @@
  */
 'use strict'
 
-var projectsStorage = require('./projectsStorage')
-var activitiesStorage = require('./activitiesStorage')
+var projectsStorage = require('./storage/projectsStorage')
+var activitiesStorage = require('./storage/activitiesStorage')
 var ipcRenderer = require('electron').ipcRenderer
 var formatTime = require('./formatTime')
 var mapHandling = require('./mapHandling')
-var getElementByID = require('./getElementByID')
 
 var currentSeconds = 0
 var startTime
 var intervalID
-var loggedActivities = activitiesStorage.readActivities()
-var savedProjects = projectsStorage.readProjects()
+var loggedActivities
+var savedProjects
 var errors = []
 var stopwatchRunning = false
+var vm
 
 // ---- DEV ----
+
+var data = {activities:{}, projects: {}}
+
 const Vue = require('vue')
+
+var dataReceived = 0
 
 ipcRenderer.send('sheeptime:loggedActivities:send')
+ipcRenderer.send('sheeptime:savedProjects:send')
+
 ipcRenderer.on('sheeptime:loggedActivities:get', function (event, arg) {
-  loggedActivities = arg
-  Vue.component('activity-list', require('./vue/activity-list.vue'))
-  var vm = new Vue({
-    el: '#main',
-    data: loggedActivities
-  })
+  console.log("Activities received")
+  data.activities = arg
+  if (dataReceived === 1){
+    createVue()
+  } else {
+    dataReceived++
+  }
 })
 
-/*
-var testObject = {array: mapHandling.mapToArray(loggedActivities[1])}
-const Vue = require('vue')
-Vue.component('activity-list', require('./vue/activity-list.vue'))
-var vm = new Vue({
-  el: '#main',
-  data: testObject
-}) */
-// -------------
+ipcRenderer.on('sheeptime:savedProjects:get', function (event, arg) {
+  console.log("Projects received")
+  console.log(arg)
+  data.projects = arg
+  if (dataReceived === 1){
+    createVue()
+  } else {
+    dataReceived++
+  }
+})
 
-// Initialise the view after getting the loggedActivities and savedProjects from the save file
-updateProjectsDropdown()
+function createVue () {
+  console.log("Creating Vue")
+  Vue.component('activity-list', require('./vue/activity-list.vue'))
+  Vue.component('projects-dropdown', require('./vue/projects-dropdown.vue'))
+  vm = new Vue({
+    el: '#main',
+    data: data
+  })
+}
 
 errors.forEach(function (err) {
   console.error(err)
@@ -60,19 +76,24 @@ $('#startStopButton').on('click', function () {
     // Stop the stopwatch
     clearInterval(intervalID)
 
-    let activityProjectID = parseInt(getElementByID('projectsDropdown').value)
+    // DEV
+    //let activityProjectID = parseInt(getElementByID('projectsDropdown').value)
+    let activityProjectID = 0
 
     // Add the new activitiy to the loggedActivities map
-    var newActivity = {projectID: activityProjectID, name: activityName.value, duration: currentSeconds, startTime: startTime, endTime: endTime}
-    loggedActivities.activitiesArray = mapHandling.addElement(loggedActivities.activitiesArray, loggedActivities.freshID, newActivity)
+    // DEV
+    var newActivity = {projectID: 0, name: activityName.value, duration: currentSeconds, startTime: startTime, endTime: endTime}
+    data.activities.activitiesArray = mapHandling.setElement(data.activities.activitiesArray , data.activities.freshID, newActivity)
+    //loggedActivities.activitiesArray.push([105, {duration:2,endTime:1474818503667,name:"asdf2242",projectID:0,startTime:1474818501039}])
 
     // Increment the fresh ID
-    loggedActivities.freshID++
+    data.activities.freshID++
 
     // Update the total time of the activity's project in the project map by adding the number of elapsed seconds
-    let activityProject = savedProjects[1].get(activityProjectID)
+    let activityProject = mapHandling.getElement(data.projects.projectsArray, activityProjectID)
     activityProject.totalSeconds += currentSeconds
-    savedProjects[1].set(activityProjectID, activityProject)
+    data.projects.projectsArray = mapHandling.setElement(data.projects.projectsArray, activityProjectID, activityProject)
+    //savedProjects[1].set(activityProjectID, activityProject)
 
     // Reset the stopwatch
     currentSeconds = 0
@@ -87,12 +108,13 @@ $('#startStopButton').on('click', function () {
     stopwatchRunning = false
 
     // Save the new activity to the JSON file
-    activitiesStorage.saveActivities(loggedActivities)
+    //activitiesStorage.saveActivities(loggedActivities)
     // Save the updated project to the JSON file
-    projectsStorage.saveProjects(savedProjects)
+    //projectsStorage.saveProjects(savedProjects)
 
     // Inform the project window of the new total time of one of the savedProjects
-    ipcRenderer.send('activity-tracked', mapHandling.mapToArray(savedProjects[1]))
+    // DEV
+    //ipcRenderer.send('activity-tracked', mapHandling.mapToArray(savedProjects[1]))
 
     // Stopwatch is not running -> buttons acts as start button
   } else {
@@ -121,9 +143,8 @@ $('#projectsButton').on('click', function () {
 $('#settingsButton').on('click', function () {
   //ipcRenderer.send('open-settings-window')
   //DEV
-  console.log(test.activitiesArray)
-  test.activitiesArray = [[61,{"projectID":5,"name":"asdfYAY","duration":2,"startTime":1472929376284,"endTime":1472929378533}]]
-
+  //console.log(test.activitiesArray)
+  loggedActivities.activitiesArray = []
   //ipcRenderer.send('test')
 })
 
@@ -148,7 +169,7 @@ $('#activityTable').on('click', 'button.deleteActivityButton', function () {
 // If a project is added in the project window, update the project dropdown in this window
 ipcRenderer.on('project-added', function (event, arg) {
   savedProjects[1] = mapHandling.arrayToMap(arg)
-  updateProjectsDropdown()
+  //updateProjectsDropdown()
 })
 
 // If a project is deleted in the project window, delete all loggedActivities associated with that project
@@ -163,31 +184,32 @@ ipcRenderer.on('project-deleted', function (event, arg) {
 
   // Update the saved projects and then the view
   savedProjects[1] = mapHandling.arrayToMap(arg.newSavedProjects)
-  updateProjectsDropdown()
+  //updateProjectsDropdown()
 })
 
+// Update the view after deleting an activity
 ipcRenderer.on('sheeptime:activity:deleted', function (event, arg) {
   loggedActivities.activitiesArray = arg
 })
 
-function updateProjectsDropdown () {
-  console.log('updateprojects')
-  var output = '<select name="savedProjects">'
-  // If the savedProjects map is empty add an error to the error list
-  if (savedProjects[1].size === 0) {
-    errors.push('Please add a project before tracking loggedActivities')
-    return
-  }
-  // Otherwise generate the savedProjects dropdown
-  savedProjects[1].forEach(function (elem, id) {
-    console.log(elem.name)
-    output +=
-      // Each option hild the project's ID in his "value" attribute
-      '<option value="' + id + '">' +
-      (elem.name) +
-      '</option>'
-  })
-  output += '</select>'
-  getElementByID('projectsDropdown').innerHTML = output
-}
-
+/* function updateProjectsDropdown () {
+ console.log('updateprojects')
+ var output = '<select name="savedProjects">'
+ // If the savedProjects map is empty add an error to the error list
+ if (savedProjects[1].size === 0) {
+ errors.push('Please add a project before tracking loggedActivities')
+ return
+ }
+ // Otherwise generate the savedProjects dropdown
+ savedProjects[1].forEach(function (elem, id) {
+ console.log(elem.name)
+ output +=
+ // Each option hild the project's ID in his "value" attribute
+ '<option value="' + id + '">' +
+ (elem.name) +
+ '</option>'
+ })
+ output += '</select>'
+ getElementByID('projectsDropdown').innerHTML = output
+ }
+ */
