@@ -14,7 +14,7 @@
                 <tr v-for="activity in al">
                     <td>{{activity[1].name}}</td>
                     <td>
-                        <span class="badge">Project name</span>
+                        <span class="badge">{{getProjectName(pl, activity[1].projectID)}}</span>
                     </td>
                     <td>
                         <a type="button" href="#activity-{{activity[0]}}" data-toggle="collapse" data-target="#activity-{{activity[0]}}">{{secondsToTime(activity[1].duration)}}</a>
@@ -37,8 +37,9 @@
 <script>
     const formatTime = require('./../formatTime')
     const ipcRenderer = require('electron').ipcRenderer
+    const mapHandling = require('./../mapHandling')
     export default {
-        props: ['al'],
+        props: ['al', 'pl'],
         methods: {
             secondsToTime: function (seconds) {
                 return formatTime.secondsToTime(seconds)
@@ -48,6 +49,9 @@
             },
             deleteActivity: function (activityID) {
                 ipcRenderer.send('sheeptime:activity:delete', activityID)
+            },
+            getProjectName: function (projectListArray, projectID) {
+                return mapHandling.getElement(projectListArray, projectID).name
             }
         }
     }

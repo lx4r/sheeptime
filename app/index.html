@@ -18,7 +18,8 @@
     <div class="row">
         <div class="col-md-12" id="errors"></div>
     </div>
-    <div class="row">
+
+    <div class="row" v-if="projects.projectsArray.length > 0">
         <form>
             <div class="col-md-4 col-sm-12 col-xs-12 col-md-offset-2">
                 <input type="text" class="form-control" id="activityName" placeholder="activity">
@@ -28,6 +29,11 @@
             </div>
         </form>
     </div>
+
+    <div class="row" v-else>
+        <div class="alert alert-danger" role="alert">Please add a project before tracking activities</div>
+    </div>
+
     <div class="row" id="buttonRow">
         <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3">
             <button class="btn btn-success" id="startStopButton">Start</button>
@@ -37,7 +43,7 @@
     </div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <activity-list :al="activities.activitiesArray"></activity-list>
+            <activity-list :al="activities.activitiesArray" :pl="projects.projectsArray"></activity-list>
         </div>
     </div>
 </div>

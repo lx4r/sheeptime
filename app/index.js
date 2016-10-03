@@ -8,6 +8,7 @@ var activitiesStorage = require('./storage/activitiesStorage')
 var ipcRenderer = require('electron').ipcRenderer
 var formatTime = require('./formatTime')
 var mapHandling = require('./mapHandling')
+var getElementByID = require('./getElementByID')
 
 var currentSeconds = 0
 var startTime
@@ -76,9 +77,7 @@ $('#startStopButton').on('click', function () {
     // Stop the stopwatch
     clearInterval(intervalID)
 
-    // DEV
-    //let activityProjectID = parseInt(getElementByID('projectsDropdown').value)
-    let activityProjectID = 0
+    let activityProjectID = parseInt(getElementByID('projectsDropdown').value)
 
     // Add the new activitiy to the loggedActivities map
     // DEV
