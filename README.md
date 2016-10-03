@@ -8,6 +8,8 @@
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) ![Built with love](https://img.shields.io/badge/built%20with-love-red.svg)
 
+**SheepTime is not stable at all right now. Take a calming look at [some real sheep](https://abload.de/img/1280px-flock_of_sheep61smr.jpg) and come back later.**
+
 ## Screenshots
 
 ## Features

@@ -1,5 +1,5 @@
 <template>
-    <select v-for="project in pl" class="form-control">
+    <select v-for="project in pl" class="form-control" id="projectsDropdown">
         <option value="{{project[0]}}">
             {{project[1].name}}
         </option>

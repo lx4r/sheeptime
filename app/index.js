@@ -41,8 +41,6 @@ ipcRenderer.on('sheeptime:loggedActivities:get', function (event, arg) {
 })
 
 ipcRenderer.on('sheeptime:savedProjects:get', function (event, arg) {
-  console.log("Projects received")
-  console.log(arg)
   data.projects = arg
   if (dataReceived === 1){
     createVue()
@@ -52,7 +50,6 @@ ipcRenderer.on('sheeptime:savedProjects:get', function (event, arg) {
 })
 
 function createVue () {
-  console.log("Creating Vue")
   Vue.component('activity-list', require('./vue/activity-list.vue'))
   Vue.component('projects-dropdown', require('./vue/projects-dropdown.vue'))
   vm = new Vue({
@@ -140,11 +137,7 @@ $('#projectsButton').on('click', function () {
 })
 
 $('#settingsButton').on('click', function () {
-  //ipcRenderer.send('open-settings-window')
-  //DEV
-  //console.log(test.activitiesArray)
-  loggedActivities.activitiesArray = []
-  //ipcRenderer.send('test')
+  ipcRenderer.send('open-settings-window')
 })
 
 $('#activityTable').on('click', 'button.deleteActivityButton', function () {
@@ -188,7 +181,7 @@ ipcRenderer.on('project-deleted', function (event, arg) {
 
 // Update the view after deleting an activity
 ipcRenderer.on('sheeptime:activity:deleted', function (event, arg) {
-  loggedActivities.activitiesArray = arg
+  data.activities.activitiesArray = arg
 })
 
 /* function updateProjectsDropdown () {
