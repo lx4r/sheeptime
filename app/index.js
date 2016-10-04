@@ -21,7 +21,7 @@ var vm
 
 // ---- DEV ----
 
-var data = {activities:{}, projects: {}}
+var data = {activities:{}, projects: {}, selectedProject: -1}
 
 const Vue = require('vue')
 
@@ -52,6 +52,7 @@ ipcRenderer.on('sheeptime:savedProjects:get', function (event, arg) {
 function createVue () {
   Vue.component('activity-list', require('./vue/activity-list.vue'))
   Vue.component('projects-dropdown', require('./vue/projects-dropdown.vue'))
+  Vue.component('asdf', require('./vue/view-footer.vue'))
   vm = new Vue({
     el: '#main',
     data: data
@@ -77,7 +78,6 @@ $('#startStopButton').on('click', function () {
     let activityProjectID = parseInt(getElementByID('projectsDropdown').value)
 
     // Add the new activitiy to the loggedActivities map
-    // DEV
     var newActivity = {projectID: 0, name: activityName.value, duration: currentSeconds, startTime: startTime, endTime: endTime}
     data.activities.activitiesArray = mapHandling.setElement(data.activities.activitiesArray , data.activities.freshID, newActivity)
     //loggedActivities.activitiesArray.push([105, {duration:2,endTime:1474818503667,name:"asdf2242",projectID:0,startTime:1474818501039}])
@@ -104,9 +104,9 @@ $('#startStopButton').on('click', function () {
     stopwatchRunning = false
 
     // Save the new activity to the JSON file
-    //activitiesStorage.saveActivities(loggedActivities)
+    activitiesStorage.saveActivities(data.activities)
     // Save the updated project to the JSON file
-    //projectsStorage.saveProjects(savedProjects)
+    projectsStorage.saveProjects(data.projects)
 
     // Inform the project window of the new total time of one of the savedProjects
     // DEV
@@ -136,17 +136,17 @@ $('#projectsButton').on('click', function () {
   ipcRenderer.send('open-savedProjects-window')
 })
 
-$('#settingsButton').on('click', function () {
+$('#settings-link').on('click', function () {
   ipcRenderer.send('open-settings-window')
 })
 
 $('#activityTable').on('click', 'button.deleteActivityButton', function () {
   // Delete the activity with the ID stored in the clicked button from the activity map, update the loggedActivities table and save the new storage array to the JSON file
   var id = $(this).data('id')
-  var activity = loggedActivities[1].get(id)
-  loggedActivities[1].delete(id)
+  var activity = mapHandling.getElement(data.activities.activitiesArray, id)
+  mapHandling.deleteElement(data.activities.activitiesArray, id)
   //updateActivitiesTable()
-  activitiesStorage.saveActivities(loggedActivities)
+  activitiesStorage.saveActivities(data.activities)
 
   // Then update the new total time of the project the activity was associated with and save the updated project map to the JSON file
   var activityProject = savedProjects[1].get(activity.projectID)

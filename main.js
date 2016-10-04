@@ -164,7 +164,3 @@ ipcMain.on('sheeptime:activity:delete', function (event, arg) {
   }
   activitiesStorage.saveActivities(loggedActivities)
 })
-
-ipcMain.on('test', function (event, arg) {
-  test = {array: [[61,{"projectID":5,"name":"asdfYAY","duration":2,"startTime":1472929376284,"endTime":1472929378533}]]}
-})

@@ -4,7 +4,7 @@
             <h3 class="panel-title">Activities</h3>
         </div>
         <div class="panel-body">
-            <table class="table">
+            <table class="table" v-if="al.length > 0">
                 <tr>
                     <th>Activity</th>
                     <th>Project</th>
@@ -23,13 +23,15 @@
                         </div>
                     </td>
                     <td>
-                    <td>
                         <button v-on:click="deleteActivity(activity[0])" type="button" class="btn btn-xs btn-danger deleteActivityButton" aria-label="Left Align">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete
                         </button>
                     </td>
                 </tr>
             </table>
+            <div class="text-muted" v-else>
+                No activities yet.
+            </div>
         </div>
     </div>
 </template>
