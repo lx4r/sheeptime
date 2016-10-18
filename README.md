@@ -18,7 +18,7 @@
 
 
 ## Powered by
-[Electron](http://electron.atom.io), [Bootstrap](http://getbootstrap.com), [Paper](http://bootswatch.com/paper/), [jQuery](http://jquery.com), [strftime](https://github.com/samsonjs/strftime), [Mocha](https://mochajs.org), [Chai](http://chaijs.com), [Vue](http://vuejs.org/), [Vueify](https://github.com/vuejs/vueify), [Browserify](http://browserify.org), [Gulp](http://gulpjs.com)
+[Electron](http://electron.atom.io), [Bootstrap](http://getbootstrap.com), [Paper](http://bootswatch.com/paper/), [jQuery](http://jquery.com), [strftime](https://github.com/samsonjs/strftime), [Mocha](https://mochajs.org), [Chai](http://chaijs.com), [Vue](http://vuejs.org/), [Vueify](https://github.com/vuejs/vueify), [Browserify](http://browserify.org), [Gulp](http://gulpjs.com)  
 structure inspired by [pixeldesu's Surfbird](https://github.com/surfbirdapp/surfbird)
 
 ----
