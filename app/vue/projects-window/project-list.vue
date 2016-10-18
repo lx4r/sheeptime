@@ -85,10 +85,6 @@
         data.projects = newProjects
     })
 
-    ipcRenderer.on('sheeptime:activity:added', function (event, newProjects) {
-        data.projects = newProjects
-    })
-
     export default {
         methods: {
             secondsToTime: function (seconds) {

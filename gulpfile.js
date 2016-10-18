@@ -21,5 +21,4 @@ gulp.task('projects-window', function () {
     .pipe(gulp.dest('./app/assets/js'))
 })
 
-
 gulp.task('js', ['main-window', 'projects-window'])

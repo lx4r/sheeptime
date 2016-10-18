@@ -13,13 +13,11 @@ let mainWindow
 let projectsWindow
 let settingsWindow
 
-//DEV
 const activitiesStorage = require('./app/storage/activitiesStorage')
 const projectsStorage = require('./app/storage/projectsStorage')
 const mapHandling = require('./app/mapHandling')
 var loggedActivities = activitiesStorage.readActivities()
 var savedProjects = projectsStorage.readProjects()
-var stopwatchRunning = false
 
 function createWindow () {
   // Create the main window.
@@ -149,8 +147,7 @@ ipcMain.on('sheeptime:loggedActivities:send', function (event, arg) {
 // Send the projects to the view
 // Flow: controller -> main window/projects-window
 ipcMain.on('sheeptime:savedProjects:send', function (event, targetWindow) {
-  console.log('Sent projects')
-  switch (targetWindow){
+  switch (targetWindow) {
     case 'main-window':
       mainWindow.webContents.send('sheeptime:savedProjects:get', savedProjects)
       break
@@ -195,7 +192,7 @@ ipcMain.on('sheeptime:activity:delete', function (event, deletedActivityID) {
 // Flow: main window -> controller
 ipcMain.on('sheeptime:activity:add', function (event, addedActivity) {
   // Add the new activity to the loggedActivities map
-  loggedActivities.activitiesArray = mapHandling.setElement(loggedActivities.activitiesArray , loggedActivities.freshID, addedActivity)
+  loggedActivities.activitiesArray = mapHandling.setElement(loggedActivities.activitiesArray, loggedActivities.freshID, addedActivity)
 
   // Increment the fresh ID
   loggedActivities.freshID++
@@ -224,7 +221,6 @@ ipcMain.on('sheeptime:activity:add', function (event, addedActivity) {
 // Event: user deleted a project
 // Flow: projects window -> controller
 ipcMain.on('sheeptime:project:delete', function (event, deletedProjectsID) {
-  console.log('Delete ' + deletedProjectsID)
   // Delete the project from the storage object
   savedProjects.projectsArray = mapHandling.deleteElement(savedProjects.projectsArray, deletedProjectsID)
 
@@ -259,7 +255,6 @@ ipcMain.on('sheeptime:project:delete', function (event, deletedProjectsID) {
 // Event: user added a project
 // Flow: projects window -> controller
 ipcMain.on('sheeptime:project:add', function (event, newProjectName) {
-  console.log('Main: project ' + newProjectName + ' added')
   // Construct new project, add it to the projects storage and increase the fresh ID
   var newProject = {name: newProjectName, totalSeconds: 0}
   savedProjects.projectsArray = mapHandling.setElement(savedProjects.projectsArray, savedProjects.freshID, newProject)
@@ -282,7 +277,7 @@ ipcMain.on('sheeptime:project:add', function (event, newProjectName) {
 ipcMain.on('sheeptime:stopwatch:started', function (event, arg) {
   // Tell the projects window to prevent the user from deleting projects
   // Flow: controller -> projects window
-  if (projectsWindow){
+  if (projectsWindow) {
     projectsWindow.webContents.send('sheeptime:stopwatch:started')
   }
 })
@@ -292,7 +287,7 @@ ipcMain.on('sheeptime:stopwatch:started', function (event, arg) {
 ipcMain.on('sheeptime:stopwatch:stopped', function (event, arg) {
   // Tell the projects window to allow the user to delete projects
   // Flow: controller -> projects window
-  if (projectsWindow){
+  if (projectsWindow) {
     projectsWindow.webContents.send('sheeptime:stopwatch:stopped')
   }
 })

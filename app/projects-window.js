@@ -1,19 +1,10 @@
 /**
  * Created by lx4r on 20.08.16.
  */
-
-var ipcRenderer = require('electron').ipcRenderer
-var projectsStorage = require('./storage/projectsStorage.js')
-var mapHandling = require('./mapHandling')
-var formatTime = require('./formatTime')
-var getElementByID = require('./getElementByID')
-var config = require('./configuration')
-
-var savedProjects = projectsStorage.readProjects()
-var projectToBeDeletedID
-var openAreYouSure = ''
+'use strict'
 
 const Vue = require('vue')
+var vm
 
 Vue.component('projects-window', require('./vue/projects-window.vue'))
 Vue.component('project-input', require('./vue/projects-window/project-input.vue'))

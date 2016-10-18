@@ -3,17 +3,10 @@
  */
 'use strict'
 
-var projectsStorage = require('./storage/projectsStorage')
-var activitiesStorage = require('./storage/activitiesStorage')
 var ipcRenderer = require('electron').ipcRenderer
-var mapHandling = require('./mapHandling')
-
-//var currentSeconds = 0
 
 var errors = []
 var vm
-
-// ---- DEV ----
 
 const Vue = require('vue')
 
@@ -34,25 +27,3 @@ errors.forEach(function (err) {
 $('#settings-link').on('click', function () {
   ipcRenderer.send('open-settings-window')
 })
-
-/*
- // If a project is added in the project window, update the project dropdown in this window
- ipcRenderer.on('project-added', function (event, arg) {
- savedProjects[1] = mapHandling.arrayToMap(arg)
- //updateProjectsDropdown()
- })
-
- // If a project is deleted in the project window, delete all loggedActivities associated with that project
- ipcRenderer.on('project-deleted', function (event, arg) {
- loggedActivities[1].forEach(function (elem, id) {
- if (elem.projectID === arg.deletedProjectID) {
- loggedActivities[1].delete(id)
- }
- })
- //updateActivitiesTable()
- activitiesStorage.saveActivities(loggedActivities)
-
- // Update the saved projects and then the view
- savedProjects[1] = mapHandling.arrayToMap(arg.newSavedProjects)
- //updateProjectsDropdown()
- }) */

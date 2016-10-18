@@ -10,19 +10,19 @@ function arrayToMap (array) {
   return new Map(array)
 }
 
-function setElement(mapAsArray, key, value) {
+function setElement (mapAsArray, key, value) {
   var map = arrayToMap(mapAsArray)
   map.set(key, value)
   return mapToArray(map)
 }
 
-function deleteElement(mapAsArray, key) {
+function deleteElement (mapAsArray, key) {
   var map = arrayToMap(mapAsArray)
   map.delete(key)
   return mapToArray(map)
 }
 
-function getElement(mapAsArray, key) {
+function getElement (mapAsArray, key) {
   var map = arrayToMap(mapAsArray)
   return map.get(key)
 }
