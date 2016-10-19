@@ -36,6 +36,8 @@
     const ipcRenderer = require('electron').ipcRenderer
     const formatTime = require('./../../formatTime')
     const getElementByID = require('./../../getElementByID')
+    const activityModel = require('./../../storage/activityModel')
+
     var data = {
         stopwatchRunning: false,
         currentSeconds: 0,
@@ -60,7 +62,7 @@
                     let activityProjectID = parseInt(getElementByID('projectsDropdown').value)
                     let endTime = Date.now()
 
-                    let addedActivity = {projectID: activityProjectID, name: data.activityName, duration: data.currentSeconds, startTime: startTime, endTime: endTime}
+                    let addedActivity = activityModel.createActivity(data.activityName, data.currentSeconds, activityProjectID, startTime, endTime)
                     ipcRenderer.send('sheeptime:activity:add', addedActivity)
 
                     data.activityName = ""

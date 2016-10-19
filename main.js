@@ -15,6 +15,7 @@ let settingsWindow
 
 const activitiesStorage = require('./app/storage/activitiesStorage')
 const projectsStorage = require('./app/storage/projectsStorage')
+const projectModel = require('./app/storage/projectModel')
 const mapHandling = require('./app/mapHandling')
 var loggedActivities = activitiesStorage.readActivities()
 var savedProjects = projectsStorage.readProjects()
