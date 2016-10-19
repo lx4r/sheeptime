@@ -1,46 +1,48 @@
 <template>
-    <div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Projects</h3>
-            </div>
-            <div class="panel-body">
-                <div v-if="dataReceived == 2" id="projects-window-projects-table">
-                    <table class="table table-striped" v-if="projects.projectsArray.length > 0">
-                        <thead>
-                        <tr>
-                            <th>Project name</th>
-                            <th>Total time</th>
-                            <th v-show="!stopwatchRunning"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="project in projects.projectsArray">
-                            <td>{{project[1].name}}</td>
-                            <td>
-                                {{secondsToTime(project[1].totalSeconds)}}
-                            </td>
-                            <td v-show="!stopwatchRunning">
-                                <button v-if="deletionConfirmation" type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deletionConfirmation" v-on:click="setProjectToDelete(project[0])">
-                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete
-                                </button>
-                                <button v-else type="button" class="btn btn-xs btn-danger" v-on:click="deleteProject(project[0])">
-                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div class="text-muted" v-else>
-                        No projects yet.
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Projects</h3>
+                </div>
+                <div class="panel-body">
+                    <div v-if="dataReceived == 2" id="projects-window-projects-table">
+                        <table class="table table-striped" v-if="projects.projectsArray.length > 0">
+                            <thead>
+                            <tr>
+                                <th>Project name</th>
+                                <th>Total time</th>
+                                <th v-show="!stopwatchRunning"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="project in projects.projectsArray">
+                                <td>{{project[1].name}}</td>
+                                <td>
+                                    {{secondsToTime(project[1].totalSeconds)}}
+                                </td>
+                                <td v-show="!stopwatchRunning">
+                                    <button v-if="deletionConfirmation" type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deletionConfirmation" v-on:click="setProjectToDelete(project[0])">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete
+                                    </button>
+                                    <button v-else type="button" class="btn btn-xs btn-danger" v-on:click="deleteProject(project[0])">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-muted" v-else>
+                            No projects yet.
+                        </div>
+                    </div>
+                    <div v-else>
+                        Loading
                     </div>
                 </div>
-                <div v-else>
-                    Loading
-                </div>
             </div>
+            <deletion-confirmation :projectToDelete="projectToDelete"></deletion-confirmation>
         </div>
-        <deletion-confirmation :projectToDelete="projectToDelete"></deletion-confirmation>
     </div>
 </template>
 
