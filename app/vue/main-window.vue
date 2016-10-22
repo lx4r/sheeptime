@@ -11,7 +11,7 @@
     const ipcRenderer = require('electron').ipcRenderer
     var data = {
         dataReceived: false,
-        projects: {}
+        projects: {},
     }
 
     ipcRenderer.send('sheeptime:savedProjects:send', 'main-window')

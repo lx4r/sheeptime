@@ -93,7 +93,7 @@ ipcMain.on('sheeptime:projects:open', function () {
   })
 })
 
-ipcMain.on('open-settings-window', function () {
+ipcMain.on('sheeptime:settings:open', function () {
   if (settingsWindow) {
     return
   }
@@ -103,7 +103,7 @@ ipcMain.on('open-settings-window', function () {
     width: 400
   })
 
-  settingsWindow.loadURL(`file://${__dirname}/app/settings.html`)
+  settingsWindow.loadURL(`file://${__dirname}/app/settings-window.html`)
 
   settingsWindow.webContents.openDevTools()
 
@@ -140,9 +140,16 @@ ipcMain.on('project-deleted', function (event, arg) {
 
 // DEV
 // Send the activities to the view
-// Flow: controller -> main window
-ipcMain.on('sheeptime:loggedActivities:send', function (event, arg) {
-  mainWindow.webContents.send('sheeptime:loggedActivities:get', loggedActivities)
+// Flow: controller -> main window/projects-window
+ipcMain.on('sheeptime:loggedActivities:send', function (event, targetWindow) {
+  switch (targetWindow) {
+    case 'main-window':
+      mainWindow.webContents.send('sheeptime:loggedActivities:get', loggedActivities)
+      break
+    case 'projects-window':
+      projectsWindow.webContents.send('sheeptime:loggedActivities:get', loggedActivities)
+      break
+  }
 })
 
 // Send the projects to the view
@@ -291,4 +298,17 @@ ipcMain.on('sheeptime:stopwatch:stopped', function (event, arg) {
   if (projectsWindow) {
     projectsWindow.webContents.send('sheeptime:stopwatch:stopped')
   }
+})
+
+// Event: user wants a report
+// Flow: projects window -> controller
+ipcMain.on('sheeptime:report:send', function (event, projectID) {
+  var result = []
+  var activitiesMap = mapHandling.arrayToMap(loggedActivities.activitiesArray)
+  activitiesMap.forEach(function (elem, id) {
+    if (elem.projectID === projectID) {
+      result.push(elem)
+    }
+  })
+  projectsWindow.webContents.send('sheeptime:report:get', result)
 })

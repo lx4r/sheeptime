@@ -21,4 +21,12 @@ gulp.task('projects-window', function () {
     .pipe(gulp.dest('./app/assets/js'))
 })
 
-gulp.task('js', ['main-window', 'projects-window'])
+gulp.task('settings-window', function () {
+  return browserify('./app/settings-window.js', {bundleExternal: false, builtins: false, commondir: false, insertGlobals: 'global'})
+    .transform(vueify)
+    .bundle()
+    .pipe(source('settings-window.js'))
+    .pipe(gulp.dest('./app/assets/js'))
+})
+
+gulp.task('js', ['main-window', 'projects-window', 'settings-window'])

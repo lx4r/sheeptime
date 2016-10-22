@@ -1,11 +1,12 @@
 <template>
     <div class="container" id="projects-window">
-        <project-input></project-input>
         <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <project-list></project-list>
+            <div class="col-md-12">
+                <h1>Projects</h1>
             </div>
         </div>
+        <project-input></project-input>
+        <project-list></project-list>
     </div>
 </template>
 <script>

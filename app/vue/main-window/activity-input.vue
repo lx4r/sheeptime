@@ -27,6 +27,9 @@
                 <button class="btn btn-danger" v-else v-on:click="startstop()">Stop</button>
             </span>
                 <button class="btn btn-primary" id="projectsButton" v-on:click="openProjects()">Projects</button>
+                <button type="button" class="btn btn-default" v-on:click="openSettings()">
+                    <span class="glyphicon glyphicon-cog"></span>
+                </button>
             </div>
         </div>
     </div>
@@ -79,6 +82,9 @@
             },
             openProjects: function () {
                 ipcRenderer.send('sheeptime:projects:open')
+            },
+            openSettings: function () {
+                ipcRenderer.send('sheeptime:settings:open')
             },
             secondsToTime: function (seconds) {
                 return formatTime.secondsToTime(seconds)

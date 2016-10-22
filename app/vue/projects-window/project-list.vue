@@ -12,6 +12,7 @@
                             <tr>
                                 <th>Project name</th>
                                 <th>Total time</th>
+                                <th></th>
                                 <th v-show="!stopwatchRunning"></th>
                             </tr>
                             </thead>
@@ -20,6 +21,11 @@
                                 <td>{{project[1].name}}</td>
                                 <td>
                                     {{secondsToTime(project[1].totalSeconds)}}
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#report" v-on:click="getReportForProject(project[0], project[1])">
+                                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Report
+                                    </button>
                                 </td>
                                 <td v-show="!stopwatchRunning">
                                     <button v-if="deletionConfirmation" type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deletionConfirmation" v-on:click="setProjectToDelete(project[0])">
@@ -42,6 +48,7 @@
                 </div>
             </div>
             <deletion-confirmation :projectToDelete="projectToDelete"></deletion-confirmation>
+            <report :activitiesForReport="activitiesForReport" :reportProject="reportProject"></report>
         </div>
     </div>
 </template>
@@ -55,7 +62,9 @@
         dataReceived: 0,
         deletionConfirmation: true,
         projectToDelete: -1,
-        stopwatchRunning: false
+        stopwatchRunning: false,
+        activitiesForReport: [],
+        reportProject: {}
     }
 
     ipcRenderer.send('sheeptime:savedProjects:send', 'projects-window')
@@ -87,6 +96,11 @@
         data.projects = newProjects
     })
 
+    ipcRenderer.on('sheeptime:report:get', function (event, projectActivities) {
+        data.activitiesForReport = projectActivities
+        console.log(projectActivities)
+    })
+
     export default {
         methods: {
             secondsToTime: function (seconds) {
@@ -98,6 +112,10 @@
             setProjectToDelete: function (projectID) {
                 console.log("Next to delete: " + projectID)
                 data.projectToDelete = projectID
+            },
+            getReportForProject: function (projectID, project) {
+                ipcRenderer.send('sheeptime:report:send', projectID)
+                data.reportProject = project
             }
         },
         data(){

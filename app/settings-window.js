@@ -3,7 +3,20 @@
  */
 'use strict'
 
-var config = require('./configuration')
+const Vue = require('vue')
+var vm
+
+Vue.component('settings-window', require('./vue/settings-window.vue'))
+Vue.component('savefile-location', require('./vue/settings-window/savefile-location.vue'))
+Vue.component('show-deletion-confirmation', require('./vue/settings-window/show-deletion-confirmation.vue'))
+Vue.component('time-format', require('./vue/settings-window/time-format.vue'))
+
+vm = new Vue({
+  el: '#settings-window-wrapper',
+  render: h => h('settings-window')
+})
+
+/* var config = require('./configuration')
 var getElementByID = require('./getElementByID')
 var fs = require('fs')
 
@@ -48,4 +61,4 @@ $('#showDeletionConfirmation').on('click', function () {
     // show modal again
     config.saveSettings('show-deletion-confirmation', true)
   }
-})
+}) */
