@@ -16,7 +16,7 @@ SheepTime is not stable at all right now. Please take a calming look at [some re
 ## Features
 
 - tracking of activities per project you work on
-- reports of the activities in a project (can be exported as a PDF)
+- reports on the activities in a project (including total time spent on the project, can be exported as a PDF)
 - supports European and American time formats
 
 ## Download
