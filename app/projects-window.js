@@ -4,7 +4,7 @@
 'use strict'
 
 const Vue = require('vue')
-var vm
+var vm // eslint-disable-line
 
 Vue.component('projects-window', require('./vue/projects-window.vue'))
 Vue.component('project-input', require('./vue/projects-window/project-input.vue'))

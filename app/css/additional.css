@@ -16,3 +16,9 @@ h1 {
     padding-top: 2px;
     padding-bottom: 2px;
 }
+button:focus {outline:none;}
+@media print {
+    #project-list, #project-heading, #project-input, .report-button{
+        display: none;
+    }
+}

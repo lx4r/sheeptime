@@ -15,7 +15,7 @@ let settingsWindow
 
 const activitiesStorage = require('./app/storage/activitiesStorage')
 const projectsStorage = require('./app/storage/projectsStorage')
-const projectModel = require('./app/storage/projectModel')
+const pdfReport = require('./app/storage/pdfReport')
 const mapHandling = require('./app/mapHandling')
 var loggedActivities = activitiesStorage.readActivities()
 var savedProjects = projectsStorage.readProjects()
@@ -35,9 +35,6 @@ function createWindow () {
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
     mainWindow = null
   })
 }
@@ -207,9 +204,7 @@ ipcMain.on('sheeptime:activity:add', function (event, addedActivity) {
 
   // Pass the changed activities storage object to the view
   // Flow: controller -> main window
-  if (mainWindow) {
-    mainWindow.webContents.send('sheeptime:activity:added', loggedActivities)
-  }
+  event.sender.send('sheeptime:activity:added', loggedActivities)
 
   // Update the total time of the activity's project in the project map by adding the number of elapsed seconds
   let activityProject = mapHandling.getElement(savedProjects.projectsArray, addedActivity.projectID)
@@ -305,10 +300,19 @@ ipcMain.on('sheeptime:stopwatch:stopped', function (event, arg) {
 ipcMain.on('sheeptime:report:send', function (event, projectID) {
   var result = []
   var activitiesMap = mapHandling.arrayToMap(loggedActivities.activitiesArray)
-  activitiesMap.forEach(function (elem, id) {
+  activitiesMap.forEach(function (elem) {
     if (elem.projectID === projectID) {
       result.push(elem)
     }
   })
+  // Flow: controller -> projects window
   projectsWindow.webContents.send('sheeptime:report:get', result)
+})
+
+// Event: user wants a PDF report
+// Flow: projects window -> controller
+ipcMain.on('sheeptime:report:PDF', function (event, reportProject) {
+  if (!pdfReport.savePDFReport(event, reportProject)){
+    event.sender.send('sheeptime:report:PDF:error')
+  }
 })

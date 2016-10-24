@@ -4,7 +4,7 @@
 'use strict'
 
 const Vue = require('vue')
-var vm
+var vm // eslint-disable-line
 
 Vue.component('settings-window', require('./vue/settings-window.vue'))
 Vue.component('savefile-location', require('./vue/settings-window/savefile-location.vue'))

@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="project-list">
                 <div class="panel-heading">
                     <h3 class="panel-title">Projects</h3>
                 </div>
@@ -96,6 +96,10 @@
         data.projects = newProjects
     })
 
+    ipcRenderer.on('sheeptime:activity:added', function (event, newProjects) {
+        data.projects = newProjects
+    })
+
     ipcRenderer.on('sheeptime:report:get', function (event, projectActivities) {
         data.activitiesForReport = projectActivities
         console.log(projectActivities)
@@ -110,7 +114,6 @@
                 ipcRenderer.send('sheeptime:project:delete', projectID)
             },
             setProjectToDelete: function (projectID) {
-                console.log("Next to delete: " + projectID)
                 data.projectToDelete = projectID
             },
             getReportForProject: function (projectID, project) {

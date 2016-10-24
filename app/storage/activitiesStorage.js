@@ -7,8 +7,8 @@
  */
 'use strict'
 
-var fs = require('fs')
-var config = require('./../configuration')
+const fs = require('fs')
+const config = require('./../configuration')
 
 // Saves the loggedActivities into a JSON file
 function saveActivities (activities) {

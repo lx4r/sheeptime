@@ -1,6 +1,6 @@
 <template>
     <div class="container" id="projects-window">
-        <div class="row">
+        <div class="row" id="project-heading">
             <div class="col-md-12">
                 <h1>Projects</h1>
             </div>

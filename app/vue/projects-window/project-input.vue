@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row" id="project-input">
         <div class="col-md-6 col-md-offset-3 col-sm-12 col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-heading">

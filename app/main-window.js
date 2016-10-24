@@ -6,7 +6,7 @@
 var ipcRenderer = require('electron').ipcRenderer
 
 var errors = []
-var vm
+var vm // eslint-disable-line
 
 const Vue = require('vue')
 
