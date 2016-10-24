@@ -18,13 +18,16 @@ h1 {
     padding-top: 2px;
     padding-bottom: 2px;
 }
+
 button:focus {outline:none;}
+
 /* PDF report */
 @media print {
     #project-list-table, #project-heading, #project-input, .report-button{
         display: none;
     }
 }
+
 /* project window */
 #project-list-table {
     width: 100%
@@ -47,7 +50,6 @@ button:focus {outline:none;}
 
 #project-list-table thead th {
     height: 30px;
-
 }
 
 #project-list-table tbody{
@@ -65,61 +67,3 @@ button:focus {outline:none;}
 #project-list-table table {
     margin-bottom: 0px !important;
 }
-
-/*
-#project-list tbody,
-#project-list thead
-{
-    display: block;
-}
-
-#project-list tbody
-{
-    overflow: auto;
-    height: 100px;
-}
-
-#project-list {
-    width: 300px;
-}
-
-#project-list th
-{
-} */
-
-
-/*
-#project-list thead {
-    width: 97%;
-}
-#project-list tbody {
-    height: 230px;
-    overflow-y: auto;
-    width: 100%;
-}
-#project-list thead, #project-list tbody, #project-list tr, #project-list td, #project-list th {
-    display: block;
-}
-#project-list tbody td, #project-list thead > tr> th {
-    float: left;
-    border-bottom-width: 0;
-} */
-
-
-/*
-#project-list {
-    width: 200px;
-    overflow-x: scroll;
-}
-#project-list table {
-    width: 100%;
-    overflow-y: scroll;
-}
-#project-list tbody {
-    overflow-x: scroll;
-    display: block;
-    height: 200px;
-}
-#project-list thead {
-    display: table-row;
-}*/
