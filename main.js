@@ -77,8 +77,8 @@ ipcMain.on('sheeptime:projects:open', function () {
   }
 
   projectsWindow = new BrowserWindow({
-    height: 600,
-    width: 400
+    height: 680,
+    width: 500
   })
 
   projectsWindow.loadURL(`file://${__dirname}/app/projects-window.html`)
