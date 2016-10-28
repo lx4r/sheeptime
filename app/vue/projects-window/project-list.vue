@@ -6,7 +6,7 @@
                     <h3 class="panel-title">Projects</h3>
                 </div>
                 <div class="panel-body">
-                    <div v-if="dataReceived == 2" id="project-list-table">
+                    <div v-if="dataReceived > 1" id="project-list-table">
                         <table class="table table-striped" v-if="projects.projectsArray.length > 0">
                             <thead>
                             <tr>

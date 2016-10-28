@@ -11,7 +11,7 @@
                     <form>
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" v-model="dontShowDeletionConfirmation">
+                                <input type="checkbox" v-model="dontShowDeletionConfirmation" v-on:change="changeDeletionConfirmation()">
                                 Don't show this dialogue again
                                 <small>(It can be re-enabled in the settings.)</small>
                             </label>
@@ -42,6 +42,10 @@
                 console.log("Don't show confirmation: " + data.dontShowDeletionConfirmation)
                 ipcRenderer.send('sheeptime:project:delete', projectID)
             },
+            changeDeletionConfirmation: function () {
+                var status = !data.dontShowDeletionConfirmation
+                ipcRenderer.send('sheeptime:config:deletion-confirmation:set', status)
+            }
         },
         data() {
             return data

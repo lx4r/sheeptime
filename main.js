@@ -121,6 +121,13 @@ ipcMain.on('sheeptime:config:deletion-confirmation:send', function (event, arg) 
 
 ipcMain.on('sheeptime:config:deletion-confirmation:set', function (event, newStatus) {
   configuration.saveSettings('show-deletion-confirmation', newStatus)
+  // Update the status in the projects window and the settings window
+  if (settingsWindow){
+    settingsWindow.webContents.send('sheeptime:config:deletion-confirmation:get', newStatus)
+  }
+  if (projectsWindow){
+    projectsWindow.webContents.send('sheeptime:config:deletion-confirmation:get', newStatus)
+  }
 })
 
 ipcMain.on('sheeptime:config:time-format:send', function (event, arg) {
