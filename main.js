@@ -116,17 +116,18 @@ ipcMain.on('sheeptime:savedProjects:send', function (event, targetWindow) {
 })
 
 ipcMain.on('sheeptime:config:deletion-confirmation:send', function (event, arg) {
-  console.log('Sent deletion config')
   event.sender.send('sheeptime:config:deletion-confirmation:get', configuration.readSettings('show-deletion-confirmation'))
 })
 
+ipcMain.on('sheeptime:config:deletion-confirmation:set', function (event, newStatus) {
+  configuration.saveSettings('show-deletion-confirmation', newStatus)
+})
+
 ipcMain.on('sheeptime:config:time-format:send', function (event, arg) {
-  console.log('Sent time format')
   event.sender.send('sheeptime:config:time-format:get', configuration.readSettings('time-format'))
 })
 
 ipcMain.on('sheeptime:config:time-format:set', function (event, newTimeFormat) {
-  console.log('Time format changed to: ' + newTimeFormat)
   configuration.saveSettings('time-format', newTimeFormat)
 })
 

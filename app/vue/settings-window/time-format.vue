@@ -9,13 +9,13 @@
                     <form v-if="dataReceived">
                         <div class="radio">
                             <label>
-                                <input type="radio" class="timeFormatRadio" name="timeFormatRadios" id="timeFormatEuropean" value="european" v-model="timeFormat" v-on:click='changeTimeFormat("european")'>
+                                <input type="radio" class="timeFormatRadio" name="timeFormatRadios" id="timeFormatEuropean" value="european" v-model="timeFormat" v-on:change='changeTimeFormat()'>
                                 DD.MM.YYYY, HH:MM
                             </label>
                         </div>
                         <div class="radio">
                             <label>
-                                <input type="radio" class="timeFormatRadio" name="timeFormatRadios" id="timeFormatAmerican" value="american" v-model="timeFormat" v-on:click='changeTimeFormat("american")'>
+                                <input type="radio" class="timeFormatRadio" name="timeFormatRadios" id="timeFormatAmerican" value="american" v-model="timeFormat" v-on:change='changeTimeFormat()'>
                                 MM/DD/YYYY, HH:MM
                             </label>
                         </div>
@@ -47,8 +47,8 @@
 
     export default {
         methods: {
-          changeTimeFormat: function (newTimeFormat) {
-              ipcRenderer.send('sheeptime:config:time-format:set', newTimeFormat)
+          changeTimeFormat: function () {
+              ipcRenderer.send('sheeptime:config:time-format:set', data.timeFormat)
           }
         },
         data () {

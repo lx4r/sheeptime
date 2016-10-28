@@ -6,16 +6,46 @@
                     <h3 class="panel-title">Deletion confirmation</h3>
                 </div>
                 <div class="panel-body">
-                    <form>
+                    <form v-if="dataReceived">
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" id="showDeletionConfirmation">
-                                Don't show the deletion confirmation dialogue
+                                <input type="checkbox" id="showDeletionConfirmation" v-model="showDeletionConfirmation" v-on:change="changeDeletionConfirmation()">
+                                Show the deletion confirmation dialogue
                             </label>
                         </div>
                     </form>
+                    <div v-else>
+                        Loading
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
+<script>
+    const ipcRenderer = require('electron').ipcRenderer
+
+    ipcRenderer.send('sheeptime:config:deletion-confirmation:send')
+
+    ipcRenderer.on('sheeptime:config:deletion-confirmation:get', function (event, status) {
+        data.showDeletionConfirmation = status
+        data.dataReceived = true
+    })
+
+    var data = {
+        showDeletionConfirmation: true,
+        dataReceived: false
+    }
+
+    export default {
+        methods: {
+            changeDeletionConfirmation: function () {
+                ipcRenderer.send('sheeptime:config:deletion-confirmation:set', data.showDeletionConfirmation)
+            }
+        },
+        data () {
+            return data
+        }
+    }
+</script>
