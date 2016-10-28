@@ -3,7 +3,7 @@
 </div>
 
 <p align='center'>
-  a simple time tracker powered by Electron
+  a simple time tracker powered by Electron + Vue
 </p>
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) ![Built with love](https://img.shields.io/badge/built%20with-love-red.svg)

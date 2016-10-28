@@ -7,8 +7,6 @@ const BrowserWindow = electron.BrowserWindow
 var ipcMain = require('electron').ipcMain
 var configuration = require('./app/configuration')
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let projectsWindow
 let settingsWindow
@@ -17,20 +15,18 @@ const activitiesStorage = require('./app/storage/activitiesStorage')
 const projectsStorage = require('./app/storage/projectsStorage')
 const pdfReport = require('./app/storage/pdfReport')
 const mapHandling = require('./app/mapHandling')
+const fs = require('fs')
 var loggedActivities = activitiesStorage.readActivities()
 var savedProjects = projectsStorage.readProjects()
 
 function createWindow () {
-  // Create the main window.
   mainWindow = new BrowserWindow({
     width: 500,
     height: 600
   })
 
-  // and load the main-window.html of the app.
   mainWindow.loadURL(`file://${__dirname}/app/main-window.html`)
 
-  // Open the DevTools.
   mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
@@ -109,63 +105,50 @@ ipcMain.on('sheeptime:settings:open', function () {
   })
 })
 
-// Pass notifications on
-// "project added": savedProjects window -> main window
-ipcMain.on('project-added', function (event, arg) {
-  if (mainWindow) {
-    mainWindow.webContents.send('project-added', arg)
-  }
-})
-// "activity tracked": main window -> savedProjects window
-ipcMain.on('activity-tracked', function (event, arg) {
-  if (projectsWindow) {
-    projectsWindow.webContents.send('activity-tracked', arg)
-  }
-})
-// "activity deleted": main window -> savedProjects window
-ipcMain.on('activity-deleted', function (event, arg) {
-  if (projectsWindow) {
-    projectsWindow.webContents.send('activity-deleted', arg)
-  }
-})
-// "project deleted": savedProjects window -> main window
-ipcMain.on('project-deleted', function (event, arg) {
-  if (mainWindow) {
-    mainWindow.webContents.send('project-deleted', arg)
-  }
-})
-
-// DEV
 // Send the activities to the view
 // Flow: controller -> main window/projects-window
 ipcMain.on('sheeptime:loggedActivities:send', function (event, targetWindow) {
-  switch (targetWindow) {
-    case 'main-window':
-      mainWindow.webContents.send('sheeptime:loggedActivities:get', loggedActivities)
-      break
-    case 'projects-window':
-      projectsWindow.webContents.send('sheeptime:loggedActivities:get', loggedActivities)
-      break
-  }
+  event.sender.send('sheeptime:loggedActivities:get', loggedActivities)
 })
 
-// Send the projects to the view
-// Flow: controller -> main window/projects-window
 ipcMain.on('sheeptime:savedProjects:send', function (event, targetWindow) {
-  switch (targetWindow) {
-    case 'main-window':
-      mainWindow.webContents.send('sheeptime:savedProjects:get', savedProjects)
-      break
-    case 'projects-window':
-      projectsWindow.webContents.send('sheeptime:savedProjects:get', savedProjects)
-      break
-  }
+  event.sender.send('sheeptime:savedProjects:get', savedProjects)
 })
 
-// Send to the view whether to show a deletion confirmation
 ipcMain.on('sheeptime:config:deletion-confirmation:send', function (event, arg) {
   console.log('Sent deletion config')
-  projectsWindow.webContents.send('sheeptime:config:deletion-confirmation:get', configuration.readSettings('show-deletion-confirmation'))
+  event.sender.send('sheeptime:config:deletion-confirmation:get', configuration.readSettings('show-deletion-confirmation'))
+})
+
+ipcMain.on('sheeptime:config:time-format:send', function (event, arg) {
+  console.log('Sent time format')
+  event.sender.send('sheeptime:config:time-format:get', configuration.readSettings('time-format'))
+})
+
+ipcMain.on('sheeptime:config:time-format:set', function (event, newTimeFormat) {
+  console.log('Time format changed to: ' + newTimeFormat)
+  configuration.saveSettings('time-format', newTimeFormat)
+})
+
+ipcMain.on('sheeptime:config:savefile-location:send', function (event, arg) {
+  event.sender.send('sheeptime:config:savefile-location:get', configuration.readSettings('savefile-directory'))
+})
+
+ipcMain.on('sheeptime:config:savefile-location:set', function (event, newSaveFileDir) {
+  fs.access(newSaveFileDir, fs.W_OK, function (err) {
+    if (!err) {
+      console.log('success in main')
+      // path exists and can be written -> save path
+      configuration.saveSettings('savefile-directory', newSaveFileDir)
+      activitiesStorage.saveActivities(loggedActivities)
+      projectsStorage.saveProjects(savedProjects)
+      event.sender.send('sheeptime:config:savefile-location:set:done', true)
+    } else {
+      // path error
+      console.log('no success in main');
+      event.sender.send('sheeptime:config:savefile-location:set:done', false)
+    }
+  })
 })
 
 // Event: user deleted an activity

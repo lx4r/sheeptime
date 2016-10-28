@@ -16,9 +16,9 @@
                         <h3 class="panel-title">About</h3>
                     </div>
                     <div class="panel-body">
-                        a project by l3r<br>
+                        a project by <a href="https://l3r.de">lx4r</a><br>
                         I hope you find SheepTime useful and have fun using it. :-)<br>
-                        If you encounter any bugs don't hesitate to open an issue on <a href="https://github.com/lx4r/sheeptime/issues" target="_blank">Github</a> or contact me via <a href="https://twitter.com/sheeptimeapp" target="_blank">Twitter</a>.
+                        If you encounter any bugs (which is quite likely for the time being) don't hesitate to open an issue on <a href="https://github.com/lx4r/sheeptime/issues" target="_blank">Github</a> or contact me via <a href="https://twitter.com/sheeptimeapp" target="_blank">Twitter</a>.
                     </div>
                 </div>
             </div>
