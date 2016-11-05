@@ -67,3 +67,46 @@ button:focus {outline:none;}
 #project-list-table table {
     margin-bottom: 0px !important;
 }
+
+/* project window: project input */
+.color-example {
+    float: left;
+    width: 20%;
+    height: 30px;
+    margin-right: 6%;
+}
+.color-example-end {
+    margin-right: 0px;
+}
+.color-example-selected {
+    border: 2px black solid;
+}
+
+.color-picker-row {
+    margin-bottom: 40px;
+}
+
+#ce1 {
+    background-color: #e51c23;
+}
+
+#ce2 {
+    background-color: #ff9800;
+}
+
+#ce3 {
+    background-color: #9c27b0;
+}
+
+#ce4 {
+    background-color: #4caf50;
+}
+
+#ce5 {
+    background-color: #2196f3;
+}
+
+.dropdown-menu {
+    width: 200px;
+    padding: 10px;
+}
