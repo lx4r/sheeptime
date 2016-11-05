@@ -21,13 +21,21 @@ SheepTime is not stable at all right now. Please take a calming look at [some re
 
 ## Download
 
+## Development
+
+### Requirements
+
+### Getting the source
+
+### Building SheepTime
 
 ## Powered by
 [Electron](http://electron.atom.io), [Bootstrap](http://getbootstrap.com), [Paper](http://bootswatch.com/paper/), [jQuery](http://jquery.com), [strftime](https://github.com/samsonjs/strftime), [Mocha](https://mochajs.org), [Chai](http://chaijs.com), [Vue](http://vuejs.org/), [Vueify](https://github.com/vuejs/vueify), [Browserify](http://browserify.org), [Gulp](http://gulpjs.com)  
-structure inspired by [pixeldesu's Surfbird](https://github.com/surfbirdapp/surfbird)
+structure and README inspired by [pixeldesu's Surfbird](https://github.com/surfbirdapp/surfbird)
 
 ----
-Author: lx4r ([@lx4r](https://twitter.com/lx4r), [l3r.de](https://l3r.de))
+Author: lx4r ([@lx4r](https://twitter.com/lx4r), [l3r.de](https://l3r.de))  
+License: [MIT](https://github.com/lx4r/sheeptime/blob/master/LICENSE)
 
 If you have a question regarding SheepTime or if you want to give me feedback about my code please don't hesitate to contact me [via Twitter](https://twitter.com/sheeptimeapp) or open an issue.
 
