@@ -46,7 +46,9 @@ app.on('ready', function () {
   if (!configuration.readSettings('show-deletion-confirmation')) {
     configuration.saveSettings('show-deletion-confirmation', true)
   }
-
+  if (!configuration.readSettings('project-colors')) {
+    configuration.saveSettings('project-colors', ['#e51c23', '#ff9800', '#9c27b0', '#4caf50', '#2196f3'])
+  }
   createWindow()
 })
 
@@ -122,10 +124,10 @@ ipcMain.on('sheeptime:config:deletion-confirmation:send', function (event, arg) 
 ipcMain.on('sheeptime:config:deletion-confirmation:set', function (event, newStatus) {
   configuration.saveSettings('show-deletion-confirmation', newStatus)
   // Update the status in the projects window and the settings window
-  if (settingsWindow){
+  if (settingsWindow) {
     settingsWindow.webContents.send('sheeptime:config:deletion-confirmation:get', newStatus)
   }
-  if (projectsWindow){
+  if (projectsWindow) {
     projectsWindow.webContents.send('sheeptime:config:deletion-confirmation:get', newStatus)
   }
 })
@@ -153,7 +155,6 @@ ipcMain.on('sheeptime:config:savefile-location:set', function (event, newSaveFil
       event.sender.send('sheeptime:config:savefile-location:set:done', true)
     } else {
       // path error
-      console.log('no success in main');
       event.sender.send('sheeptime:config:savefile-location:set:done', false)
     }
   })
@@ -303,7 +304,7 @@ ipcMain.on('sheeptime:report:send', function (event, projectID) {
 // Event: user wants a PDF report
 // Flow: projects window -> controller
 ipcMain.on('sheeptime:report:PDF', function (event, reportProject) {
-  if (!pdfReport.savePDFReport(event, reportProject)){
+  if (!pdfReport.savePDFReport(event, reportProject)) {
     event.sender.send('sheeptime:report:PDF:error')
   }
 })

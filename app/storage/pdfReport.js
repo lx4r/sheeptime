@@ -21,23 +21,20 @@ function savePDFReport (event, reportProject) {
         if (err) {
           return false
         } else {
-          console.log("Dir created")
           return writePDFReportFile(event, reportProject, reportDir)
         }
       })
       // Dir exists
     } else {
-      console.log("Dir exists")
       return writePDFReportFile(event, reportProject, reportDir)
     }
   })
 }
 
 // write the PDF file
-function writePDFReportFile(event, reportProject, reportDir) {
-  console.log('RP:' + reportProject.name)
-  var projectName = reportProject.name.toLowerCase().replace(" ", "_")
-  var pdfPath =  reportDir + projectName + '.pdf'
+function writePDFReportFile (event, reportProject, reportDir) {
+  var projectName = reportProject.name.toLowerCase().replace(' ', '_')
+  var pdfPath = reportDir + projectName + '.pdf'
   const win = BrowserWindow.fromWebContents(event.sender)
   win.webContents.printToPDF({}, function (error, data) {
     if (error) throw error
@@ -46,9 +43,9 @@ function writePDFReportFile(event, reportProject, reportDir) {
         throw error
       } else {
         // PDF successfully written
+        shell.openExternal('file://' + pdfPath)
         return true
       }
-      shell.openExternal('file://' + pdfPath)
     })
   })
 }
