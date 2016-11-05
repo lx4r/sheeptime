@@ -29,4 +29,4 @@ gulp.task('settings-window', function () {
     .pipe(gulp.dest('./app/assets/js'))
 })
 
-gulp.task('js', ['main-window', 'projects-window', 'settings-window'])
+gulp.task('view', ['main-window', 'projects-window', 'settings-window'])

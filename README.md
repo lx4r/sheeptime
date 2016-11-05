@@ -6,12 +6,14 @@
   a simple time tracker powered by Electron + Vue
 </p>
 
-[![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) ![Built with love](https://img.shields.io/badge/built%20with-love-red.svg)
+[![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) ![Built with love](https://img.shields.io/badge/built%20with-♥-red.svg)
 
 **Coming soon!  
 SheepTime is not stable at all right now. Please take a calming look at [some real sheep](https://abload.de/img/1280px-flock_of_sheep61smr.jpg) and come back later.**
 
 ## Screenshots
+
+can be found on [the project website](http://sheeptime.l3r.de)
 
 ## Features
 
@@ -25,7 +27,14 @@ SheepTime is not stable at all right now. Please take a calming look at [some re
 
 ### Requirements
 
-### Getting the source
+- node.js (latest stable should work)
+
+### Preparations
+
+- Get the source: `git clone git@github.com:lx4r/sheeptime.git` (then `cd sheeptime`)
+- Install the required modules: `npm install`
+- Compile the view: `gulp view`
+- Start the app: `npm start`
 
 ### Building SheepTime
 
