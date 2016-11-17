@@ -74,11 +74,13 @@ button:focus {outline:none;}
     width: 20%;
     height: 30px;
     margin-right: 6%;
+    margin-bottom: 10px;
 }
 .color-example-end {
     margin-right: 0px;
 }
-.color-example-selected {
+/* for some reason Vue.js doesn't seem to like class names with hyphens in :class */
+.colorSelected {
     border: 2px black solid;
 }
 

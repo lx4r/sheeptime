@@ -20,7 +20,7 @@
                             <tr v-for="activity in activities.activitiesArray">
                                 <td>{{activity[1].name}}</td>
                                 <td>
-                                    <span class="badge">{{getProjectName(pl, activity[1].projectID)}}</span>
+                                    <span class="badge" :style='"background-color:" + getProjectColor(pl, activity[1].projectID)'>{{getProjectName(pl, activity[1].projectID)}}</span>
                                 </td>
                                 <td>
                                     <a type="button" v-bind:href="'#activity-' + activity[0]" data-toggle="collapse" v-bind:data-target="'#activity-' + activity[0]">{{secondsToTime(activity[1].duration)}}</a>
@@ -50,51 +50,54 @@
 </template>
 
 <script>
-    const formatTime = require('./../../formatTime')
-    const ipcRenderer = require('electron').ipcRenderer
-    const mapHandling = require('./../../mapHandling')
+  const formatTime = require('./../../formatTime')
+  const ipcRenderer = require('electron').ipcRenderer
+  const mapHandling = require('./../../mapHandling')
 
-    var data = {
-        activities: {},
-        dataReceived: false
+  var data = {
+    activities: {},
+    dataReceived: false
+  }
+
+  ipcRenderer.send('sheeptime:loggedActivities:send', 'main-window')
+
+  ipcRenderer.on('sheeptime:loggedActivities:get', function (event, arg) {
+    console.log("Activities received")
+    data.activities = arg
+    data.dataReceived = true
+  })
+
+  // Update the view after deleting an activity
+  ipcRenderer.on('sheeptime:activity:deleted', function (event, arg) {
+    data.activities = arg
+  })
+
+  // Update the view after adding an activity
+  ipcRenderer.on('sheeptime:activity:added', function (event, arg) {
+    data.activities = arg
+  })
+
+  export default {
+    props: ['pl'],
+    methods: {
+      secondsToTime: function (seconds) {
+        return formatTime.secondsToTime(seconds)
+      },
+      timestampToDate: function (timestamp) {
+        return formatTime.timestampToDate(timestamp)
+      },
+      deleteActivity: function (activityID) {
+        ipcRenderer.send('sheeptime:activity:delete', activityID)
+      },
+      getProjectName: function (projectListArray, projectID) {
+        return mapHandling.getElement(projectListArray, projectID).name
+      },
+      getProjectColor: function (projectListArray, projectID) {
+        return mapHandling.getElement(projectListArray, projectID).color
+      }
+    },
+    data(){
+      return data
     }
-
-    ipcRenderer.send('sheeptime:loggedActivities:send', 'main-window')
-
-    ipcRenderer.on('sheeptime:loggedActivities:get', function (event, arg) {
-        console.log("Activities received")
-        data.activities = arg
-        data.dataReceived = true
-    })
-
-    // Update the view after deleting an activity
-    ipcRenderer.on('sheeptime:activity:deleted', function (event, arg) {
-        data.activities = arg
-    })
-
-    // Update the view after adding an activity
-    ipcRenderer.on('sheeptime:activity:added', function (event, arg) {
-        data.activities = arg
-    })
-
-    export default {
-        props: ['pl'],
-        methods: {
-            secondsToTime: function (seconds) {
-                return formatTime.secondsToTime(seconds)
-            },
-            timestampToDate: function (timestamp) {
-                return formatTime.timestampToDate(timestamp)
-            },
-            deleteActivity: function (activityID) {
-                ipcRenderer.send('sheeptime:activity:delete', activityID)
-            },
-            getProjectName: function (projectListArray, projectID) {
-                return mapHandling.getElement(projectListArray, projectID).name
-            }
-        },
-        data(){
-            return data
-        }
-    }
+  }
 </script>

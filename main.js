@@ -1,3 +1,5 @@
+'use strict'
+
 const electron = require('electron')
 // Module to control application life.
 const app = electron.app
@@ -119,6 +121,11 @@ ipcMain.on('sheeptime:savedProjects:send', function (event, targetWindow) {
 
 ipcMain.on('sheeptime:config:deletion-confirmation:send', function (event, arg) {
   event.sender.send('sheeptime:config:deletion-confirmation:get', configuration.readSettings('show-deletion-confirmation'))
+})
+
+ipcMain.on('sheeptime:config:colors:send', function (event, arg) {
+  console.log('colors: ' + configuration.readSettings('project-colors'))
+  event.sender.send('sheeptime:config:colors:get', configuration.readSettings('project-colors'))
 })
 
 ipcMain.on('sheeptime:config:deletion-confirmation:set', function (event, newStatus) {
@@ -249,9 +256,9 @@ ipcMain.on('sheeptime:project:delete', function (event, deletedProjectsID) {
 
 // Event: user added a project
 // Flow: projects window -> controller
-ipcMain.on('sheeptime:project:add', function (event, newProjectName) {
+ipcMain.on('sheeptime:project:add', function (event, newProjectObject) {
   // Construct new project, add it to the projects storage and increase the fresh ID
-  var newProject = {name: newProjectName, totalSeconds: 0}
+  var newProject = {name: newProjectObject.name, color: newProjectObject.selectedColor, totalSeconds: 0}
   savedProjects.projectsArray = mapHandling.setElement(savedProjects.projectsArray, savedProjects.freshID, newProject)
   savedProjects.freshID++
 

@@ -5,32 +5,27 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Add project</h3>
                 </div>
-                <div class="panel-body">
+                <div v-if="dataReceived" class="panel-body">
                     <div class="form-group">
                         <div class="input-group">
                             <input type="text" class="form-control" id="projectName" placeholder="project name" v-model="projectName">
                             <div class="input-group-btn">
                                 <div class="dropdown">
-                                    <button id="dLabel" type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Color
                                         <span class="caret"></span>
                                     </button>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel">
-                                        <div class="color-picker-row">
-                                            <div class="color-example color-example-selected" id="ce1">&nbsp;</div>
-                                            <div class="color-example" id="ce2">&nbsp;</div>
-                                            <div class="color-example" id="ce3">&nbsp;</div>
-                                            <div class="color-example color-example-end" id="ce4">&nbsp;</div>
-                                        </div>
-                                        <div class="color-picker-row">
-                                            <div class="color-example" id="ce5">&nbsp;</div>
-                                        </div>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="color-example" v-for="(color, index) in colors" :style='"background-color:" + color' v-on:click="selectedColor=color" :class='{colorSelected: color === selectedColor}'>&nbsp;</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-success" id="addProjectButton" type="button" v-on:click="addProject(projectName)">Add project</button>
+                    <button class="btn btn-success" id="addProjectButton" type="button" v-on:click="addProject()">Add project</button>
+                </div>
+                <div v-else class="panel-body">
+                    Loading
                 </div>
             </div>
         </div>
@@ -38,20 +33,43 @@
 </template>
 
 <script>
-    const ipcRenderer = require('electron').ipcRenderer
+  const ipcRenderer = require('electron').ipcRenderer
 
-    var data = {
-        projectName:  ""
-    }
+  ipcRenderer.send('sheeptime:config:colors:send');
 
-    export default {
-        methods: {
-            addProject: function (name) {
-                ipcRenderer.send('sheeptime:project:add', name)
-            }
-        },
-        data(){
-            return data
+  ipcRenderer.on('sheeptime:config:colors:get', function (event, colors) {
+    console.log("colors: " + colors);
+    data.colors = colors
+    data.dataReceived = true
+  })
+
+  var data = {
+    projectName:  "",
+    colors: [],
+    selectedColor: 0,
+    dataReceived: false
+  }
+
+  export default {
+    methods: {
+      addProject: function () {
+        console.log('Selected color: ' + data.selectedColor);
+        var newProject = {
+          name: this.projectName,
+          selectedColor: this.selectedColor
+        };
+        ipcRenderer.send('sheeptime:project:add', newProject)
+      }
+    },
+    data(){
+      return data
+    },
+    computed: {
+      highlightSelectedColor: function () {
+        return {
+          // code to come
         }
+      }
     }
+  }
 </script>
