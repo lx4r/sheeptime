@@ -18,7 +18,7 @@
                             </thead>
                             <tbody>
                             <tr v-for="project in projects.projectsArray">
-                                <td>{{project[1].name}}</td>
+                                <td><span class="badge" :style='"background-color:" + project[1].color'>{{project[1].name}}</span></td>
                                 <td>
                                     {{secondsToTime(project[1].totalSeconds)}}
                                 </td>

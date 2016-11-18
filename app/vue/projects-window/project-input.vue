@@ -53,12 +53,13 @@
   export default {
     methods: {
       addProject: function () {
-        console.log('Selected color: ' + data.selectedColor);
+        console.log('Selected color: ' + data.selectedColor)
         var newProject = {
           name: this.projectName,
           selectedColor: this.selectedColor
-        };
+        }
         ipcRenderer.send('sheeptime:project:add', newProject)
+        data.projectName = ""
       }
     },
     data(){
