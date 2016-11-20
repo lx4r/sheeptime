@@ -1,3 +1,4 @@
+/* general styles */
 h1 {
     text-align: center;
     font-size: 38px;
@@ -19,7 +20,9 @@ h1 {
     padding-bottom: 2px;
 }
 
-button:focus {outline:none;}
+button:focus {
+    outline: none !important;
+}
 
 /* PDF report */
 @media print {
@@ -28,7 +31,7 @@ button:focus {outline:none;}
     }
 }
 
-/* project window */
+/* project window: project list */
 #project-list-table {
     width: 100%
 }
@@ -111,4 +114,44 @@ button:focus {outline:none;}
 .dropdown-menu {
     width: 200px;
     padding: 10px;
+}
+
+/* main window: activity list */
+#activity-list-table {
+    width: 100%
+}
+
+#activity-list-table thead,
+#activity-list-table tbody,
+#activity-list-table tr,
+#activity-list-table td,
+#activity-list-table th{
+    display: block;
+}
+
+#activity-list-table tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+#activity-list-table thead th {
+    height: 30px;
+}
+
+#activity-list-table tbody{
+    height: 325px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#activity-list-table tbody td,
+#activity-list-table thead th {
+    width: 25%;
+    float: left;
+}
+
+#activity-list-table table {
+    margin-bottom: 0px !important;
 }

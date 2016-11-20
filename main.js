@@ -24,7 +24,7 @@ var savedProjects = projectsStorage.readProjects()
 function createWindow () {
   mainWindow = new BrowserWindow({
     width: 500,
-    height: 600
+    height: 680
   })
 
   mainWindow.loadURL(`file://${__dirname}/app/main-window.html`)

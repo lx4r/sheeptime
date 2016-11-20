@@ -6,7 +6,7 @@
                     <h3 class="panel-title">Activities</h3>
                 </div>
                 <div class="panel-body">
-                    <div v-if="dataReceived" id="main-window-activities-table">
+                    <div v-if="dataReceived" id="activity-list-table">
                         <table class="table table-striped" v-if="activities.activitiesArray.length > 0">
                             <thead>
                             <tr>

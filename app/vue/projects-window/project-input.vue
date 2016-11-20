@@ -38,7 +38,6 @@
   ipcRenderer.send('sheeptime:config:colors:send');
 
   ipcRenderer.on('sheeptime:config:colors:get', function (event, colors) {
-    console.log("colors: " + colors);
     data.colors = colors
     data.dataReceived = true
   })
