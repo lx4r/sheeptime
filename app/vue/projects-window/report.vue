@@ -6,7 +6,7 @@
                     <button type="button" class="close report-button" data-dismiss="modal"><span>&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Report for <i>{{reportProject.name}}</i></h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="report-table">
                     Total time: {{secondsToTime(reportProject.totalSeconds)}}
                     <table v-if="activitiesForReport.length > 0" class="table table-striped">
                         <thead>
@@ -48,7 +48,6 @@
                 return formatTime.secondsToTime(seconds)
             },
             generatePDFReport: function (reportProject) {
-                console.log('Works!')
                 ipcRenderer.send('sheeptime:report:PDF', reportProject)
             }
         }

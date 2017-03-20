@@ -155,3 +155,43 @@ button:focus {
 #activity-list-table table {
     margin-bottom: 0px !important;
 }
+
+/* projects window: report */
+#report-table {
+    width: 100%
+}
+
+#report-table thead,
+#report-table tbody,
+#report-table tr,
+#report-table td,
+#report-table th{
+    display: block;
+}
+
+#report-table tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+#report-table thead th {
+    height: 30px;
+}
+
+#report-table tbody{
+    height: 325px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#report-table tbody td,
+#report-table thead th {
+    width: 50%;
+    float: left;
+}
+
+#report-table table {
+    margin-bottom: 0px !important;
+}
