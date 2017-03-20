@@ -10,10 +10,13 @@
 
 const fs = require('fs')
 const config = require('./../configuration')
+const projectsFileName = 'sheeptime-projects.json'
+const projectsFilePath = config.readSettings('savefile-directory') + '/' + projectsFileName
+const defaultFileContent = {freshID: 0, projectsArray: []}
 
 // Saves the projects into a JSON file
 function saveProjects (projects) {
-  fs.writeFile(config.readSettings('savefile-directory') + '/sheeptime-projects.json', JSON.stringify(projects), function (err) {
+  fs.writeFile(projectsFilePath, JSON.stringify(projects), function (err) {
     if (err) {
       return console.log(err)
     }
@@ -23,11 +26,19 @@ function saveProjects (projects) {
 
 // Returns an object with the saved projects and the fresh ID (see top)
 function readProjects () {
-  var projects = fs.readFileSync(config.readSettings('savefile-directory') + '/sheeptime-projects.json', 'utf8')
-  if (projects) {
-    return JSON.parse(projects)
+  if (fs.existsSync(projectsFilePath)) {
+    // file exists
+    var projects = fs.readFileSync(projectsFilePath, 'utf8')
+    if (projects) {
+      return JSON.parse(projects)
+    } else {
+      // file exists but is empty
+      return defaultFileContent
+    }
   } else {
-    return {freshID: 0, projectsArray: []}
+    // file doesn't exist -> create file and fill it with the default content
+    fs.writeFileSync(projectsFilePath, JSON.stringify(defaultFileContent))
+    return defaultFileContent
   }
 }
 

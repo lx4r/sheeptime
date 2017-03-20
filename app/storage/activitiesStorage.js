@@ -9,24 +9,34 @@
 
 const fs = require('fs')
 const config = require('./../configuration')
+const activitiesFileName = 'sheeptime-activities.json'
+const activitiesFilePath = config.readSettings('savefile-directory') + '/' + activitiesFileName
+const defaultFileContent = {freshID: 0, activitiesArray: []}
 
 // Saves the loggedActivities into a JSON file
 function saveActivities (activities) {
-  fs.writeFile(config.readSettings('savefile-directory') + '/sheeptime-activities.json', JSON.stringify(activities), function (err) {
+  fs.writeFile(activitiesFilePath, JSON.stringify(activities), function (err) {
     if (err) {
       return console.log(err)
     }
-    console.log('The file was saved!')
   })
 }
 
 // Returns an object with the saved activities and the fresh ID (see top)
 function readActivities () {
-  var activities = fs.readFileSync(config.readSettings('savefile-directory') + '/sheeptime-activities.json', 'utf8')
-  if (activities) {
-    return JSON.parse(activities)
+  if (fs.existsSync(activitiesFilePath)) {
+    // file exists
+    var activities = fs.readFileSync(activitiesFilePath, 'utf8')
+    if (activities) {
+      return JSON.parse(activities)
+    } else {
+      // file exists but is empty
+      return defaultFileContent
+    }
   } else {
-    return {freshID: 0, activitiesArray: []}
+    // file doesn't exist -> create file and fill it with the default content
+    fs.writeFileSync(activitiesFilePath, JSON.stringify(defaultFileContent))
+    return defaultFileContent
   }
 }
 

@@ -18,8 +18,8 @@ const projectsStorage = require('./app/storage/projectsStorage')
 const pdfReport = require('./app/storage/pdfReport')
 const mapHandling = require('./app/mapHandling')
 const fs = require('fs')
-var loggedActivities = activitiesStorage.readActivities()
-var savedProjects = projectsStorage.readProjects()
+let loggedActivities = activitiesStorage.readActivities()
+let savedProjects = projectsStorage.readProjects()
 
 function createWindow () {
   mainWindow = new BrowserWindow({
