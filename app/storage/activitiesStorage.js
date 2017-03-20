@@ -35,8 +35,8 @@ function readActivities () {
     }
   } else {
     // file doesn't exist -> create file and fill it with the default content
-    fs.writeFileSync(activitiesFilePath, JSON.stringify(defaultFileContent));
-    return defaultFileContent;
+    fs.writeFileSync(activitiesFilePath, JSON.stringify(defaultFileContent))
+    return defaultFileContent
   }
 }
 
