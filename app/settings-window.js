@@ -17,10 +17,10 @@ vm = new Vue({
 })
 
 // open links with the "open-in-browser"-class in the default OS browser
-const shell = require('electron').shell;
+const shell = require('electron').shell
 $('.open-in-browser').click((event) => {
-    event.preventDefault();
-    shell.openExternal(event.target.href);
+  event.preventDefault()
+  shell.openExternal(event.target.href)
 })
 
 /* var config = require('./configuration')
