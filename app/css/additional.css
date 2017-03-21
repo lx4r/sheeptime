@@ -26,8 +26,11 @@ button:focus {
 
 /* PDF report */
 @media print {
-    #project-list-table, #project-heading, #project-input, .report-button{
-        display: none;
+    #project-list-table, #project-heading h1, #project-input, .report-button{
+        display: none !important;
+    }
+    #report-table tbody {
+        height: 100% !important;
     }
 }
 
