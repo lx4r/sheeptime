@@ -124,7 +124,6 @@ ipcMain.on('sheeptime:config:deletion-confirmation:send', function (event, arg) 
 })
 
 ipcMain.on('sheeptime:config:colors:send', function (event, arg) {
-  console.log('colors: ' + configuration.readSettings('project-colors'))
   event.sender.send('sheeptime:config:colors:get', configuration.readSettings('project-colors'))
 })
 
