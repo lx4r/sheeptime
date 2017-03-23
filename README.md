@@ -8,8 +8,9 @@
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) [![Build Status](https://travis-ci.org/lx4r/sheeptime.svg?branch=master)](https://travis-ci.org/lx4r/sheeptime) ![Built with love](https://img.shields.io/badge/built%20with-♥-red.svg)
 
-**Coming soon!  
-SheepTime is not stable at all right now. Please take a calming look at [some real sheep](https://abload.de/img/1280px-flock_of_sheep61smr.jpg) and come back later.**
+## Under development
+
+SheepTime is not stable at all right now. Be prepared to encounter bugs when you use it.
 
 ## Screenshots
 
