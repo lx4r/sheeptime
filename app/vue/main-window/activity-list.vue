@@ -30,7 +30,10 @@
                                 </td>
                                 <td>
                                     <button v-on:click="deleteActivity(activity[0])" type="button" class="btn btn-xs btn-danger deleteActivityButton" aria-label="Left Align">
-                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#edit-activity" v-on:click="setActivityToEdit(activity)">
+                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                     </button>
                                 </td>
                             </tr>
@@ -45,6 +48,7 @@
                     </div>
                 </div>
             </div>
+            <edit-activity :activityToEdit="activityToEdit"></edit-activity>
         </div>
     </div>
 </template>
@@ -56,7 +60,8 @@
 
   var data = {
     activities: {},
-    dataReceived: false
+    dataReceived: false,
+    activityToEdit: {},
   }
 
   ipcRenderer.send('sheeptime:loggedActivities:send', 'main-window')
@@ -94,6 +99,10 @@
       },
       getProjectColor: function (projectListArray, projectID) {
         return mapHandling.getElement(projectListArray, projectID).color
+      },
+      setActivityToEdit: function (newActivityToEdit) {
+        console.log(newActivityToEdit);
+        data.activityToEdit = newActivityToEdit;
       }
     },
     data(){
