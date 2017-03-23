@@ -17,7 +17,7 @@
                             <projects-dropdown :pl="projectList"></projects-dropdown>
                         </div>
                         <div class="form-group">
-                            <input data-provide="datepicker">
+                            <input data-provide="datepicker" value="03/12/2017">
                         </div>
                     </form>
                 </div>
@@ -32,6 +32,7 @@
 <script>
   const formatTime = require('./../../formatTime')
   const ipcRenderer = require('electron').ipcRenderer
+  let dateObject = null;
 
   export default {
     props: ['activityToEdit', 'projectList'],
@@ -41,6 +42,11 @@
       },
       generatePDFReport: function (reportProject) {
         ipcRenderer.send('sheeptime:report:PDF', reportProject)
+      },
+      getDay: function (timestamp) {
+        if (dateObject === null){
+          dateObject = formatTime.timestampToDateObject(activity[1].time)
+        }
       }
     }
   }

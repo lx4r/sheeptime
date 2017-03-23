@@ -5,47 +5,45 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Activities</h3>
                 </div>
-                <div class="panel-body">
-                    <div v-if="dataReceived" id="activity-list-table">
-                        <table class="table table-striped" v-if="activities.activitiesArray.length > 0">
-                            <thead>
-                            <tr>
-                                <th>Activity</th>
-                                <th>Project</th>
-                                <th>Time</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="activity in activities.activitiesArray">
-                                <td>{{activity[1].name}}</td>
-                                <td>
-                                    <span class="badge" :style='"background-color:" + getProjectColor(pl, activity[1].projectID)'>{{getProjectName(pl, activity[1].projectID)}}</span>
-                                </td>
-                                <td>
-                                    <a type="button" v-bind:href="'#activity-' + activity[0]" data-toggle="collapse" v-bind:data-target="'#activity-' + activity[0]">{{secondsToTime(activity[1].duration)}}</a>
-                                    <div class="collapse" v-bind:id="'activity-' + activity[0]">
-                                        {{timestampToDate(activity[1].startTime)}} - {{timestampToDate(activity[1].endTime)}}
-                                    </div>
-                                </td>
-                                <td>
-                                    <button v-on:click="deleteActivity(activity[0])" type="button" class="btn btn-xs btn-danger deleteActivityButton" aria-label="Left Align">
-                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#edit-activity" v-on:click="setActivityToEdit(activity)">
-                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div class="text-muted" v-else>
-                            No activities yet.
-                        </div>
+                <div v-if="dataReceived" id="activity-list-table">
+                    <table class="table table-striped" v-if="activities.activitiesArray.length > 0">
+                        <thead>
+                        <tr>
+                            <th>Activity</th>
+                            <th>Project</th>
+                            <th>Time</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="activity in activities.activitiesArray">
+                            <td>{{activity[1].name}}</td>
+                            <td>
+                                <span class="badge" :style='"background-color:" + getProjectColor(pl, activity[1].projectID)'>{{getProjectName(pl, activity[1].projectID)}}</span>
+                            </td>
+                            <td>
+                                <a type="button" v-bind:href="'#activity-' + activity[0]" data-toggle="collapse" v-bind:data-target="'#activity-' + activity[0]">{{secondsToTime(activity[1].duration)}}</a>
+                                <div class="collapse" v-bind:id="'activity-' + activity[0]">
+                                    {{timestampToDate(activity[1].startTime)}} - {{timestampToDate(activity[1].endTime)}}
+                                </div>
+                            </td>
+                            <td>
+                                <button v-on:click="deleteActivity(activity[0])" type="button" class="btn btn-xs btn-danger deleteActivityButton" aria-label="Left Align">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#edit-activity" v-on:click="setActivityToEdit(activity)">
+                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-muted" v-else>
+                        No activities yet.
                     </div>
-                    <div v-else>
-                        Loading
-                    </div>
+                </div>
+                <div v-else>
+                    Loading
                 </div>
             </div>
             <edit-activity :activityToEdit="activityToEdit" :projectList="pl"></edit-activity>
