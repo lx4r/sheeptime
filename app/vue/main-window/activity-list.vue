@@ -48,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            <edit-activity :activityToEdit="activityToEdit"></edit-activity>
+            <edit-activity :activityToEdit="activityToEdit" :projectList="pl"></edit-activity>
         </div>
     </div>
 </template>
