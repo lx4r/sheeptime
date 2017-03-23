@@ -16,6 +16,9 @@
                             <label for="projectsDropdown">Project</label>
                             <projects-dropdown :pl="projectList"></projects-dropdown>
                         </div>
+                        <div class="form-group">
+                            <input data-provide="datepicker">
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -34,7 +37,7 @@
     props: ['activityToEdit', 'projectList'],
     methods: {
       secondsToTime: function (seconds) {
-        return formatTime.secondsToTime(seconds)
+        return formatTime.secondsToTimeString(seconds)
       },
       generatePDFReport: function (reportProject) {
         ipcRenderer.send('sheeptime:report:PDF', reportProject)

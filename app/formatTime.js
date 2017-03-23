@@ -5,7 +5,7 @@
 var strftime = require('./js/strftime.min')
 var config = require('./configuration')
 
-function secondsToTime (secondsIn) {
+function secondsToTimeString (secondsIn) {
   var hours = Math.floor(secondsIn / 3600)
   var minutes = Math.floor((secondsIn - (hours * 3600)) / 60)
   var seconds = secondsIn - (hours * 3600) - (minutes * 60)
@@ -16,16 +16,21 @@ function secondsToTime (secondsIn) {
   return hours + ':' + minutes + ':' + seconds
 }
 
-function timestampToDate (timestamp) {
+function timestampToDateString (timestamp) {
   switch (config.readSettings('time-format')) {
     case 'european':
-      return strftime('%d.%m.%y, %H:%M', new Date(timestamp))
+      return strftime('%d.%m.%y, %H:%M', timestampToDateObject(timestamp))
     case 'american':
-      return strftime('%m/%d/%y, %H:%M', new Date(timestamp))
+      return strftime('%m/%d/%y, %H:%M', timestampToDateObject(timestamp))
   }
 }
 
+function timestampToDateObject (timestamp) {
+  return new Date(timestamp)
+}
+
 module.exports = {
-  secondsToTime: secondsToTime,
-  timestampToDate: timestampToDate
+  secondsToTimeString: secondsToTimeString,
+  timestampToDateString: timestampToDateString,
+  timestampToDateObject: timestampToDateObject
 }

@@ -86,10 +86,10 @@
     props: ['pl'],
     methods: {
       secondsToTime: function (seconds) {
-        return formatTime.secondsToTime(seconds)
+        return formatTime.secondsToTimeString(seconds)
       },
       timestampToDate: function (timestamp) {
-        return formatTime.timestampToDate(timestamp)
+        return formatTime.timestampToDateString(timestamp)
       },
       deleteActivity: function (activityID) {
         ipcRenderer.send('sheeptime:activity:delete', activityID)

@@ -45,7 +45,7 @@
         props: ['activitiesForReport', 'reportProject'],
         methods: {
             secondsToTime: function (seconds) {
-                return formatTime.secondsToTime(seconds)
+                return formatTime.secondsToTimeString(seconds)
             },
             generatePDFReport: function (reportProject) {
                 ipcRenderer.send('sheeptime:report:PDF', reportProject)

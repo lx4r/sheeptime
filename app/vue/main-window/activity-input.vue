@@ -87,7 +87,7 @@
                 ipcRenderer.send('sheeptime:settings:open')
             },
             secondsToTime: function (seconds) {
-                return formatTime.secondsToTime(seconds)
+                return formatTime.secondsToTimeString(seconds)
             },
         },
         data () {

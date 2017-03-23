@@ -8,12 +8,12 @@ var formatTime = require('../app/formatTime')
 var mapHandling = require('../app/mapHandling')
 
 describe('formatTime', function () {
-  describe('secondsToTime', function () {
+  describe('secondsToTimeString', function () {
     it('should return 00:00:00 when no time has elapsed', function () {
-      formatTime.secondsToTime(0).should.equal('00:00:00')
+      formatTime.secondsToTimeString(0).should.equal('00:00:00')
     })
     it('should be able to convert more than 24 h in seconds to a valid time', function () {
-      formatTime.secondsToTime(91830).should.equal('25:30:30')
+      formatTime.secondsToTimeString(91830).should.equal('25:30:30')
     })
   })
 })

@@ -108,7 +108,7 @@
     export default {
         methods: {
             secondsToTime: function (seconds) {
-                return formatTime.secondsToTime(seconds)
+                return formatTime.secondsToTimeString(seconds)
             },
             deleteProject: function (projectID) {
                 ipcRenderer.send('sheeptime:project:delete', projectID)
