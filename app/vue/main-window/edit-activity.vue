@@ -1,10 +1,10 @@
 <template>
     <div class="modal fade" id="edit-activity" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
-            <div v-if="activityToEdit != {}" class="modal-content">
+            <div v-if="activityToEdit" class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel" v-if="activityToEdit != {}">Edit activity <i></i></h4>
+                    <h4 class="modal-title" id="myModalLabel" v-if="activityToEdit">Edit activity <i>{{activityToEdit[1].name}}</i></h4>
                 </div>
                 <div class="modal-body" id="">
                     <!-- Total time: {{secondsToTime(reportProject.totalSeconds)}}

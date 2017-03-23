@@ -61,7 +61,7 @@
   var data = {
     activities: {},
     dataReceived: false,
-    activityToEdit: {},
+    activityToEdit: null,
   }
 
   ipcRenderer.send('sheeptime:loggedActivities:send', 'main-window')

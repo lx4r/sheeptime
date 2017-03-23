@@ -1,7 +1,7 @@
 <template>
     <div class="modal fade" id="report" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
-            <div v-if="reportProject != {}" class="modal-content">
+            <div v-if="reportProject" class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close report-button" data-dismiss="modal"><span>&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Report for <i>{{reportProject.name}}</i></h4>

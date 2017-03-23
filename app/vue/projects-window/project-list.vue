@@ -64,7 +64,7 @@
         projectToDelete: -1,
         stopwatchRunning: false,
         activitiesForReport: [],
-        reportProject: {}
+        reportProject: null,
     }
 
     ipcRenderer.send('sheeptime:savedProjects:send', 'projects-window')
