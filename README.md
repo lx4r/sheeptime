@@ -44,7 +44,7 @@ can be found on [the project website](http://sheeptime.l3r.de)
 structure and README inspired by [pixeldesu's Surfbird](https://github.com/surfbirdapp/surfbird)
 
 ----
-Author: lx4r ([@lx4r](https://twitter.com/lx4r), [l3r.de](https://l3r.de))  
+Author: lx4r ([@lx4r](https://twitter.com/lx4r), [l3r.de](http://l3r.de))  
 License: [MIT](https://github.com/lx4r/sheeptime/blob/master/LICENSE)
 
 If you have a question regarding SheepTime or if you want to give me feedback about my code please don't hesitate to contact me [via Twitter](https://twitter.com/sheeptimeapp) or open an issue.
