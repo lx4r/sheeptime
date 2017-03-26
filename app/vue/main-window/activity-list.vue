@@ -87,7 +87,7 @@
         return formatTime.secondsToTimeString(seconds)
       },
       timestampToDate: function (timestamp) {
-        return formatTime.timestampToDateString(timestamp)
+        return formatTime.timestampToDateTimeString(timestamp)
       },
       deleteActivity: function (activityID) {
         ipcRenderer.send('sheeptime:activity:delete', activityID)

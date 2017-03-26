@@ -16,7 +16,7 @@ function secondsToTimeString (secondsIn) {
   return hours + ':' + minutes + ':' + seconds
 }
 
-function timestampToDateString (timestamp) {
+function timestampToDateTimeString (timestamp) {
   switch (config.readSettings('time-format')) {
     case 'european':
       return strftime('%d.%m.%y, %H:%M', timestampToDateObject(timestamp))
@@ -25,12 +25,27 @@ function timestampToDateString (timestamp) {
   }
 }
 
+function timestampToDateString (timestamp) {
+  switch (config.readSettings('time-format')) {
+    case 'european':
+      return strftime('%d.%m.%y', timestampToDateObject(timestamp))
+    case 'american':
+      return strftime('%m/%d/%y', timestampToDateObject(timestamp))
+  }
+}
+
 function timestampToDateObject (timestamp) {
   return new Date(timestamp)
 }
 
+function timestampToTimeString (timestamp) {
+  return strftime('%H:%M', timestampToDateObject(timestamp))
+}
+
 module.exports = {
   secondsToTimeString: secondsToTimeString,
+  timestampToDateTimeString: timestampToDateTimeString,
   timestampToDateString: timestampToDateString,
-  timestampToDateObject: timestampToDateObject
+  timestampToDateObject: timestampToDateObject,
+  timestampToTimeString: timestampToTimeString
 }

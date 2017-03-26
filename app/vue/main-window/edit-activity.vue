@@ -7,19 +7,40 @@
                     <h4 class="modal-title" id="myModalLabel" v-if="activityToEdit">Edit activity</h4>
                 </div>
                 <div class="modal-body" id="">
-                    <form>
-                        <div class="form-group">
-                            <label for="activityName">Name</label>
-                            <input type="text" class="form-control" id="activityName" :value="activityToEdit[1].name">
+                    <div class="form-group">
+                        <label for="activityName">Name</label>
+                        <input type="text" class="form-control" id="activityName" :value="activityToEdit[1].name">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectsDropdown">Project</label>
+                        <projects-dropdown :pl="projectList"></projects-dropdown>
+                    </div>
+                    <div class="form-group">
+                        <!-- <input data-provide="datepicker" id="start-date-picker" :="fillStartDatePicker()">
+                        <input data-provide="datepicker" id="end-date-picker" :="fillEndDatePicker()"> -->
+                        <div class="input-group date" data-provide="datepicker">
+                            <label for="startDatePicker">Date</label>
+                            <input type="text" class="form-control" id="startDatePicker" :="getStartDate(activityToEdit[1].startTime)">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="projectsDropdown">Project</label>
-                            <projects-dropdown :pl="projectList"></projects-dropdown>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label for="startTime">start time</label>
+                                <input type="time" class="form-control" id="startTime" :value="timestampToTimeString(activityToEdit[1].startTime)">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <input data-provide="datepicker" value="03/12/2017">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label for="endTime">end time</label>
+                                <input type="time" class="form-control" id="endTime" :value="timestampToTimeString(activityToEdit[1].endTime)">
+                            </div>
                         </div>
-                    </form>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
@@ -32,7 +53,6 @@
 <script>
   const formatTime = require('./../../formatTime')
   const ipcRenderer = require('electron').ipcRenderer
-  let dateObject = null;
 
   export default {
     props: ['activityToEdit', 'projectList'],
@@ -43,10 +63,11 @@
       generatePDFReport: function (reportProject) {
         ipcRenderer.send('sheeptime:report:PDF', reportProject)
       },
-      getDay: function (timestamp) {
-        if (dateObject === null){
-          dateObject = formatTime.timestampToDateObject(activity[1].time)
-        }
+      getStartDate: function (timestamp) {
+        $('startDatePicker').datepicker('setDate', new Date())
+      },
+      timestampToTimeString: function (timestamp) {
+        return formatTime.timestampToTimeString(timestamp)
       }
     }
   }
