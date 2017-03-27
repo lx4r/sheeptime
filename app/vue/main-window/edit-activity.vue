@@ -19,24 +19,24 @@
                         <!-- <input data-provide="datepicker" id="start-date-picker" :="fillStartDatePicker()">
                         <input data-provide="datepicker" id="end-date-picker" :="fillEndDatePicker()"> -->
                         <div class="input-group date" data-provide="datepicker">
-                            <label for="startDatePicker">Date</label>
+                            <!-- <label for="startDatePicker">Date</label>
                             <input type="text" class="form-control" id="startDatePicker" :="getStartDate(activityToEdit[1].startTime)">
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-3">
                             <div class="form-group">
                                 <label for="startTime">start time</label>
-                                <input type="time" class="form-control" id="startTime" :value="timestampToTimeString(activityToEdit[1].startTime)">
+                                <input type="time" class="form-control" id="startTime" v-model="startTime" :value="setStartTimeString">
                             </div>
                         </div>
                         <div class="col-xs-3">
                             <div class="form-group">
                                 <label for="endTime">end time</label>
-                                <input type="time" class="form-control" id="endTime" :value="timestampToTimeString(activityToEdit[1].endTime)">
+                                <input type="time" class="form-control" id="endTime" v-model="endTime" :value="setEndTimeString">
                             </div>
                         </div>
                     </div>
@@ -53,22 +53,30 @@
 <script>
   const formatTime = require('./../../formatTime')
   const ipcRenderer = require('electron').ipcRenderer
+  let data = {
+    startTime: "00:00",
+    endTime: "00:00"
+  }
 
   export default {
     props: ['activityToEdit', 'projectList'],
     methods: {
-      secondsToTime: function (seconds) {
-        return formatTime.secondsToTimeString(seconds)
+
+    },
+    computed: {
+      setStartTimeString: function () {
+        let startTimeString = formatTime.timestampToTimeString(this.activityToEdit[1].startTime)
+        data.startTime = startTimeString
+        return startTimeString
       },
-      generatePDFReport: function (reportProject) {
-        ipcRenderer.send('sheeptime:report:PDF', reportProject)
-      },
-      getStartDate: function (timestamp) {
-        $('startDatePicker').datepicker('setDate', new Date())
-      },
-      timestampToTimeString: function (timestamp) {
-        return formatTime.timestampToTimeString(timestamp)
+      setEndTimeString: function () {
+        let endTimeString = formatTime.timestampToTimeString(this.activityToEdit[1].endTime)
+        data.endTime = endTimeString
+        return endTimeString
       }
+    },
+    data: function () {
+      return data;
     }
   }
 </script>
