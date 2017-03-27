@@ -2,8 +2,8 @@
  * Created by lx4r on 22.08.16.
  */
 
-var strftime = require('./js/strftime.min')
-var config = require('./configuration')
+const strftime = require('./js/strftime.min')
+const config = require('./configuration')
 
 function secondsToTimeString (secondsIn) {
   var hours = Math.floor(secondsIn / 3600)
@@ -28,9 +28,9 @@ function timestampToDateTimeString (timestamp) {
 function timestampToDateString (timestamp) {
   switch (config.readSettings('time-format')) {
     case 'european':
-      return strftime('%d.%m.%y', timestampToDateObject(timestamp))
+      return strftime('%d.%m.%Y', timestampToDateObject(timestamp))
     case 'american':
-      return strftime('%m/%d/%y', timestampToDateObject(timestamp))
+      return strftime('%m/%d/%Y', timestampToDateObject(timestamp))
   }
 }
 

@@ -8,7 +8,7 @@
  */
 'use strict'
 
-var nconf = require('nconf').file({file: getUserHome() + '/sheeptime-config.json'})
+const nconf = require('nconf').file({file: getUserHome() + '/sheeptime-config.json'})
 
 function saveSettings (settingKey, settingValue) {
   nconf.set(settingKey, settingValue)

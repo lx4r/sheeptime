@@ -23,24 +23,17 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <!-- <input data-provide="datepicker" id="start-date-picker" :="fillStartDatePicker()">
-                        <input data-provide="datepicker" id="end-date-picker" :="fillEndDatePicker()"> -->
-                        <div class="input-group date" data-provide="datepicker">
-                            <!-- <label for="startDatePicker">Date</label>
-                            <input type="text" class="form-control" id="startDatePicker" :="getStartDate(activityToEdit[1].startTime)">
-                            <div class="input-group-addon">
-                                <span class="glyphicon glyphicon-th"></span>
-                            </div> -->
-                        </div>
+                        <label for="activityName">Date</label>
+                        <input type="text" class="form-control" :value="setDate" v-model="activityDateString">
                     </div>
                     <div class="row">
-                        <div class="col-xs-3">
+                        <div class="col-xs-6 col-sm-6 col-md-3">
                             <div class="form-group">
                                 <label for="startTime">start time</label>
                                 <input type="time" class="form-control" id="startTime" v-model="startTime" :value="setStartTimeString">
                             </div>
                         </div>
-                        <div class="col-xs-3">
+                        <div class="col-xs-6 col-sm-6 col-md-3">
                             <div class="form-group">
                                 <label for="endTime">end time</label>
                                 <input type="time" class="form-control" id="endTime" v-model="endTime" :value="setEndTimeString">
@@ -59,12 +52,13 @@
 
 <script>
   const formatTime = require('./../../formatTime')
-  const ipcRenderer = require('electron').ipcRenderer
+
   let data = {
     startTime: "00:00",
     endTime: "00:00",
     activityProjectID: 0,
     activityName: "",
+    activityDateString: "01/01/2000"
   }
 
   export default {
@@ -90,6 +84,11 @@
       setActivityName: function () {
         data.activityName = this.activityToEdit[1].name
         return this.activityToEdit[1].name
+      },
+      setDate: function () {
+        let dateString = formatTime.timestampToDateString(this.activityToEdit[1].startTime);
+        data.activityDateString = dateString
+        return dateString
       }
     },
     data: function () {
