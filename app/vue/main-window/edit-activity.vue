@@ -13,7 +13,11 @@
                     </div>
                     <div class="form-group">
                         <label for="projectsDropdown">Project</label>
-                        <projects-dropdown :pl="projectList"></projects-dropdown>
+                        <select class="form-control" id="projectsDropdown" v-model="activityProjectID" :value="activityToEdit[1].projectID">
+                            <option v-for="project in projectList" :value="project[0]">
+                                {{project[1].name}}
+                            </option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <!-- <input data-provide="datepicker" id="start-date-picker" :="fillStartDatePicker()">
@@ -55,7 +59,8 @@
   const ipcRenderer = require('electron').ipcRenderer
   let data = {
     startTime: "00:00",
-    endTime: "00:00"
+    endTime: "00:00",
+    activityProjectID: 0,
   }
 
   export default {
