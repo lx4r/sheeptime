@@ -4,16 +4,19 @@
             <div v-if="activityToEdit" class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel" v-if="activityToEdit">Edit activity</h4>
+                    <h4 class="modal-title" id="myModalLabel">
+                        Edit activity <i>{{activityToEdit[1].name}}</i>
+                        <i v-show='activityToEdit[1].name === ""'>(no name)</i>
+                    </h4>
                 </div>
                 <div class="modal-body" id="">
                     <div class="form-group">
                         <label for="activityName">Name</label>
-                        <input type="text" class="form-control" id="activityName" :value="activityToEdit[1].name">
+                        <input type="text" class="form-control" id="activityName" v-model="activityName" :value="setActivityName">
                     </div>
                     <div class="form-group">
                         <label for="projectsDropdown">Project</label>
-                        <select class="form-control" id="projectsDropdown" v-model="activityProjectID" :value="activityToEdit[1].projectID">
+                        <select class="form-control" id="projectsDropdown" v-model="activityProjectID" :value="setProjectID">
                             <option v-for="project in projectList" :value="project[0]">
                                 {{project[1].name}}
                             </option>
@@ -61,6 +64,7 @@
     startTime: "00:00",
     endTime: "00:00",
     activityProjectID: 0,
+    activityName: "",
   }
 
   export default {
@@ -78,6 +82,14 @@
         let endTimeString = formatTime.timestampToTimeString(this.activityToEdit[1].endTime)
         data.endTime = endTimeString
         return endTimeString
+      },
+      setProjectID: function () {
+        data.activityProjectID = this.activityToEdit[1].projectID
+        return this.activityToEdit[1].projectID
+      },
+      setActivityName: function () {
+        data.activityName = this.activityToEdit[1].name
+        return this.activityToEdit[1].name
       }
     },
     data: function () {
