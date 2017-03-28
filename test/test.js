@@ -76,8 +76,23 @@ describe('formatTime', function () {
           }
         }
       })
-      var expectedHour = addLeadingZero(new Date(1500000).getHours()) // needs to be calculated because it can vary based on the timezone
-      var expected = '01/18/70, ' + expectedHour + ':00'
+      var expectedHour = addLeadingZero(new Date(1500000 * 1000).getHours()) // needs to be calculated because it can vary based on the timezone
+      var expected = '01/18/70, ' + expectedHour + ':40'
+      formatTime.timestampToDateTimeString(1500000).should.equal(expected)
+      formatTime.restoreRealConfig()
+    })
+    it('should convert 1500000 to a valid European date time string', function () {
+      formatTime.setMockConfig({
+        readSettings: function (settingName) {
+          if (settingName === 'time-format') {
+            return 'european'
+          } else {
+            throw new Error('using wrong setting')
+          }
+        }
+      })
+      var expectedHour = addLeadingZero(new Date(1500000 * 1000).getHours()) // needs to be calculated because it can vary based on the timezone
+      var expected = '18.01.70, ' + expectedHour + ':40'
       formatTime.timestampToDateTimeString(1500000).should.equal(expected)
       formatTime.restoreRealConfig()
     })
@@ -93,7 +108,22 @@ describe('formatTime', function () {
       formatTime.timestampToDateObject(0).getTime().should.equal(expected.getTime())
     })
     it('should convert 5000 to a valid Date object', function () {
-      var expected = new Date(5000)
+      var expected = new Date(5000 * 1000)
+      formatTime.timestampToDateObject(5000).getTime().should.equal(expected.getTime())
+    })
+    it('should not accept negative timestamps', function () {
+      (function () {
+        formatTime.timestampToDateObject(-1)
+      }).should.throw(Error)
+    })
+  })
+  describe('timestampToTimeString', function () {
+    it('should convert 0 to a valid time string', function () {
+      var expected = new Date(0)
+      formatTime.timestampToTimeString(0).getTime().should.equal(expected.getTime())
+    })
+    it('should convert 5000 to a valid Date object', function () {
+      var expected = new Date(5000 * 1000)
       formatTime.timestampToDateObject(5000).getTime().should.equal(expected.getTime())
     })
     it('should not accept negative timestamps', function () {
