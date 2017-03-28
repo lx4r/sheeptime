@@ -4,9 +4,9 @@
  */
 
 var should = require('chai').should() // eslint-disable-line
+var expect = require('chai').expect // eslint-disable-line
 var formatTime = require('../app/formatTime')
 var mapHandling = require('../app/mapHandling')
-
 
 // helper functions
 function addLeadingZero (number) {
@@ -17,7 +17,6 @@ function addLeadingZero (number) {
   }
 }
 
-
 describe('formatTime', function () {
   describe('secondsToTimeString', function () {
     it('should return 00:00:00 when no time has elapsed', function () {
@@ -27,7 +26,7 @@ describe('formatTime', function () {
       formatTime.secondsToTimeString(91830).should.equal('25:30:30')
     })
     it('should not accept negative seconds', function () {
-      formatTime.secondsToTimeString(-1).should.throw(Error)
+      expect(formatTime.secondsToTimeString(-1)).to.throw(Error)
     })
   })
   describe('timestampToDateTimeString', function () {
@@ -59,6 +58,7 @@ describe('formatTime', function () {
       let expected = '01/01/70, ' + expectedHour + ':00'
       formatTime.timestampToDateTimeString(0).should.equal(expected)
     })
+  })
     /* it('should convert current time to European date time string', function () {
      formatTime.setMockConfig({
      readSettings: function (settingName) {
@@ -79,7 +79,7 @@ describe('formatTime', function () {
      formatTime.timestampToDateTimeString(Math.floor(Date.now() / 1000)).should.equal(expected)
      })
      })
-  })*/
+  }) */
 
   describe('mapHandling', function () {
     describe('mapToArray', function () {
