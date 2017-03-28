@@ -12,11 +12,11 @@
                 <div class="modal-body" id="">
                     <div class="form-group">
                         <label for="activityName">Name</label>
-                        <input type="text" class="form-control" id="activityName" v-model="activityName" :value="setActivityName">
+                        <input type="text" class="form-control" id="activityName" v-model="activityName" :value="initializeForm">
                     </div>
                     <div class="form-group">
                         <label for="projectsDropdown">Project</label>
-                        <select class="form-control" id="projectsDropdown" v-model="activityProjectID" :value="setProjectID">
+                        <select class="form-control" id="projectsDropdown" v-model="activityProjectID">
                             <option v-for="project in projectList" :value="project[0]">
                                 {{project[1].name}}
                             </option>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="form-group">
                         <label for="activityName">Date</label>
-                        <input type="text" class="form-control" :value="setDate" v-model="activityDateString">
+                        <input type="text" class="form-control" v-model="activityDateString">
                     </div>
                     <label for="activityName">Date</label>
                     <div class="row">
@@ -54,13 +54,13 @@
                         <div class="col-xs-6 col-sm-6 col-md-3">
                             <div class="form-group">
                                 <label for="startTime">start time</label>
-                                <input type="time" class="form-control" id="startTime" v-model="startTime" :value="setStartTimeString">
+                                <input type="time" class="form-control" id="startTime" v-model="startTime">
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-3">
                             <div class="form-group">
                                 <label for="endTime">end time</label>
-                                <input type="time" class="form-control" id="endTime" v-model="endTime" :value="setEndTimeString">
+                                <input type="time" class="form-control" id="endTime" v-model="endTime">
                             </div>
                         </div>
                     </div>
@@ -94,26 +94,13 @@
 
     },
     computed: {
-      setStartTimeString: function () {
-        let startTimeString = formatTime.timestampToTimeString(this.activityToEdit[1].startTime)
-        data.startTime = startTimeString
-      },
-      setEndTimeString: function () {
-        let endTimeString = formatTime.timestampToTimeString(this.activityToEdit[1].endTime)
-        data.endTime = endTimeString
-      },
-      setProjectID: function () {
+      initializeForm: function () {
+        // using a computed property here to have access to the props
+        data.startTime = formatTime.timestampToTimeString(this.activityToEdit[1].startTime)
+        data.endTime = formatTime.timestampToTimeString(this.activityToEdit[1].endTime)
         data.activityProjectID = this.activityToEdit[1].projectID
-      },
-      setActivityName: function () {
         data.activityName = this.activityToEdit[1].name
-      },
-      setDate: function () {
-        let dateString = formatTime.timestampToDateString(this.activityToEdit[1].startTime);
-        data.activityDateString = dateString
-      },
-      setDuration: function () {
-        data.activityDuration = this.activityToEdit[1].duration
+        data.activityDateString = formatTime.timestampToDateString(this.activityToEdit[1].startTime)
       }
     },
     data: function () {
