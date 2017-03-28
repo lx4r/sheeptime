@@ -26,6 +26,30 @@
                         <label for="activityName">Date</label>
                         <input type="text" class="form-control" :value="setDate" v-model="activityDateString">
                     </div>
+                    <label for="activityName">Duration</label>
+                    <div class="row" id="duration">
+                        <div class="col-xs-2">
+                            <div class="form-group">
+                                <input type="text" class="form-control editActivityDuration" id="activityDurationHours">
+                            </div>
+                        </div>
+                        <div class="col-xs-1 edit-activity-duration-separator">
+                            :
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="form-group">
+                                <input type="text" class="form-control editActivityDuration" id="activityDurationHours">
+                            </div>
+                        </div>
+                        <div class="col-xs-1 edit-activity-duration-separator">
+                            :
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="form-group">
+                                <input type="text" class="form-control editActivityDuration" id="activityDurationHours">
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-3">
                             <div class="form-group">
@@ -58,7 +82,8 @@
     endTime: "00:00",
     activityProjectID: 0,
     activityName: "",
-    activityDateString: "01/01/2000"
+    activityDateString: "01/01/2000",
+    activityDuration: 0
   }
 
   export default {
@@ -89,6 +114,10 @@
         let dateString = formatTime.timestampToDateString(this.activityToEdit[1].startTime);
         data.activityDateString = dateString
         return dateString
+      },
+      setDuration: function () {
+        data.activityDuration = this.activityToEdit[1].duration
+        return this.activityToEdit[1].duration
       }
     },
     data: function () {

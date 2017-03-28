@@ -214,3 +214,8 @@ button:focus {
         overflow: visible !important;
     }
 }
+
+/* edit activity */
+.edit-activity-duration-separator{
+    text-align: center;
+}
