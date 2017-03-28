@@ -59,11 +59,10 @@
                     data.stopwatchRunning = false
                     ipcRenderer.send('sheeptime:stopwatch:stopped')
 
-
                     // Create the new activity
                     // TODO: Use Vue for this
                     let activityProjectID = parseInt(getElementByID('projectsDropdown').value)
-                    let endTime = Date.now()
+                    let endTime = formatTime.JSTimstampToUNIXTimestamp(Date.now())
 
                     let addedActivity = activityModel.createActivity(data.activityName, data.currentSeconds, activityProjectID, startTime, endTime)
                     ipcRenderer.send('sheeptime:activity:add', addedActivity)
@@ -72,7 +71,7 @@
                     data.currentSeconds = 0
                     // stopwatch is not running -> button acts as start button
                 } else {
-                    startTime = Date.now()
+                    startTime = formatTime.JSTimstampToUNIXTimestamp(Date.now())
                     data.stopwatchRunning = true
                     intervalID = setInterval(function () {
                         data.currentSeconds++

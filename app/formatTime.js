@@ -49,7 +49,12 @@ function timestampToDateObject (timestamp) {
   if (timestamp < 0) {
     throw Error('negative timestamp')
   }
-  return new Date(timestamp)
+  // timestamps are saved as UNIX timestamp (seconds) but JS uses milliseconds
+  return new Date(timestamp * 1000)
+}
+
+function JSTimstampToUNIXTimestamp (JSTimestamp) {
+  return Math.floor(JSTimestamp / 1000)
 }
 
 function timestampToTimeString (timestamp) {
@@ -77,5 +82,6 @@ module.exports = {
   timestampToDateObject: timestampToDateObject,
   timestampToTimeString: timestampToTimeString,
   setMockConfig: setMockConfig,
-  restoreRealConfig: restoreRealConfig
+  restoreRealConfig: restoreRealConfig,
+  JSTimstampToUNIXTimestamp: JSTimstampToUNIXTimestamp
 }
