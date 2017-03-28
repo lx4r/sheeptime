@@ -1,14 +1,19 @@
 /**
  * Created by lx4r on 22.08.16.
  */
+'use strict'
 
 const strftime = require('./js/strftime.min')
-const config = require('./configuration')
+let config = require('./configuration') // not using "const" to be able to override with mock config
+let realConfig = null // only used when config is overridden with mock config
 
 function secondsToTimeString (secondsIn) {
-  var hours = Math.floor(secondsIn / 3600)
-  var minutes = Math.floor((secondsIn - (hours * 3600)) / 60)
-  var seconds = secondsIn - (hours * 3600) - (minutes * 60)
+  if (secondsIn < 0) {
+    throw Error('negative seconds don\'t make sense here')
+  }
+  let hours = Math.floor(secondsIn / 3600)
+  let minutes = Math.floor((secondsIn - (hours * 3600)) / 60)
+  let seconds = secondsIn - (hours * 3600) - (minutes * 60)
 
   if (hours < 10) { hours = '0' + hours }
   if (minutes < 10) { minutes = '0' + minutes }
@@ -42,10 +47,23 @@ function timestampToTimeString (timestamp) {
   return strftime('%H:%M', timestampToDateObject(timestamp))
 }
 
+function setMockConfig (mockConfigObject) {
+  // mock config object must provide function readSettings
+  // restoreRealConfig must be called after every test
+  realConfig = config
+  config = mockConfigObject
+}
+
+function restoreRealConfig () {
+  config = realConfig
+}
+
 module.exports = {
   secondsToTimeString: secondsToTimeString,
   timestampToDateTimeString: timestampToDateTimeString,
   timestampToDateString: timestampToDateString,
   timestampToDateObject: timestampToDateObject,
-  timestampToTimeString: timestampToTimeString
+  timestampToTimeString: timestampToTimeString,
+  setMockConfig: setMockConfig,
+  restoreRealConfig: restoreRealConfig
 }
