@@ -4,7 +4,6 @@
  */
 
 var should = require('chai').should() // eslint-disable-line
-var expect = require('chai').expect // eslint-disable-line
 var formatTime = require('../app/formatTime')
 var mapHandling = require('../app/mapHandling')
 
@@ -26,7 +25,9 @@ describe('formatTime', function () {
       formatTime.secondsToTimeString(91830).should.equal('25:30:30')
     })
     it('should not accept negative seconds', function () {
-      expect(formatTime.secondsToTimeString(-1)).to.throw(Error)
+      (function () {
+        formatTime.secondsToTimeString(-1)
+      }).should.throw(Error)
     })
   })
   describe('timestampToDateTimeString', function () {
@@ -40,9 +41,10 @@ describe('formatTime', function () {
           }
         }
       })
-      let expectedHour = addLeadingZero(new Date(0).getHours()) // needs to be calculated because it can vary based on the timezone
-      let expected = '01.01.70, ' + expectedHour + ':00'
+      var expectedHour = addLeadingZero(new Date(0).getHours()) // needs to be calculated because it can vary based on the timezone
+      var expected = '01.01.70, ' + expectedHour + ':00'
       formatTime.timestampToDateTimeString(0).should.equal(expected)
+      formatTime.restoreRealConfig()
     })
     it('should convert 0 to a valid American date time string', function () {
       formatTime.setMockConfig({
@@ -54,9 +56,15 @@ describe('formatTime', function () {
           }
         }
       })
-      let expectedHour = addLeadingZero(new Date(0).getHours()) // needs to be calculated because it can vary based on the timezone
-      let expected = '01/01/70, ' + expectedHour + ':00'
+      var expectedHour = addLeadingZero(new Date(0).getHours()) // needs to be calculated because it can vary based on the timezone
+      var expected = '01/01/70, ' + expectedHour + ':00'
       formatTime.timestampToDateTimeString(0).should.equal(expected)
+      formatTime.restoreRealConfig()
+    })
+    it('should not accept negative timestamps', function () {
+      (function () {
+        formatTime.timestampToDateTimeString(-1)
+      }).should.throw(Error)
     })
   })
     /* it('should convert current time to European date time string', function () {

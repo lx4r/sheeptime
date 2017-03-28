@@ -9,7 +9,7 @@ let realConfig = null // only used when config is overridden with mock config
 
 function secondsToTimeString (secondsIn) {
   if (secondsIn < 0) {
-    throw Error('negative seconds don\'t make sense here')
+    throw Error('negative seconds')
   }
   let hours = Math.floor(secondsIn / 3600)
   let minutes = Math.floor((secondsIn - (hours * 3600)) / 60)
@@ -22,6 +22,9 @@ function secondsToTimeString (secondsIn) {
 }
 
 function timestampToDateTimeString (timestamp) {
+  if (timestamp < 0) {
+    throw Error('negative timestamp')
+  }
   switch (config.readSettings('time-format')) {
     case 'european':
       return strftime('%d.%m.%y, %H:%M', timestampToDateObject(timestamp))
@@ -31,6 +34,9 @@ function timestampToDateTimeString (timestamp) {
 }
 
 function timestampToDateString (timestamp) {
+  if (timestamp < 0) {
+    throw Error('negative timestamp')
+  }
   switch (config.readSettings('time-format')) {
     case 'european':
       return strftime('%d.%m.%Y', timestampToDateObject(timestamp))
@@ -40,10 +46,16 @@ function timestampToDateString (timestamp) {
 }
 
 function timestampToDateObject (timestamp) {
+  if (timestamp < 0) {
+    throw Error('negative timestamp')
+  }
   return new Date(timestamp)
 }
 
 function timestampToTimeString (timestamp) {
+  if (timestamp < 0) {
+    throw Error('negative timestamp')
+  }
   return strftime('%H:%M', timestampToDateObject(timestamp))
 }
 
