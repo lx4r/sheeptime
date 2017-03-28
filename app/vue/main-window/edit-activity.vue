@@ -26,11 +26,11 @@
                         <label for="activityName">Date</label>
                         <input type="text" class="form-control" :value="setDate" v-model="activityDateString">
                     </div>
-                    <label for="activityName">Duration</label>
-                    <div class="row" id="duration">
+                    <label for="activityName">Date</label>
+                    <div class="row">
                         <div class="col-xs-2">
                             <div class="form-group">
-                                <input type="text" class="form-control editActivityDuration" id="activityDurationHours">
+                                <input type="text" class="form-control editActivityDuration" v-model="activityDurationHours" id="activityDurationHours">
                             </div>
                         </div>
                         <div class="col-xs-1 edit-activity-duration-separator">
@@ -38,7 +38,7 @@
                         </div>
                         <div class="col-xs-2">
                             <div class="form-group">
-                                <input type="text" class="form-control editActivityDuration" id="activityDurationHours">
+                                <input type="text" class="form-control editActivityDuration" v-model="activityDurationMinutes" id="activityDurationMinutes">
                             </div>
                         </div>
                         <div class="col-xs-1 edit-activity-duration-separator">
@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-xs-2">
                             <div class="form-group">
-                                <input type="text" class="form-control editActivityDuration" id="activityDurationHours">
+                                <input type="text" class="form-control editActivityDuration" v-model="activityDurationSeconds" id="activityDurationSeconds">
                             </div>
                         </div>
                     </div>
@@ -83,7 +83,9 @@
     activityProjectID: 0,
     activityName: "",
     activityDateString: "01/01/2000",
-    activityDuration: 0
+    activityDurationHours: '00',
+    activityDurationMinutes: '00',
+    activityDurationSeconds: '00'
   }
 
   export default {
@@ -95,29 +97,23 @@
       setStartTimeString: function () {
         let startTimeString = formatTime.timestampToTimeString(this.activityToEdit[1].startTime)
         data.startTime = startTimeString
-        return startTimeString
       },
       setEndTimeString: function () {
         let endTimeString = formatTime.timestampToTimeString(this.activityToEdit[1].endTime)
         data.endTime = endTimeString
-        return endTimeString
       },
       setProjectID: function () {
         data.activityProjectID = this.activityToEdit[1].projectID
-        return this.activityToEdit[1].projectID
       },
       setActivityName: function () {
         data.activityName = this.activityToEdit[1].name
-        return this.activityToEdit[1].name
       },
       setDate: function () {
         let dateString = formatTime.timestampToDateString(this.activityToEdit[1].startTime);
         data.activityDateString = dateString
-        return dateString
       },
       setDuration: function () {
         data.activityDuration = this.activityToEdit[1].duration
-        return this.activityToEdit[1].duration
       }
     },
     data: function () {
