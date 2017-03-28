@@ -119,40 +119,24 @@ describe('formatTime', function () {
   })
   describe('timestampToTimeString', function () {
     it('should convert 0 to a valid time string', function () {
-      var expected = new Date(0)
-      formatTime.timestampToTimeString(0).getTime().should.equal(expected.getTime())
+      var expected = addLeadingZero(new Date(0).getHours()) + ':00'
+      formatTime.timestampToTimeString(0).should.equal(expected)
     })
-    it('should convert 5000 to a valid Date object', function () {
-      var expected = new Date(5000 * 1000)
-      formatTime.timestampToDateObject(5000).getTime().should.equal(expected.getTime())
+    it('should convert 500000 to a valid time string', function () {
+      var expected = addLeadingZero(new Date(500000 * 1000).getHours()) + ':53'
+      formatTime.timestampToTimeString(500000).should.equal(expected)
     })
     it('should not accept negative timestamps', function () {
       (function () {
-        formatTime.timestampToDateObject(-1)
+        formatTime.timestampToTimeString(-1)
       }).should.throw(Error)
     })
   })
-  /* it('should convert current time to European date time string', function () {
-   formatTime.setMockConfig({
-   readSettings: function (settingName) {
-   if (settingName === 'time-format') {
-   return 'european'
-   } else {
-   throw new Error('using wrong setting')
-   }
-   }
-   })
-   let dateForExpected = new Date()
-   let expectedHour = addLeadingZero(dateForExpected.getHours()) // needs to be calculated because it can vary based on the timezone
-   let expectedMinute = addLeadingZero(dateForExpected.getMinutes())
-   let expectedDay = addLeadingZero(dateForExpected.getDate())
-   let expectedMonth = addLeadingZero(dateForExpected.getMonth())
-   let expectedYear = addLeadingZero(dateForExpected.getYear())
-   let expected = expectedDay + '.' + expectedMonth + '.' + expectedYear + ', ' + expectedHour + ':' + expectedMinute
-   formatTime.timestampToDateTimeString(Math.floor(Date.now() / 1000)).should.equal(expected)
-   })
-   })
-   }) */
+  describe('JSTimstampToUNIXTimestamp', function () {
+    it('should 1000 to 1', function () {
+      formatTime.JSTimstampToUNIXTimestamp(1000).should.equal(1)
+    })
+  })
 })
 
 describe('mapHandling', function () {
