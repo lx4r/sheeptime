@@ -17,12 +17,29 @@ function addLeadingZero (number) {
 }
 
 describe('formatTime', function () {
-  describe('secondsToTimeString', function () {
-    it('should return 00:00:00 when no time has elapsed', function () {
-      formatTime.secondsToTimeString(0).should.equal('00:00:00')
+  describe('secondsToTimeObject', function () {
+    it('should return a time objects that expresses 00:00:00 when no time has elapsed', function () {
+      let timeObject = formatTime.secondsToTimeObject(0)
+      timeObject.hours.should.equal('00')
+      timeObject.minutes.should.equal('00')
+      timeObject.seconds.should.equal('00')
     })
-    it('should be able to convert more than 24 h in seconds to a valid time', function () {
-      formatTime.secondsToTimeString(91830).should.equal('25:30:30')
+    it('should be able to convert more than 24 h in seconds to a valid time object', function () {
+      let timeObject = formatTime.secondsToTimeObject(91830)
+      timeObject.hours.should.equal('25')
+      timeObject.minutes.should.equal('30')
+      timeObject.seconds.should.equal('30')
+    })
+    it('should not accept negative seconds', function () {
+      (function () {
+        formatTime.secondsToTimeObject(-1)
+      }).should.throw(Error)
+    })
+  })
+  describe('secondsToTimeString', function () {
+    // conversion itself should work correctly if secondsToTimeObject works correctly
+    it('should convert a time object to a valid time string', function () {
+      formatTime.secondsToTimeString(500).should.equal('00:08:20')
     })
     it('should not accept negative seconds', function () {
       (function () {
@@ -133,7 +150,7 @@ describe('formatTime', function () {
     })
   })
   describe('JSTimstampToUNIXTimestamp', function () {
-    it('should 1000 to 1', function () {
+    it('should convert 1000 to 1', function () {
       formatTime.JSTimstampToUNIXTimestamp(1000).should.equal(1)
     })
   })

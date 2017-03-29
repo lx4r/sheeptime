@@ -7,7 +7,9 @@ const strftime = require('./js/strftime.min')
 let config = require('./configuration') // not using "const" to be able to override with mock config
 let realConfig = null // only used when config is overridden with mock config
 
-function secondsToTimeString (secondsIn) {
+function secondsToTimeObject (secondsIn) {
+  // converts seconds to time object with two digit hours, minutes, seconds (-> adds leading zeroes)
+  // properties of the time object are strings
   if (secondsIn < 0) {
     throw Error('negative seconds')
   }
@@ -18,7 +20,20 @@ function secondsToTimeString (secondsIn) {
   if (hours < 10) { hours = '0' + hours }
   if (minutes < 10) { minutes = '0' + minutes }
   if (seconds < 10) { seconds = '0' + seconds }
-  return hours + ':' + minutes + ':' + seconds
+
+  return {
+    hours: hours.toString(),
+    minutes: minutes.toString(),
+    seconds: seconds.toString()
+  }
+}
+
+function secondsToTimeString (secondsIn) {
+  if (secondsIn < 0) {
+    throw Error('negative seconds')
+  }
+  let timeObject = secondsToTimeObject(secondsIn)
+  return timeObject.hours + ':' + timeObject.minutes + ':' + timeObject.seconds
 }
 
 function timestampToDateTimeString (timestamp) {
@@ -76,6 +91,7 @@ function restoreRealConfig () {
 }
 
 module.exports = {
+  secondsToTimeObject: secondsToTimeObject,
   secondsToTimeString: secondsToTimeString,
   timestampToDateTimeString: timestampToDateTimeString,
   timestampToDateString: timestampToDateString,
