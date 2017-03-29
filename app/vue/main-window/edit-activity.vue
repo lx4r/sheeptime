@@ -30,7 +30,7 @@
                     <div class="row">
                         <div class="col-xs-2">
                             <div class="form-group">
-                                <input type="text" class="form-control editActivityDuration" v-model="activityDurationHours" id="activityDurationHours">
+                                <input type="text" class="form-control editActivityDuration" v-model="activityDurationHours" id="activityDurationHours" v-on:change="hoursChanged()">
                             </div>
                         </div>
                         <div class="col-xs-1 edit-activity-duration-separator">
@@ -85,22 +85,43 @@
     activityDateString: "01/01/2000",
     activityDurationHours: '00',
     activityDurationMinutes: '00',
-    activityDurationSeconds: '00'
+    activityDurationSeconds: '00',
   }
+  let activityObject = null
+  let activityDurationObject = null
 
   export default {
     props: ['activityToEdit', 'projectList'],
     methods: {
-
+      hoursChanged: function () {
+        if (data.activityDurationHours < activityDurationObject.hours){
+          console.log("hours substracted")
+          let hoursDifference = activityDurationObject.hours - data.activityDurationHours
+          activityObject.endTime -= (hoursDifference * 3600)
+          data.endTime = formatTime.secondsToTimeString(activityObject.endTime)
+        } else if (data.activityDurationHours > activityDurationObject.hours){
+          console.log("hours added")
+          let hoursDifference = data.activityDurationHours - activityDurationObject.hours
+          activityObject.endTime += (hoursDifference * 3600)
+          data.endTime = formatTime.secondsToTimeString(activityObject.endTime)
+        }
+      }
     },
     computed: {
       initializeForm: function () {
         // using a computed property here to have access to the props
-        data.startTime = formatTime.timestampToTimeString(this.activityToEdit[1].startTime)
-        data.endTime = formatTime.timestampToTimeString(this.activityToEdit[1].endTime)
-        data.activityProjectID = this.activityToEdit[1].projectID
-        data.activityName = this.activityToEdit[1].name
-        data.activityDateString = formatTime.timestampToDateString(this.activityToEdit[1].startTime)
+        activityObject = this.activityToEdit[1]
+        activityDurationObject = formatTime.secondsToTimeObject(activityObject.duration)
+
+        data.startTime = formatTime.timestampToTimeString(activityObject.startTime)
+        data.endTime = formatTime.timestampToTimeString(activityObject.endTime)
+        data.activityProjectID = activityObject.projectID
+        data.activityName = activityObject.name
+        data.activityDateString = formatTime.timestampToDateString(activityObject.startTime)
+        data.activityDurationHours = activityDurationObject.hours
+        data.activityDurationMinutes = activityDurationObject.minutes
+        data.activityDurationSeconds = activityDurationObject.seconds
+
       }
     },
     data: function () {
