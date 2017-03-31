@@ -78,6 +78,11 @@
     props: ['activityToEdit', 'projectList', 'activityToEditProperties'],
     methods: {
       hoursChanged: function (activityToEditProperties, activityToEditContent) {
+        if (!this.isValidInput(activityToEditProperties.durationHours)){
+          // reset hours if input was invalid
+          activityToEditProperties.durationHours = activityToEditProperties.durationObject.hours
+          return
+        }
         // activityToEditProperties.durationObject contains the previous duration
         if (activityToEditProperties.durationHours < activityToEditProperties.durationObject.hours) {
           // hours decreased
@@ -94,7 +99,21 @@
         }
       },
       minutesChanged: function (activityToEditProperties, activityToEditContent) {
-        console.log("minutes changed");
+        if (!this.isValidInput(activityToEditProperties.durationMinutes)){
+          // reset hours if input was invalid
+          activityToEditProperties.durationMinutes = activityToEditProperties.durationObject.minutes
+          return
+        }
+        if (activityToEditProperties.durationMinutes === '60'){
+          // change hours number if minutes make up an hour
+          activityToEditProperties.durationMinutes = '00'
+          if (activityToEditProperties.durationHours < 9){
+            // adding a leading zero to the new hours value
+            activityToEditProperties.durationHours = (activityToEditProperties.durationHours + 1)
+          }
+          this.hoursChanged(activityToEditProperties, activityToEditContent)
+          return
+        }
         // activityToEditProperties.durationObject contains the previous duration
         if (activityToEditProperties.durationMinutes < activityToEditProperties.durationObject.minutes) {
           // minutes decreased
@@ -118,10 +137,10 @@
         activityToEditProperties.endTimeString = formatTime.timestampToTimeString(activityToEditContent.endTime)
         // update duration object to be able to compare with it at the next change
         activityToEditProperties.durationObject = formatTime.secondsToTimeObject(activityToEditContent.duration)
+      },
+      isValidInput: function (inputString) {
+        return !(isNaN(inputString) || inputString.length > 2 || inputString.length < 1 || inputString < 0);
       }
-    },
-    data: function () {
-      return data;
     }
   }
 </script>
