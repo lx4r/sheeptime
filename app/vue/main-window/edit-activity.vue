@@ -30,7 +30,7 @@
                     <div class="row" id="activityDuration">
                         <div class="col-xs-2">
                             <div class="form-group">
-                                <input type="text" class="form-control editActivityDuration" v-model="activityToEditProperties.durationHours" id="activityDurationHours">
+                                <input type="text" class="form-control editActivityDuration" v-model="activityToEditProperties.durationHours" id="activityDurationHours" @change="hoursChanged(activityToEditProperties, activityToEdit[1])">
                             </div>
                         </div>
                         <div class="col-xs-1 edit-activity-duration-separator">
@@ -54,13 +54,13 @@
                         <div class="col-xs-6 col-sm-6 col-md-3">
                             <div class="form-group">
                                 <label for="startTime">start time</label>
-                                <input type="time" class="form-control" id="startTime" v-model="activityToEditProperties.startTime">
+                                <input type="time" class="form-control" id="startTime" v-model="activityToEditProperties.startTimeString">
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-3">
                             <div class="form-group">
                                 <label for="endTime">end time</label>
-                                <input type="time" class="form-control" id="endTime" v-model="activityToEditProperties.endTime">
+                                <input type="time" class="form-control" id="endTime" v-model="activityToEditProperties.endTimeString">
                             </div>
                         </div>
                     </div>
@@ -93,51 +93,19 @@
   export default {
     props: ['activityToEdit', 'projectList', 'activityToEditProperties'],
     methods: {
-      hoursChanged: function () {
-        if (data.activityDurationHours < activityDurationObject.hours){
+      hoursChanged: function (activityToEditProperties, activityToEditContent) {
+        // activityToEditProperties.durationObject contains the previous duration
+        if (activityToEditProperties.durationHours < activityToEditProperties.durationObject.hours) {
           console.log("hours substracted")
-          let hoursDifference = activityDurationObject.hours - data.activityDurationHours
-          activityObject.endTime -= (hoursDifference * 3600)
-          data.endTime = formatTime.secondsToTimeString(activityObject.endTime)
-        } else if (data.activityDurationHours > activityDurationObject.hours){
+          let hoursDifference = activityToEditProperties.durationObject.hours - activityToEditProperties.durationHours
+          activityToEditContent.endTime -= (hoursDifference * 3600)
+          activityToEditProperties.endTimeString = formatTime.timestampToTimeString(activityToEditContent.endTime)
+        } else if (activityToEditProperties.durationHours > activityToEditProperties.durationObject.hours) {
           console.log("hours added")
-          let hoursDifference = data.activityDurationHours - activityDurationObject.hours
-          activityObject.endTime += (hoursDifference * 3600)
-          data.endTime = formatTime.secondsToTimeString(activityObject.endTime)
+          let hoursDifference = activityToEditProperties.durationHours - activityToEditProperties.durationObject.hours
+          activityToEditContent.endTime += (hoursDifference * 3600)
+          activityToEditProperties.endTimeString = formatTime.timestampToTimeString(activityToEditContent.endTime)
         }
-      },
-      initializeForm2: function (activityToEdit) {
-        console.log("init2 called")
-        // using a computed property here to have access to the props
-        activityObject = activityToEdit[1]
-        activityDurationObject = formatTime.secondsToTimeObject(activityObject.duration)
-
-        data.startTime = formatTime.timestampToTimeString(activityObject.startTime)
-        data.endTime = formatTime.timestampToTimeString(activityObject.endTime)
-        data.activityProjectID = activityObject.projectID
-        data.activityName = activityObject.name
-        data.activityDateString = formatTime.timestampToDateString(activityObject.startTime)
-        data.activityDurationHours = activityDurationObject.hours
-        data.activityDurationMinutes = activityDurationObject.minutes
-        data.activityDurationSeconds = activityDurationObject.seconds
-      }
-    },
-    computed: {
-      initializeForm: function () {
-        console.log("init called")
-        // using a computed property here to have access to the props
-        activityObject = this.activityToEdit[1]
-        activityDurationObject = formatTime.secondsToTimeObject(activityObject.duration)
-
-        data.startTime = formatTime.timestampToTimeString(activityObject.startTime)
-        data.endTime = formatTime.timestampToTimeString(activityObject.endTime)
-        data.activityProjectID = activityObject.projectID
-        data.activityName = activityObject.name
-        data.activityDateString = formatTime.timestampToDateString(activityObject.startTime)
-        data.activityDurationHours = activityDurationObject.hours
-        data.activityDurationMinutes = activityDurationObject.minutes
-        data.activityDurationSeconds = activityDurationObject.seconds
-        return ""
       }
     },
     data: function () {

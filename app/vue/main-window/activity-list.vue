@@ -104,8 +104,9 @@
         let activityContent = newActivityToEdit[1];
         let activityDurationObject = formatTime.secondsToTimeObject(activityContent.duration)
         data.activityToEditProperties = {
-          startTime : formatTime.timestampToTimeString(activityContent.startTime),
-          endTime: formatTime.timestampToTimeString(activityContent.endTime),
+          durationObject: activityDurationObject,
+          startTimeString : formatTime.timestampToTimeString(activityContent.startTime),
+          endTimeString: formatTime.timestampToTimeString(activityContent.endTime),
           projectID: activityContent.projectID,
           name: activityContent.name,
           dateString: formatTime.timestampToDateString(activityContent.startTime),
