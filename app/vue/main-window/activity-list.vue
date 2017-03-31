@@ -102,13 +102,14 @@
       setActivityToEdit: function (newActivityToEdit) {
         data.activityToEdit = newActivityToEdit;
         let activityContent = newActivityToEdit[1];
+        let activityDurationObject = formatTime.secondsToTimeObject(activityContent.duration)
         data.activityToEditProperties = {
           startTime : formatTime.timestampToTimeString(activityContent.startTime),
           endTime: formatTime.timestampToTimeString(activityContent.endTime),
           projectID: activityContent.projectID,
           name: activityContent.name,
-          activityDateString: formatTime.timestampToDateString(activityContent.startTime),
-          durationHours: activityContent.hours,
+          dateString: formatTime.timestampToDateString(activityContent.startTime),
+          durationHours: activityDurationObject.hours,
           durationMinutes: activityDurationObject.minutes,
           durationSeconds: activityDurationObject.seconds,
         }

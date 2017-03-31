@@ -1,7 +1,7 @@
 <template>
     <div class="modal fade" id="edit-activity" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
-            <div v-if="activityToEdit" class="modal-content">
+            <div v-if="activityToEditProperties" class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">
@@ -12,11 +12,11 @@
                 <div class="modal-body" id="">
                     <div class="form-group">
                         <label for="activityName">Name</label>
-                        <input type="text" class="form-control" id="activityName" v-model="activityName" :="initializeForm2(activityToEdit)">
+                        <input type="text" class="form-control" id="activityName" v-model="activityToEditProperties.name">
                     </div>
                     <div class="form-group">
                         <label for="projectsDropdown">Project</label>
-                        <select class="form-control" id="projectsDropdown" v-model="activityProjectID">
+                        <select class="form-control" id="projectsDropdown" v-model="activityToEditProperties.projectID">
                             <option v-for="project in projectList" :value="project[0]">
                                 {{project[1].name}}
                             </option>
@@ -24,13 +24,13 @@
                     </div>
                     <div class="form-group">
                         <label for="activityName">Date</label>
-                        <input type="text" class="form-control" v-model="activityDateString">
+                        <input type="text" class="form-control" v-model="activityToEditProperties.dateString">
                     </div>
-                    <label for="activityName">Date</label>
-                    <div class="row">
+                    <label for="activityDuration">Duration</label>
+                    <div class="row" id="activityDuration">
                         <div class="col-xs-2">
                             <div class="form-group">
-                                <input type="text" class="form-control editActivityDuration" v-model="activityDurationHours" id="activityDurationHours" v-on:change="hoursChanged()">
+                                <input type="text" class="form-control editActivityDuration" v-model="activityToEditProperties.durationHours" id="activityDurationHours">
                             </div>
                         </div>
                         <div class="col-xs-1 edit-activity-duration-separator">
@@ -38,7 +38,7 @@
                         </div>
                         <div class="col-xs-2">
                             <div class="form-group">
-                                <input type="text" class="form-control editActivityDuration" v-model="activityDurationMinutes" id="activityDurationMinutes">
+                                <input type="text" class="form-control editActivityDuration" v-model="activityToEditProperties.durationMinutes" id="activityDurationMinutes">
                             </div>
                         </div>
                         <div class="col-xs-1 edit-activity-duration-separator">
@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-xs-2">
                             <div class="form-group">
-                                <input type="text" class="form-control editActivityDuration" v-model="activityDurationSeconds" id="activityDurationSeconds">
+                                <input type="text" class="form-control editActivityDuration" v-model="activityToEditProperties.durationSeconds" id="activityDurationSeconds">
                             </div>
                         </div>
                     </div>
@@ -54,13 +54,13 @@
                         <div class="col-xs-6 col-sm-6 col-md-3">
                             <div class="form-group">
                                 <label for="startTime">start time</label>
-                                <input type="time" class="form-control" id="startTime" v-model="startTime">
+                                <input type="time" class="form-control" id="startTime" v-model="activityToEditProperties.startTime">
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-3">
                             <div class="form-group">
                                 <label for="endTime">end time</label>
-                                <input type="time" class="form-control" id="endTime" v-model="endTime">
+                                <input type="time" class="form-control" id="endTime" v-model="activityToEditProperties.endTime">
                             </div>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
   let activityDurationObject = null
 
   export default {
-    props: ['activityToEdit', 'projectList'],
+    props: ['activityToEdit', 'projectList', 'activityToEditProperties'],
     methods: {
       hoursChanged: function () {
         if (data.activityDurationHours < activityDurationObject.hours){
