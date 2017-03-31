@@ -10,12 +10,14 @@ function arrayToMap (array) {
   return new Map(array)
 }
 
+// returns an array
 function setElement (mapAsArray, key, value) {
   var map = arrayToMap(mapAsArray)
   map.set(key, value)
   return mapToArray(map)
 }
 
+// returns an array
 function deleteElement (mapAsArray, key) {
   var map = arrayToMap(mapAsArray)
   map.delete(key)

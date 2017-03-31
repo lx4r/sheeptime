@@ -12,11 +12,11 @@
                 <div class="modal-body" id="">
                     <div class="form-group">
                         <label for="activityName">Name</label>
-                        <input type="text" class="form-control" id="activityName" v-model="activityToEditProperties.name">
+                        <input type="text" class="form-control" id="activityName" v-model="activityToEdit[1].name">
                     </div>
                     <div class="form-group">
                         <label for="projectsDropdown">Project</label>
-                        <select class="form-control" id="projectsDropdown" v-model="activityToEditProperties.projectID">
+                        <select class="form-control" id="projectsDropdown" v-model="activityToEdit[1].projectID">
                             <option v-for="project in projectList" :value="project[0]">
                                 {{project[1].name}}
                             </option>
@@ -73,6 +73,7 @@
 
 <script>
   const formatTime = require('./../../formatTime')
+  const ipcRenderer = require('electron').ipcRenderer
 
   export default {
     props: ['activityToEdit', 'projectList', 'activityToEditProperties'],

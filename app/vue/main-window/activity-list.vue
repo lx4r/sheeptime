@@ -103,12 +103,11 @@
         data.activityToEdit = newActivityToEdit;
         let activityContent = newActivityToEdit[1];
         let activityDurationObject = formatTime.secondsToTimeObject(activityContent.duration)
+        // data of the activity that needs to be computed before it is shown
         data.activityToEditProperties = {
           durationObject: activityDurationObject,
           startTimeString : formatTime.timestampToTimeString(activityContent.startTime),
           endTimeString: formatTime.timestampToTimeString(activityContent.endTime),
-          projectID: activityContent.projectID,
-          name: activityContent.name,
           dateString: formatTime.timestampToDateString(activityContent.startTime),
           durationHours: activityDurationObject.hours,
           durationMinutes: activityDurationObject.minutes,
