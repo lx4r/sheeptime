@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-xs-2">
                             <div class="form-group">
-                                <input type="text" class="form-control editActivityDuration" v-model="activityToEditProperties.durationSeconds" id="activityDurationSeconds">
+                                <input type="text" class="form-control editActivityDuration" v-model="activityToEditProperties.durationSeconds" id="activityDurationSeconds" @change="secondsChanged(activityToEditProperties, activityToEdit[1])">
                             </div>
                         </div>
                     </div>
@@ -99,19 +99,9 @@
         }
       },
       minutesChanged: function (activityToEditProperties, activityToEditContent) {
-        if (!this.isValidInput(activityToEditProperties.durationMinutes)){
-          // reset hours if input was invalid
+        if (!this.isValidInput(activityToEditProperties.durationMinutes) || activityToEditProperties.durationMinutes > 59){
+          // reset minutes if input was invalid
           activityToEditProperties.durationMinutes = activityToEditProperties.durationObject.minutes
-          return
-        }
-        if (activityToEditProperties.durationMinutes === '60'){
-          // change hours number if minutes make up an hour
-          activityToEditProperties.durationMinutes = '00'
-          if (activityToEditProperties.durationHours < 9){
-            // adding a leading zero to the new hours value
-            activityToEditProperties.durationHours = (activityToEditProperties.durationHours + 1)
-          }
-          this.hoursChanged(activityToEditProperties, activityToEditContent)
           return
         }
         // activityToEditProperties.durationObject contains the previous duration
@@ -130,7 +120,25 @@
         }
       },
       secondsChanged: function (activityToEditProperties, activityToEditContent) {
-
+        if (!this.isValidInput(activityToEditProperties.durationSeconds) || activityToEditProperties.durationSeconds > 59){
+          // reset seconds if input was invalid
+          activityToEditProperties.durationSeconds = activityToEditProperties.durationObject.seconds
+          return
+        }
+        // activityToEditProperties.durationObject contains the previous duration
+        if (activityToEditProperties.durationSeconds < activityToEditProperties.durationObject.seconds) {
+          // seconds decreased
+          let secondsDifference = activityToEditProperties.durationObject.seconds - activityToEditProperties.durationSeconds
+          activityToEditContent.endTime -= secondsDifference
+          activityToEditContent.duration -= secondsDifference
+          this.updateEndTimeDuration(activityToEditProperties, activityToEditContent)
+        } else if (activityToEditProperties.durationSeconds > activityToEditProperties.durationObject.seconds) {
+          // seconds increased
+          let secondsDifference = activityToEditProperties.durationSeconds - activityToEditProperties.durationObject.seconds
+          activityToEditContent.endTime += secondsDifference
+          activityToEditContent.duration += secondsDifference
+          this.updateEndTimeDuration(activityToEditProperties, activityToEditContent)
+        }
       },
       updateEndTimeDuration: function (activityToEditProperties, activityToEditContent) {
         // helper function to update end time and duration
