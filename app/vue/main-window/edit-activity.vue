@@ -41,6 +41,14 @@
                                 <input type="text" class="form-control editActivityDuration" v-model="activityToEditProperties.durationMinutes" id="activityDurationMinutes" @change="minutesChanged(activityToEditProperties, activityToEdit[1])">
                             </div>
                         </div>
+                        <div class="col-xs-1 edit-activity-duration-separator">
+                            :
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="form-group">
+                                <input type="text" class="form-control editActivityDuration" v-model="activityToEditProperties.durationSeconds" id="activityDurationSeconds">
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-3">
@@ -86,6 +94,7 @@
         }
       },
       minutesChanged: function (activityToEditProperties, activityToEditContent) {
+        console.log("minutes changed");
         // activityToEditProperties.durationObject contains the previous duration
         if (activityToEditProperties.durationMinutes < activityToEditProperties.durationObject.minutes) {
           // minutes decreased
@@ -101,12 +110,18 @@
           this.updateEndTimeDuration(activityToEditProperties, activityToEditContent)
         }
       },
+      secondsChanged: function (activityToEditProperties, activityToEditContent) {
+
+      },
       updateEndTimeDuration: function (activityToEditProperties, activityToEditContent) {
         // helper function to update end time and duration
         activityToEditProperties.endTimeString = formatTime.timestampToTimeString(activityToEditContent.endTime)
         // update duration object to be able to compare with it at the next change
         activityToEditProperties.durationObject = formatTime.secondsToTimeObject(activityToEditContent.duration)
       }
+    },
+    data: function () {
+      return data;
     }
   }
 </script>
