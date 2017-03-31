@@ -12,7 +12,7 @@
                 <div class="modal-body" id="">
                     <div class="form-group">
                         <label for="activityName">Name</label>
-                        <input type="text" class="form-control" id="activityName" v-model="activityName" :value="initializeForm">
+                        <input type="text" class="form-control" id="activityName" v-model="activityName" :="initializeForm2(activityToEdit)">
                     </div>
                     <div class="form-group">
                         <label for="projectsDropdown">Project</label>
@@ -105,10 +105,26 @@
           activityObject.endTime += (hoursDifference * 3600)
           data.endTime = formatTime.secondsToTimeString(activityObject.endTime)
         }
+      },
+      initializeForm2: function (activityToEdit) {
+        console.log("init2 called")
+        // using a computed property here to have access to the props
+        activityObject = activityToEdit[1]
+        activityDurationObject = formatTime.secondsToTimeObject(activityObject.duration)
+
+        data.startTime = formatTime.timestampToTimeString(activityObject.startTime)
+        data.endTime = formatTime.timestampToTimeString(activityObject.endTime)
+        data.activityProjectID = activityObject.projectID
+        data.activityName = activityObject.name
+        data.activityDateString = formatTime.timestampToDateString(activityObject.startTime)
+        data.activityDurationHours = activityDurationObject.hours
+        data.activityDurationMinutes = activityDurationObject.minutes
+        data.activityDurationSeconds = activityDurationObject.seconds
       }
     },
     computed: {
       initializeForm: function () {
+        console.log("init called")
         // using a computed property here to have access to the props
         activityObject = this.activityToEdit[1]
         activityDurationObject = formatTime.secondsToTimeObject(activityObject.duration)
@@ -121,7 +137,7 @@
         data.activityDurationHours = activityDurationObject.hours
         data.activityDurationMinutes = activityDurationObject.minutes
         data.activityDurationSeconds = activityDurationObject.seconds
-
+        return ""
       }
     },
     data: function () {

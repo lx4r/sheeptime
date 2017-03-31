@@ -46,7 +46,7 @@
                     Loading
                 </div>
             </div>
-            <edit-activity :activityToEdit="activityToEdit" :projectList="pl"></edit-activity>
+            <edit-activity :activityToEdit="activityToEdit" :activityToEditProperties="activityToEditProperties" :projectList="pl"></edit-activity>
         </div>
     </div>
 </template>
@@ -60,6 +60,7 @@
     activities: {},
     dataReceived: false,
     activityToEdit: null,
+    activityToEditProperties: null
   }
 
   ipcRenderer.send('sheeptime:loggedActivities:send', 'main-window')
@@ -99,8 +100,18 @@
         return mapHandling.getElement(projectListArray, projectID).color
       },
       setActivityToEdit: function (newActivityToEdit) {
-        console.log(newActivityToEdit);
         data.activityToEdit = newActivityToEdit;
+        let activityContent = newActivityToEdit[1];
+        data.activityToEditProperties = {
+          startTime : formatTime.timestampToTimeString(activityContent.startTime),
+          endTime: formatTime.timestampToTimeString(activityContent.endTime),
+          projectID: activityContent.projectID,
+          name: activityContent.name,
+          activityDateString: formatTime.timestampToDateString(activityContent.startTime),
+          durationHours: activityContent.hours,
+          durationMinutes: activityDurationObject.minutes,
+          durationSeconds: activityDurationObject.seconds,
+        }
       }
     },
     data(){
