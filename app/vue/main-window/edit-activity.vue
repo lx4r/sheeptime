@@ -38,7 +38,7 @@
                         </div>
                         <div class="col-xs-2">
                             <div class="form-group">
-                                <input type="text" class="form-control editActivityDuration" v-model="activityToEditProperties.durationMinutes" id="activityDurationMinutes">
+                                <input type="text" class="form-control editActivityDuration" v-model="activityToEditProperties.durationMinutes" id="activityDurationMinutes" @change="minutesChanged(activityToEditProperties, activityToEdit[1])">
                             </div>
                         </div>
                         <div class="col-xs-1 edit-activity-duration-separator">
@@ -74,41 +74,50 @@
 <script>
   const formatTime = require('./../../formatTime')
 
-  let data = {
-    startTime: "00:00",
-    endTime: "00:00",
-    activityProjectID: 0,
-    activityName: "",
-    activityDateString: "01/01/2000",
-    activityDurationHours: '00',
-    activityDurationMinutes: '00',
-    activityDurationSeconds: '00',
-  }
-  let activityObject = null
-  let activityDurationObject = null
-
   export default {
     props: ['activityToEdit', 'projectList', 'activityToEditProperties'],
     methods: {
       hoursChanged: function (activityToEditProperties, activityToEditContent) {
         // activityToEditProperties.durationObject contains the previous duration
         if (activityToEditProperties.durationHours < activityToEditProperties.durationObject.hours) {
-          console.log("hours substracted")
+          // hours decreased
           let hoursDifference = activityToEditProperties.durationObject.hours - activityToEditProperties.durationHours
           activityToEditContent.endTime -= (hoursDifference * 3600)
           activityToEditContent.duration -= (hoursDifference * 3600)
-          activityToEditProperties.endTimeString = formatTime.timestampToTimeString(activityToEditContent.endTime)
-          // update duration obejct to be able to compare with it at the next change
-          activityToEditProperties.durationObject = formatTime.secondsToTimeObject(activityToEditContent.duration)
+          this.updateEndTimeDuration(activityToEditProperties, activityToEditContent)
         } else if (activityToEditProperties.durationHours > activityToEditProperties.durationObject.hours) {
-          console.log("hours added")
+          // hours increased
           let hoursDifference = activityToEditProperties.durationHours - activityToEditProperties.durationObject.hours
           activityToEditContent.endTime += (hoursDifference * 3600)
           activityToEditContent.duration += (hoursDifference * 3600)
-          activityToEditProperties.endTimeString = formatTime.timestampToTimeString(activityToEditContent.endTime)
-          // update duration obejct to be able to compare with it at the next change
-          activityToEditProperties.durationObject = formatTime.secondsToTimeObject(activityToEditContent.duration)
+          this.updateEndTimeDuration(activityToEditProperties, activityToEditContent)
         }
+      },
+      minutesChanged: function (activityToEditProperties, activityToEditContent) {
+        console.log("minutes changed");
+        // activityToEditProperties.durationObject contains the previous duration
+        if (activityToEditProperties.durationMinutes < activityToEditProperties.durationObject.minutes) {
+          // minutes decreased
+          let minutesDifference = activityToEditProperties.durationObject.minutes - activityToEditProperties.durationMinutes
+          activityToEditContent.endTime -= (minutesDifference * 60)
+          activityToEditContent.duration -= (minutesDifference * 60)
+          this.updateEndTimeDuration(activityToEditProperties, activityToEditContent)
+        } else if (activityToEditProperties.durationMinutes > activityToEditProperties.durationObject.minutes) {
+          // minutes increased
+          let minutesDifference = activityToEditProperties.durationMinutes - activityToEditProperties.durationObject.minutes
+          activityToEditContent.endTime += (minutesDifference * 60)
+          activityToEditContent.duration += (minutesDifference * 60)
+          this.updateEndTimeDuration(activityToEditProperties, activityToEditContent)
+        }
+      },
+      secondsChanged: function (activityToEditProperties, activityToEditContent) {
+
+      },
+      updateEndTimeDuration: function (activityToEditProperties, activityToEditContent) {
+        // helper function to update end time and duration
+        activityToEditProperties.endTimeString = formatTime.timestampToTimeString(activityToEditContent.endTime)
+        // update duration object to be able to compare with it at the next change
+        activityToEditProperties.durationObject = formatTime.secondsToTimeObject(activityToEditContent.duration)
       }
     },
     data: function () {
