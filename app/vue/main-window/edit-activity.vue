@@ -66,9 +66,6 @@
                     </div>
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
-                </div>
             </div>
         </div>
     </div>
@@ -99,12 +96,18 @@
           console.log("hours substracted")
           let hoursDifference = activityToEditProperties.durationObject.hours - activityToEditProperties.durationHours
           activityToEditContent.endTime -= (hoursDifference * 3600)
+          activityToEditContent.duration -= (hoursDifference * 3600)
           activityToEditProperties.endTimeString = formatTime.timestampToTimeString(activityToEditContent.endTime)
+          // update duration obejct to be able to compare with it at the next change
+          activityToEditProperties.durationObject = formatTime.secondsToTimeObject(activityToEditContent.duration)
         } else if (activityToEditProperties.durationHours > activityToEditProperties.durationObject.hours) {
           console.log("hours added")
           let hoursDifference = activityToEditProperties.durationHours - activityToEditProperties.durationObject.hours
           activityToEditContent.endTime += (hoursDifference * 3600)
+          activityToEditContent.duration += (hoursDifference * 3600)
           activityToEditProperties.endTimeString = formatTime.timestampToTimeString(activityToEditContent.endTime)
+          // update duration obejct to be able to compare with it at the next change
+          activityToEditProperties.durationObject = formatTime.secondsToTimeObject(activityToEditContent.duration)
         }
       }
     },
