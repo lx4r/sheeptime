@@ -10,6 +10,7 @@ Vue.component('settings-window', require('./vue/settings-window.vue'))
 Vue.component('savefile-location', require('./vue/settings-window/savefile-location.vue'))
 Vue.component('show-deletion-confirmation', require('./vue/settings-window/show-deletion-confirmation.vue'))
 Vue.component('time-format', require('./vue/settings-window/time-format.vue'))
+Vue.component('enable-debug-mode', require('./vue/settings-window/enable-debug-mode.vue'))
 
 vm = new Vue({
   el: '#settings-window-wrapper',
