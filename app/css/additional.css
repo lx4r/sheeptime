@@ -141,8 +141,23 @@ button:focus {
 
 #activity-list-table tbody td,
 #activity-list-table thead th {
-    width: 25%;
     float: left;
+}
+#activity-list-table tbody td:nth-child(1),
+#activity-list-table thead th:nth-child(1) {
+    width: 35%;
+}
+#activity-list-table tbody td:nth-child(2),
+#activity-list-table thead th:nth-child(2) {
+    width: 35%;
+}
+#activity-list-table tbody td:nth-child(3),
+#activity-list-table thead th:nth-child(3) {
+    width: 15%;
+}
+#activity-list-table tbody td:nth-child(4),
+#activity-list-table thead th:nth-child(4) {
+    width: 15%;
 }
 
 #activity-list-table table {
