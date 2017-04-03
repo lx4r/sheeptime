@@ -19,7 +19,6 @@ function saveActivities (activities) {
     if (err) {
       return console.error(err)
     }
-    console.log("yay, saved")
   })
 }
 
