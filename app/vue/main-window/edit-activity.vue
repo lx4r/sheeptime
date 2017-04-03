@@ -78,6 +78,7 @@
   export default {
     props: ['activityToEdit', 'projectList', 'activityToEditProperties'],
     methods: {
+      // TODO: simplify code here
       hoursChanged: function (activityToEditProperties, activityToEditContent) {
         if (!this.isValidInput(activityToEditProperties.durationHours)){
           // reset hours if input was invalid

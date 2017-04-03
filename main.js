@@ -253,38 +253,12 @@ ipcMain.on('sheeptime:project:delete', function (event, deletedProjectsID) {
   projectsStorage.saveProjects(savedProjects)
 })
 
-// Event: user edited a project
+// Event: user edited an activity
 // Flow: main window -> controller
-ipcMain.on('sheeptime:project:edit', function (event, edited) {
-  // Delete the project from the storage object
-  savedProjects.projectsArray = mapHandling.deleteElement(savedProjects.projectsArray, deletedProjectsID)
-
-  // Pass the changed storage object to the view
-  // Flow: controller -> projects window, main window
-  if (projectsWindow) {
-    projectsWindow.webContents.send('sheeptime:project:deleted', savedProjects)
-  }
-  if (mainWindow) {
-    mainWindow.webContents.send('sheeptime:project:deleted', savedProjects)
-  }
-
-  // Delete all the activities that were associated with that project
-  var activitiesMap = mapHandling.arrayToMap(loggedActivities.activitiesArray)
-  activitiesMap.forEach(function (elem, id) {
-    if (elem.projectID === deletedProjectsID) {
-      activitiesMap.delete(id)
-    }
-  })
-  loggedActivities.activitiesArray = mapHandling.mapToArray(activitiesMap)
-
-  // Pass the changed activities storage object to the view
-  // Flow: controller -> main window
-  if (mainWindow) {
-    mainWindow.webContents.send('sheeptime:activity:deleted', loggedActivities)
-  }
-
+ipcMain.on('sheeptime:activity:edit', function (event, editedProject) {
+  // Update the project from in the storage object
+  loggedActivities.projectsArray = mapHandling.setElement(loggedActivities.activitiesArray, editedProject[0], editedProject[1])
   activitiesStorage.saveActivities(loggedActivities)
-  projectsStorage.saveProjects(savedProjects)
 })
 
 // Event: user added a project

@@ -63,6 +63,8 @@
     activityToEditProperties: null
   }
 
+  let activityToEditPrevString = null;
+
   ipcRenderer.send('sheeptime:loggedActivities:send', 'main-window')
 
   ipcRenderer.on('sheeptime:loggedActivities:get', function (event, arg) {
@@ -79,6 +81,16 @@
   // Update the view after adding an activity
   ipcRenderer.on('sheeptime:activity:added', function (event, arg) {
     data.activities = arg
+  })
+
+  // save activity when the edit modal is closed
+  $(document).on('hide.bs.modal','#edit-activity', function () {
+    //ipcRenderer.send('sheeptime:activity:edit', )
+    if (JSON.stringify(data.activityToEdit) === activityToEditPrevString){
+      // TODO
+    } else {
+      // TODO
+    }
   })
 
   export default {
@@ -113,6 +125,8 @@
           durationMinutes: activityDurationObject.minutes,
           durationSeconds: activityDurationObject.seconds,
         }
+        // save a stringified version of the activity to later determine whether it has been changed
+        activityToEditPrevString = JSON.stringify(newActivityToEdit);
       }
     },
     data(){

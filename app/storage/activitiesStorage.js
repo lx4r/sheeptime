@@ -17,8 +17,9 @@ const defaultFileContent = {freshID: 0, activitiesArray: []}
 function saveActivities (activities) {
   fs.writeFile(activitiesFilePath, JSON.stringify(activities), function (err) {
     if (err) {
-      return console.log(err)
+      return console.error(err)
     }
+    console.log("yay, saved")
   })
 }
 
