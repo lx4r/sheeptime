@@ -111,7 +111,10 @@ button:focus {
 
 /* main window: activity list */
 #activity-list-table {
-    width: 100%
+    width: 100%;
+    height: 380px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #activity-list-table thead,
