@@ -86,10 +86,9 @@
   // save activity when the edit modal is closed
   $(document).on('hide.bs.modal','#edit-activity', function () {
     //ipcRenderer.send('sheeptime:activity:edit', )
-    if (JSON.stringify(data.activityToEdit) === activityToEditPrevString){
-      // TODO
-    } else {
-      // TODO
+    if (!(JSON.stringify(data.activityToEdit) === activityToEditPrevString)){
+      // activity has been changed -> save updated activities list
+      ipcRenderer.send('sheeptime:activity:edit', data.activityToEdit)
     }
   })
 
