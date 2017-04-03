@@ -9,14 +9,14 @@
                     <ul class="list-group" v-if="activities.activitiesArray.length > 0">
                         <li class="list-group-item activity-body" v-for="activity in activities.activitiesArray">
                             <div class="row">
-                                <div class="col-xs-6">
+                                <div class="col-xs-6 col-sm-8 col-md-6">
                                     <div class="activity-title">
                                         {{activity[1].name}}
                                         <i v-show='activity[1].name === ""'>(no name)</i>
                                     </div>
                                     <span class="badge" :style='"background-color:" + getProjectColor(pl, activity[1].projectID)'>{{getProjectName(pl, activity[1].projectID)}}</span><br>
                                 </div>
-                                <div class="col-xs-3 activity-button-column">
+                                <div class="col-xs-3 col-sm-2 col-md-3 activity-button-column">
                                     <button v-on:click="deleteActivity(activity[0])" type="button" class="btn btn-xs btn-danger deleteActivityButton" aria-label="Left Align">
                                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                     </button>
@@ -27,7 +27,7 @@
                                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                     </button>
                                 </div>
-                                <div class="col-xs-3 activity-time-column">
+                                <div class="col-xs-3 col-sm-2 col-md-3  activity-time-column">
                                     <a type="button" class="activity-time" v-bind:href="'#activity-' + activity[0]" data-toggle="collapse" v-bind:data-target="'#activity-' + activity[0]">{{secondsToTime(activity[1].duration)}}</a>
                                     <div class="collapse" v-bind:id="'activity-' + activity[0]">
                                         {{timestampToDate(activity[1].startTime)}} - {{timestampToDate(activity[1].endTime)}}
