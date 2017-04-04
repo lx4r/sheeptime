@@ -24,46 +24,6 @@ button:focus {
     outline: none !important;
 }
 
-/* project window: project list */
-#project-list-table {
-    width: 100%
-}
-
-#project-list-table thead,
-#project-list-table tbody,
-#project-list-table tr,
-#project-list-table td,
-#project-list-table th{
-    display: block;
-}
-
-#project-list-table tr:after {
-    content: ' ';
-    display: block;
-    visibility: hidden;
-    clear: both;
-}
-
-#project-list-table thead th {
-    height: 30px;
-}
-
-#project-list-table tbody{
-    height: 300px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-#project-list-table tbody td,
-#project-list-table thead th {
-    width: 25%;
-    float: left;
-}
-
-#project-list-table table {
-    margin-bottom: 0px !important;
-}
-
 /* project window: project input */
 .color-example {
     float: left;
@@ -134,62 +94,29 @@ button:focus {
     font-size: 1.2em;
 }
 
-/* main window: activity list */
-#activity-list-table {
-    width: 100%;
+/* project window: project list */
+#project-list{
     height: 380px;
     overflow-y: auto;
-    overflow-x: hidden;
 }
-
-#activity-list-table thead,
-#activity-list-table tbody,
-#activity-list-table tr,
-#activity-list-table td,
-#activity-list-table th{
-    display: block;
+.project-title {
+    /* font-size: 1.1em; */
 }
-
-#activity-list-table tr:after {
-    content: ' ';
-    display: block;
-    visibility: hidden;
-    clear: both;
+.project-body {
+    padding-top: 3px;
+    padding-bottom: 8px;
 }
-
-#activity-list-table thead th {
-    height: 30px;
+.project-name-column {
+    padding-top: 10px;
 }
-
-#activity-list-table tbody{
-    height: 325px;
-    overflow-y: auto;
-    overflow-x: hidden;
+.project-button-column {
+    padding-top: 10px;
 }
-
-#activity-list-table tbody td,
-#activity-list-table thead th {
-    float: left;
-}
-#activity-list-table tbody td:nth-child(1),
-#activity-list-table thead th:nth-child(1) {
-    width: 35%;
-}
-#activity-list-table tbody td:nth-child(2),
-#activity-list-table thead th:nth-child(2) {
-    width: 35%;
-}
-#activity-list-table tbody td:nth-child(3),
-#activity-list-table thead th:nth-child(3) {
-    width: 15%;
-}
-#activity-list-table tbody td:nth-child(4),
-#activity-list-table thead th:nth-child(4) {
-    width: 15%;
-}
-
-#activity-list-table table {
-    margin-bottom: 0px !important;
+.project-time-column {
+    padding-top: 10px;
+    text-align: right;
+    padding-left: 0px;
+    font-size: 1.2em;
 }
 
 /* projects window: report */

@@ -9,13 +9,13 @@
                     <ul class="list-group" v-if="projects.projectsArray.length > 0">
                         <li class="list-group-item project-body" v-for="project in projects.projectsArray">
                             <div class="row">
-                                <div class="col-xs-6 col-sm-8 col-md-6">
+                                <div class="col-xs-5 col-sm-8 col-md-6 project-name-column">
                                         <span class="badge project-title" :style='"background-color:" + project[1].color'>
                                             {{project[1].name}}
                                             <i v-show='project[1].name === ""'>(no name)</i>
                                         </span>
                                 </div>
-                                <div class="col-xs-3 col-sm-2 col-md-3 activity-button-column">
+                                <div class="col-xs-4 col-sm-2 col-md-3 project-button-column">
                                     <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#report" v-on:click="getReportForProject(project[0], project[1])">
                                         <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Report
                                     </button>
@@ -28,7 +28,7 @@
                                             </button>
                                         </span>
                                 </div>
-                                <div class="col-xs-3 col-sm-2 col-md-3  project-time-column">
+                                <div class="col-xs-3 col-sm-2 col-md-3 project-time-column">
                                     {{secondsToTime(project[1].totalSeconds)}}
                                 </div>
                             </div>
