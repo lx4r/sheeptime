@@ -29,7 +29,7 @@ function createMainWindow () {
 
   mainWindow.loadURL(`file://${__dirname}/app/main-window.html`)
 
-  if (configuration.readSettings('debug-mode') === true){
+  if (configuration.readSettings('debug-mode') === true) {
     mainWindow.webContents.openDevTools()
   }
 
@@ -153,7 +153,6 @@ ipcMain.on('sheeptime:config:time-format:send', function (event, arg) {
 ipcMain.on('sheeptime:config:savefile-location:send', function (event, arg) {
   event.sender.send('sheeptime:config:savefile-location:get', configuration.readSettings('savefile-directory'))
 })
-
 
 // Config setters
 // Flow: main window/projects-window -> controller
