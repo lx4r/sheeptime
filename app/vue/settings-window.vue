@@ -9,6 +9,7 @@
         <time-format></time-format>
         <savefile-location></savefile-location>
         <show-deletion-confirmation></show-deletion-confirmation>
+        <enable-debug-mode></enable-debug-mode>
         <div class="row">
             <div class="col-md-6 col-md-offset-3 col-sm-12 col-xs-12">
                 <div class="panel panel-default">

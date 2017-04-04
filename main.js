@@ -21,7 +21,7 @@ const fs = require('fs')
 let loggedActivities = activitiesStorage.readActivities()
 let savedProjects = projectsStorage.readProjects()
 
-function createWindow () {
+function createMainWindow () {
   mainWindow = new BrowserWindow({
     width: 500,
     height: 680
@@ -29,11 +29,47 @@ function createWindow () {
 
   mainWindow.loadURL(`file://${__dirname}/app/main-window.html`)
 
-  mainWindow.webContents.openDevTools()
+  if (configuration.readSettings('debug-mode') === true){
+    mainWindow.webContents.openDevTools()
+  }
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
     mainWindow = null
+  })
+}
+
+function createProjectsWindow () {
+  projectsWindow = new BrowserWindow({
+    height: 680,
+    width: 500
+  })
+
+  projectsWindow.loadURL(`file://${__dirname}/app/projects-window.html`)
+
+  if (configuration.readSettings('debug-mode') === true) {
+    projectsWindow.webContents.openDevTools()
+  }
+
+  projectsWindow.on('closed', function () {
+    projectsWindow = null
+  })
+}
+
+function createSettingsWindow () {
+  settingsWindow = new BrowserWindow({
+    height: 600,
+    width: 400
+  })
+
+  settingsWindow.loadURL(`file://${__dirname}/app/settings-window.html`)
+
+  if (configuration.readSettings('debug-mode') === true) {
+    settingsWindow.webContents.openDevTools()
+  }
+
+  settingsWindow.on('closed', function () {
+    settingsWindow = null
   })
 }
 
@@ -48,10 +84,13 @@ app.on('ready', function () {
   if (!configuration.readSettings('show-deletion-confirmation')) {
     configuration.saveSettings('show-deletion-confirmation', true)
   }
+  if (!configuration.readSettings('debug-mode')) {
+    configuration.saveSettings('debug-mode', false)
+  }
   if (!configuration.readSettings('project-colors')) {
     configuration.saveSettings('project-colors', ['#e51c23', '#ff9800', '#9c27b0', '#4caf50', '#2196f3'])
   }
-  createWindow()
+  createMainWindow()
 })
 
 // Quit when all windows are closed.
@@ -67,7 +106,7 @@ app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
-    createWindow()
+    createMainWindow()
   }
 })
 
@@ -75,38 +114,14 @@ ipcMain.on('sheeptime:projects:open', function () {
   if (projectsWindow) {
     return
   }
-
-  projectsWindow = new BrowserWindow({
-    height: 680,
-    width: 500
-  })
-
-  projectsWindow.loadURL(`file://${__dirname}/app/projects-window.html`)
-
-  projectsWindow.webContents.openDevTools()
-
-  projectsWindow.on('closed', function () {
-    projectsWindow = null
-  })
+  createProjectsWindow()
 })
 
 ipcMain.on('sheeptime:settings:open', function () {
   if (settingsWindow) {
     return
   }
-
-  settingsWindow = new BrowserWindow({
-    height: 600,
-    width: 400
-  })
-
-  settingsWindow.loadURL(`file://${__dirname}/app/settings-window.html`)
-
-  settingsWindow.webContents.openDevTools()
-
-  settingsWindow.on('closed', function () {
-    settingsWindow = null
-  })
+  createSettingsWindow()
 })
 
 // Send the activities to the view
@@ -123,10 +138,25 @@ ipcMain.on('sheeptime:config:deletion-confirmation:send', function (event, arg) 
   event.sender.send('sheeptime:config:deletion-confirmation:get', configuration.readSettings('show-deletion-confirmation'))
 })
 
+ipcMain.on('sheeptime:config:debug-mode:send', function (event, arg) {
+  event.sender.send('sheeptime:config:debug-mode:get', configuration.readSettings('debug-mode'))
+})
+
 ipcMain.on('sheeptime:config:colors:send', function (event, arg) {
   event.sender.send('sheeptime:config:colors:get', configuration.readSettings('project-colors'))
 })
 
+ipcMain.on('sheeptime:config:time-format:send', function (event, arg) {
+  event.sender.send('sheeptime:config:time-format:get', configuration.readSettings('time-format'))
+})
+
+ipcMain.on('sheeptime:config:savefile-location:send', function (event, arg) {
+  event.sender.send('sheeptime:config:savefile-location:get', configuration.readSettings('savefile-directory'))
+})
+
+
+// Config setters
+// Flow: main window/projects-window -> controller
 ipcMain.on('sheeptime:config:deletion-confirmation:set', function (event, newStatus) {
   configuration.saveSettings('show-deletion-confirmation', newStatus)
   // Update the status in the projects window and the settings window
@@ -138,22 +168,17 @@ ipcMain.on('sheeptime:config:deletion-confirmation:set', function (event, newSta
   }
 })
 
-ipcMain.on('sheeptime:config:time-format:send', function (event, arg) {
-  event.sender.send('sheeptime:config:time-format:get', configuration.readSettings('time-format'))
+ipcMain.on('sheeptime:config:debug-mode:set', function (event, newDebugMode) {
+  configuration.saveSettings('debug-mode', newDebugMode)
 })
 
 ipcMain.on('sheeptime:config:time-format:set', function (event, newTimeFormat) {
   configuration.saveSettings('time-format', newTimeFormat)
 })
 
-ipcMain.on('sheeptime:config:savefile-location:send', function (event, arg) {
-  event.sender.send('sheeptime:config:savefile-location:get', configuration.readSettings('savefile-directory'))
-})
-
 ipcMain.on('sheeptime:config:savefile-location:set', function (event, newSaveFileDir) {
   fs.access(newSaveFileDir, fs.W_OK, function (err) {
     if (!err) {
-      console.log('success in main')
       // path exists and can be written -> save path
       configuration.saveSettings('savefile-directory', newSaveFileDir)
       activitiesStorage.saveActivities(loggedActivities)
@@ -169,7 +194,6 @@ ipcMain.on('sheeptime:config:savefile-location:set', function (event, newSaveFil
 // Event: user deleted an activity
 // Flow: main window -> controller
 ipcMain.on('sheeptime:activity:delete', function (event, deletedActivityID) {
-  console.log('Delete ' + deletedActivityID)
   // Save a reference to the activity for finding it's project
   var activity = mapHandling.getElement(loggedActivities.activitiesArray, deletedActivityID)
   // Delete the activity from the storage object
@@ -183,7 +207,6 @@ ipcMain.on('sheeptime:activity:delete', function (event, deletedActivityID) {
 
   // Then update the new total time of the project the activity was associated with
   var activityProject = mapHandling.getElement(savedProjects.projectsArray, activity.projectID)
-  console.log(activityProject)
   activityProject.totalSeconds += -(activity.duration)
   savedProjects.projectsArray = mapHandling.setElement(savedProjects.projectsArray, activity.projectID, activityProject)
 

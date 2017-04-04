@@ -9,8 +9,8 @@
                     <form v-if="dataReceived">
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" id="showDeletionConfirmation" v-model="showDeletionConfirmation" v-on:change="changeDebugMode()">
-                                Show the deletion confirmation dialogue
+                                <input type="checkbox" id="enable-debug-mode" v-model="enableDebugMode" v-on:change="toggleDebugMode()">
+                                Show the debug sidebar
                             </label>
                         </div>
                     </form>
@@ -24,28 +24,28 @@
 </template>
 
 <script>
-    const ipcRenderer = require('electron').ipcRenderer
+  const ipcRenderer = require('electron').ipcRenderer
 
-    ipcRenderer.send('sheeptime:config:deletion-confirmation:send')
+  var data = {
+    enableDebugMode: false,
+    dataReceived: false
+  }
 
-    ipcRenderer.on('sheeptime:config:deletion-confirmation:get', function (event, status) {
-        data.showDeletionConfirmation = status
-        data.dataReceived = true
-    })
+  ipcRenderer.send('sheeptime:config:debug-mode:send')
 
-    var data = {
-        showDeletionConfirmation: true,
-        dataReceived: false
+  ipcRenderer.on('sheeptime:config:debug-mode:get', function (event, status) {
+    data.enableDebugMode = status
+    data.dataReceived = true
+  })
+
+  export default {
+    methods: {
+      toggleDebugMode: function () {
+        ipcRenderer.send('sheeptime:config:debug-mode:set', data.enableDebugMode)
+      }
+    },
+    data () {
+      return data
     }
-
-    export default {
-        methods: {
-            changeDebugMode: function () {
-                ipcRenderer.send('sheeptime:config:deletion-confirmation:set', data.showDeletionConfirmation)
-            }
-        },
-        data () {
-            return data
-        }
-    }
+  }
 </script>
