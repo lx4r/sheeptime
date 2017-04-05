@@ -102,6 +102,7 @@
   })
 
   export default {
+    props: ['colors'],
     methods: {
       secondsToTime: function (seconds) {
         return formatTime.secondsToTimeString(seconds)
