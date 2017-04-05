@@ -16,9 +16,6 @@
                                         </span>
                                 </div>
                                 <div class="col-xs-3 col-sm-2 col-md-3 project-button-column">
-                                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#report" v-on:click="getReportForProject(project[0], project[1])">
-                                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-                                    </button>
                                     <span v-show="!stopwatchRunning">
                                         <button v-show="deletionConfirmation" type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deletionConfirmation" v-on:click="setProjectToDelete(project[0])">
                                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -27,6 +24,12 @@
                                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                         </button>
                                     </span>
+                                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#edit-project" v-on:click="setProjectToEdit(project)">
+                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#report" v-on:click="getReportForProject(project[0], project[1])">
+                                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                                    </button>
                                 </div>
                                 <div class="col-xs-3 col-sm-2 col-md-3 project-time-column">
                                     {{secondsToTime(project[1].totalSeconds)}}
@@ -41,6 +44,7 @@
             </div>
             <deletion-confirmation :projectToDelete="projectToDelete"></deletion-confirmation>
             <report :activitiesForReport="activitiesForReport" :reportProject="reportProject"></report>
+            <edit-project :projectToEdit="projectToEdit" :colors="colors"></edit-project>
         </div>
     </div>
 </template>
@@ -57,6 +61,7 @@
     stopwatchRunning: false,
     activitiesForReport: [],
     reportProject: null,
+    projectToEdit: null,
   }
 
   ipcRenderer.send('sheeptime:savedProjects:send', 'projects-window')
@@ -111,6 +116,10 @@
       getReportForProject: function (projectID, project) {
         ipcRenderer.send('sheeptime:report:send', projectID)
         data.reportProject = project
+      },
+      setProjectToEdit: function (newProjectToEdit) {
+        data.projectToEdit = newProjectToEdit
+        console.log(data)
       }
     },
     data(){

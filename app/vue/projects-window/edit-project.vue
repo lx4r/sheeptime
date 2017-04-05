@@ -1,11 +1,11 @@
 <template>
     <div class="modal fade" id="edit-project" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
-            <div v-if="activityToEditProperties" class="modal-content">
+            <div v-if="true" class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">
-                        Edit project <i>{{activityToEdit[1].name}}</i>
+                        Edit project <i>{{projectToEdit[1].name}}</i>
                         <i v-show='projectToEdit[1].name === ""'>(no name)</i>
                     </h4>
                 </div>
@@ -28,17 +28,18 @@
                     </div>
                 </div>
             </div>
+            <div v-else class="modal-content">
+                yay
+                {{projectToEdit}}
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-  const formatTime = require('./../../formatTime')
   const ipcRenderer = require('electron').ipcRenderer
 
   export default {
     props: ['projectToEdit, colors'],
-    methods: {
-    }
   }
 </script>

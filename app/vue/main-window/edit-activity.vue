@@ -1,7 +1,7 @@
 <template>
     <div class="modal fade" id="edit-activity" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
-            <div v-if="activityToEditProperties" class="modal-content">
+            <div v-if="activityToEditProperties && activityToEdit" class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">
@@ -9,7 +9,7 @@
                         <i v-show='activityToEdit[1].name === ""'>(no name)</i>
                     </h4>
                 </div>
-                <div class="modal-body" id="">
+                <div class="modal-body">
                     <div class="form-group">
                         <label for="activityName">Name</label>
                         <input type="text" class="form-control" id="activityName" v-model="activityToEdit[1].name">
