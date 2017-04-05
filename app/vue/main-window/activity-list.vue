@@ -66,7 +66,6 @@
   ipcRenderer.send('sheeptime:loggedActivities:send', 'main-window')
 
   ipcRenderer.on('sheeptime:loggedActivities:get', function (event, arg) {
-    console.log("Activities received")
     data.activities = arg
     data.dataReceived = true
   })

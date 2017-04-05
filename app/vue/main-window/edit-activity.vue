@@ -73,7 +73,6 @@
 
 <script>
   const formatTime = require('./../../formatTime')
-  const ipcRenderer = require('electron').ipcRenderer
 
   export default {
     props: ['activityToEdit', 'projectList', 'activityToEditProperties'],

@@ -61,7 +61,7 @@
     stopwatchRunning: false,
     activitiesForReport: [],
     reportProject: null,
-    projectToEdit: null,
+    projectToEdit: null
   }
 
   ipcRenderer.send('sheeptime:savedProjects:send', 'projects-window')
@@ -99,7 +99,6 @@
 
   ipcRenderer.on('sheeptime:report:get', function (event, projectActivities) {
     data.activitiesForReport = projectActivities
-    console.log(projectActivities)
   })
 
   export default {

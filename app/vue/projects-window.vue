@@ -5,10 +5,27 @@
                 <h1>Projects</h1>
             </div>
         </div>
-        <project-input></project-input>
-        <project-list></project-list>
+        <project-input :colors="colors"></project-input>
+        <project-list :colors="colors"></project-list>
     </div>
 </template>
-<script>
 
+<script>
+  const ipcRenderer = require('electron').ipcRenderer
+
+  var data = {
+    colors: null
+  }
+
+  ipcRenderer.send('sheeptime:config:colors:send');
+
+  ipcRenderer.on('sheeptime:config:colors:get', function (event, colors) {
+    data.colors = colors
+  })
+
+  export default {
+    data(){
+      return data
+    }
+  }
 </script>

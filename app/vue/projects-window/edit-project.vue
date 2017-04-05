@@ -1,7 +1,7 @@
 <template>
     <div class="modal fade" id="edit-project" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
-            <div v-if="true" class="modal-content">
+            <div v-if="projectToEdit && colors" class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">
@@ -15,22 +15,20 @@
                         <input type="text" class="form-control" id="projectName" v-model="projectToEdit[1].name">
                     </div>
                     <div class="form-group">
-                        <label for="projectColor">Project</label>
-                        <div class="dropdown" id="projectColor">
-                            <button type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Color
-                                <span class="caret"></span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class="color-example" v-for="(color, index) in colors" :style='"background-color:" + color' v-on:click="selectedColor=color" :class='{colorSelected: color === selectedColor}'>&nbsp;</div>
+                        <label for="projectColor">Color</label>
+                        <div class="input-group-btn">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Color
+                                    <span class="caret"></span>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="color-example" v-for="(color, index) in colors" :style='"background-color:" + color' v-on:click="selectedColor=color" :class='{colorSelected: color === selectedColor}'>&nbsp;</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div v-else class="modal-content">
-                yay
-                {{projectToEdit}}
             </div>
         </div>
     </div>
@@ -40,6 +38,6 @@
   const ipcRenderer = require('electron').ipcRenderer
 
   export default {
-    props: ['projectToEdit, colors'],
+    props: ['projectToEdit', 'colors'],
   }
 </script>
