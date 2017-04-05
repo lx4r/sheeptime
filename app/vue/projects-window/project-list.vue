@@ -20,13 +20,13 @@
                                         <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
                                     </button>
                                     <span v-show="!stopwatchRunning">
-                                            <button v-if="deletionConfirmation" type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deletionConfirmation" v-on:click="setProjectToDelete(project[0])">
-                                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                            </button>
-                                            <button v-else type="button" class="btn btn-xs btn-danger" v-on:click="deleteProject(project[0])">
-                                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                            </button>
-                                        </span>
+                                        <button v-show="deletionConfirmation" type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deletionConfirmation" v-on:click="setProjectToDelete(project[0])">
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                        </button>
+                                        <button v-show="!deletionConfirmation" type="button" class="btn btn-xs btn-danger" v-on:click="deleteProject(project[0])">
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                        </button>
+                                    </span>
                                 </div>
                                 <div class="col-xs-3 col-sm-2 col-md-3 project-time-column">
                                     {{secondsToTime(project[1].totalSeconds)}}
