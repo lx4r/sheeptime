@@ -71,7 +71,7 @@ button:focus {
 
 /* main window: activity list */
 #activity-list{
-    height: 380px;
+    height: 385px;
     overflow-y: auto;
 }
 .activity-title {
@@ -84,6 +84,8 @@ button:focus {
 }
 .activity-button-column {
     padding-top: 12px;
+    text-align: right;
+    padding-right: 0px;
 }
 .activity-time-column {
     padding-top: 12px;
@@ -96,11 +98,8 @@ button:focus {
 
 /* project window: project list */
 #project-list{
-    height: 380px;
+    height: 360px;
     overflow-y: auto;
-}
-.project-title {
-    /* font-size: 1.1em; */
 }
 .project-body {
     padding-top: 3px;
@@ -111,6 +110,8 @@ button:focus {
 }
 .project-button-column {
     padding-top: 10px;
+    text-align: right;
+    padding-right: 0px;
 }
 .project-time-column {
     padding-top: 10px;

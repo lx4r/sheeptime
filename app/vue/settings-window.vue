@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3 col-sm-12 col-xs-12">
                 <h1>Settings</h1>
-                <div class="alert alert-warning" role="alert">These settings will come into effect after a restart.</div>
+                <div class="alert alert-warning" role="alert">Some of these settings will only come into effect after a restart.</div>
             </div>
         </div>
         <time-format></time-format>
