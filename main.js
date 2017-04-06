@@ -18,8 +18,8 @@ const projectsStorage = require('./app/storage/projectsStorage')
 const pdfReport = require('./app/storage/pdfReport')
 const mapHandling = require('./app/mapHandling')
 const fs = require('fs')
-let loggedActivities = activitiesStorage.readActivities()
-let savedProjects = projectsStorage.readProjects()
+let loggedActivities
+let savedProjects
 
 function createMainWindow () {
   mainWindow = new BrowserWindow({
@@ -90,6 +90,11 @@ app.on('ready', function () {
   if (!configuration.readSettings('project-colors')) {
     configuration.saveSettings('project-colors', ['#e51c23', '#ff9800', '#9c27b0', '#4caf50', '#2196f3'])
   }
+
+  // load activities and projects
+  loggedActivities = activitiesStorage.readActivities()
+  savedProjects = projectsStorage.readProjects()
+
   createMainWindow()
 })
 
