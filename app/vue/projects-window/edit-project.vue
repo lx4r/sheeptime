@@ -15,15 +15,15 @@
                         <input type="text" class="form-control" id="projectName" v-model="projectToEdit[1].name">
                     </div>
                     <div class="form-group">
-                        <label for="projectColor">Color</label>
                         <div class="input-group-btn">
                             <div class="dropdown">
                                 <button type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Color
                                     <span class="caret"></span>
                                 </button>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <div class="color-example" v-for="(color, index) in colors" :style='"background-color:" + color' v-on:click="selectedColor=color" :class='{colorSelected: color === selectedColor}'>&nbsp;</div>
+                                <div class="dropdown-menu dropdown-menu-left">
+                                    <!-- TODO: use color picker component both for this and the color picker in the project input -->
+                                    <div class="color-example" v-for="color in colors" :style='"background-color:" + color' v-on:click="projectToEdit[1].color=color" :class='{colorSelected: color === projectToEdit[1].color}'>&nbsp;</div>
                                 </div>
                             </div>
                         </div>
