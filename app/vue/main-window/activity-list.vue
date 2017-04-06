@@ -111,15 +111,17 @@
         data.activityToEdit = newActivityToEdit;
         let activityContent = newActivityToEdit[1];
         let activityDurationObject = formatTime.secondsToTimeObject(activityContent.duration)
-        // data of the activity that needs to be computed before it is shown
+        // additional data about the activity
         data.activityToEditProperties = {
-          durationObject: activityDurationObject,
+          durationObject: activityDurationObject, // serves as basis point for detecting changes to the duration
           startTimeString : formatTime.timestampToTimeString(activityContent.startTime),
           endTimeString: formatTime.timestampToTimeString(activityContent.endTime),
           dateString: formatTime.timestampToDateString(activityContent.startTime),
           durationHours: activityDurationObject.hours,
           durationMinutes: activityDurationObject.minutes,
           durationSeconds: activityDurationObject.seconds,
+          startTimePrev: activityContent.startTime,
+          endTimePrev: activityContent.endTime,
         }
         // save a stringified version of the activity to later determine whether it has been changed
         activityToEditPrevString = JSON.stringify(newActivityToEdit)
