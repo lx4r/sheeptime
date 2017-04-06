@@ -61,8 +61,11 @@
     stopwatchRunning: false,
     activitiesForReport: [],
     reportProject: null,
-    projectToEdit: null
+    projectToEdit: null,
   }
+
+  // used for change detection
+  let projectToEditPrevString = null;
 
   ipcRenderer.send('sheeptime:savedProjects:send', 'projects-window')
   ipcRenderer.send('sheeptime:config:deletion-confirmation:send')
@@ -101,6 +104,14 @@
     data.activitiesForReport = projectActivities
   })
 
+  // check whether project has been changed when the edit modal is closed
+  $(document).on('hide.bs.modal','#edit-project', function () {
+    if (!(JSON.stringify(data.projectToEdit) === projectToEditPrevString)){
+      // activity has been changed -> save updated activities list
+      ipcRenderer.send('sheeptime:project:edit', data.projectToEdit)
+    }
+  })
+
   export default {
     props: ['colors'],
     methods: {
@@ -119,7 +130,8 @@
       },
       setProjectToEdit: function (newProjectToEdit) {
         data.projectToEdit = newProjectToEdit
-        console.log(data)
+        // save a stringified version of the project to later determine whether it has been changed
+        projectToEditPrevString = JSON.stringify(newProjectToEdit)
       }
     },
     data(){
