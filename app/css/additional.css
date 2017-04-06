@@ -71,7 +71,7 @@ button:focus {
 
 /* main window: activity list */
 #activity-list{
-    height: 385px;
+    height: 350px;
     overflow-y: auto;
 }
 .activity-title {
@@ -98,7 +98,7 @@ button:focus {
 
 /* project window: project list */
 #project-list{
-    height: 360px;
+    height: 340px;
     overflow-y: auto;
 }
 .project-body {

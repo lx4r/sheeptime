@@ -6,8 +6,10 @@
  * time-format ('european' or 'american')
  * show-deletion-confirmation (boolean)
  */
+// TODO: Update this
 'use strict'
 
+const os = require('os')
 const nconf = require('nconf').file({file: getUserHome() + '/sheeptime-config.json'})
 
 function saveSettings (settingKey, settingValue) {
@@ -21,7 +23,7 @@ function readSettings (settingKey) {
 }
 
 function getUserHome () {
-  return process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME']
+  return os.homedir()
 }
 
 module.exports = {
