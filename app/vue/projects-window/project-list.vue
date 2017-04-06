@@ -16,17 +16,20 @@
                                         </span>
                                 </div>
                                 <div class="col-xs-3 col-sm-2 col-md-3 project-button-column">
-                                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#report" v-on:click="getReportForProject(project[0], project[1])">
+                                    <span v-show="!stopwatchRunning">
+                                        <button v-show="deletionConfirmation" type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deletionConfirmation" v-on:click="setProjectToDelete(project[0])">
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                        </button>
+                                        <button v-show="!deletionConfirmation" type="button" class="btn btn-xs btn-danger" v-on:click="deleteProject(project[0])">
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                        </button>
+                                    </span>
+                                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#edit-project" v-on:click="setProjectToEdit(project)">
+                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#report" v-on:click="getReportForProject(project[0], project[1])">
                                         <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
                                     </button>
-                                    <span v-show="!stopwatchRunning">
-                                            <button v-if="deletionConfirmation" type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deletionConfirmation" v-on:click="setProjectToDelete(project[0])">
-                                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                            </button>
-                                            <button v-else type="button" class="btn btn-xs btn-danger" v-on:click="deleteProject(project[0])">
-                                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                            </button>
-                                        </span>
                                 </div>
                                 <div class="col-xs-3 col-sm-2 col-md-3 project-time-column">
                                     {{secondsToTime(project[1].totalSeconds)}}
@@ -41,6 +44,7 @@
             </div>
             <deletion-confirmation :projectToDelete="projectToDelete"></deletion-confirmation>
             <report :activitiesForReport="activitiesForReport" :reportProject="reportProject"></report>
+            <edit-project :projectToEdit="projectToEdit" :colors="colors"></edit-project>
         </div>
     </div>
 </template>
@@ -57,7 +61,11 @@
     stopwatchRunning: false,
     activitiesForReport: [],
     reportProject: null,
+    projectToEdit: null,
   }
+
+  // used for change detection
+  let projectToEditPrevString = null;
 
   ipcRenderer.send('sheeptime:savedProjects:send', 'projects-window')
   ipcRenderer.send('sheeptime:config:deletion-confirmation:send')
@@ -94,10 +102,18 @@
 
   ipcRenderer.on('sheeptime:report:get', function (event, projectActivities) {
     data.activitiesForReport = projectActivities
-    console.log(projectActivities)
+  })
+
+  // check whether project has been changed when the edit modal is closed
+  $(document).on('hide.bs.modal','#edit-project', function () {
+    if (!(JSON.stringify(data.projectToEdit) === projectToEditPrevString)){
+      // activity has been changed -> save updated activities list
+      ipcRenderer.send('sheeptime:project:edit', data.projectToEdit)
+    }
   })
 
   export default {
+    props: ['colors'],
     methods: {
       secondsToTime: function (seconds) {
         return formatTime.secondsToTimeString(seconds)
@@ -111,6 +127,11 @@
       getReportForProject: function (projectID, project) {
         ipcRenderer.send('sheeptime:report:send', projectID)
         data.reportProject = project
+      },
+      setProjectToEdit: function (newProjectToEdit) {
+        data.projectToEdit = newProjectToEdit
+        // save a stringified version of the project to later determine whether it has been changed
+        projectToEditPrevString = JSON.stringify(newProjectToEdit)
       }
     },
     data(){

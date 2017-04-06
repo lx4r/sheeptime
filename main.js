@@ -248,10 +248,18 @@ ipcMain.on('sheeptime:activity:add', function (event, addedActivity) {
 
 // Event: user edited an activity
 // Flow: main window -> controller
-ipcMain.on('sheeptime:activity:edit', function (event, editedProject) {
-  // Update the project from in the storage object
-  loggedActivities.activitiesArray = mapHandling.setElement(loggedActivities.activitiesArray, editedProject[0], editedProject[1])
+ipcMain.on('sheeptime:activity:edit', function (event, editedActivity) {
+  // Update the activity in the storage object
+  loggedActivities.activitiesArray = mapHandling.setElement(loggedActivities.activitiesArray, editedActivity[0], editedActivity[1])
   activitiesStorage.saveActivities(loggedActivities)
+})
+
+// Event: user edited a project
+// Flow: projects window -> controller
+ipcMain.on('sheeptime:project:edit', function (event, editedProject) {
+  // Update the project in the storage object
+  savedProjects.projectsArray = mapHandling.setElement(savedProjects.projectsArray, editedProject[0], editedProject[1])
+  projectsStorage.saveProjects(savedProjects)
 })
 
 // Event: user deleted a project

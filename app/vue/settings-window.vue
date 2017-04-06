@@ -17,9 +17,9 @@
                         <h3 class="panel-title">About</h3>
                     </div>
                     <div class="panel-body">
-                        a project by <a class="open-in-browser" href="https://l3r.de">lx4r</a><br>
+                        a project by <a class="open-in-browser" href="https://l3r.de">lx4r</a>, license: <a class="open-in-browser" href="https://github.com/lx4r/sheeptime/blob/master/LICENSE">MIT</a><br>
                         I hope you find SheepTime useful and have fun using it. :-)<br>
-                        If you encounter any bugs (which is quite likely for the time being) don't hesitate to open an issue on <a class="open-in-browser" href="https://github.com/lx4r/sheeptime/issues" target="_blank">Github</a> or contact me via <a class="open-in-browser" href="https://twitter.com/lx4r" target="_blank">Twitter</a>.
+                        If you encounter any bugs (which is quite likely for the time being) don't hesitate to <a class="open-in-browser" href="https://github.com/lx4r/sheeptime/issues" target="_blank">open an issue on Github</a> or contact me via <a class="open-in-browser" href="https://twitter.com/lx4r" target="_blank">Twitter</a>.
                     </div>
                 </div>
             </div>

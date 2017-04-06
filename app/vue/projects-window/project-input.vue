@@ -5,7 +5,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Add project</h3>
                 </div>
-                <div v-if="dataReceived" class="panel-body">
+                <div v-if="colors" class="panel-body">
                     <div class="form-group">
                         <div class="input-group">
                             <input type="text" class="form-control" id="projectName" placeholder="project name" v-model="projectName">
@@ -35,24 +35,16 @@
 <script>
   const ipcRenderer = require('electron').ipcRenderer
 
-  ipcRenderer.send('sheeptime:config:colors:send');
-
-  ipcRenderer.on('sheeptime:config:colors:get', function (event, colors) {
-    data.colors = colors
-    data.dataReceived = true
-  })
-
   var data = {
     projectName:  "",
-    colors: [],
     selectedColor: 0,
     dataReceived: false
   }
 
   export default {
+    props: ['colors'],
     methods: {
       addProject: function () {
-        console.log('Selected color: ' + data.selectedColor)
         var newProject = {
           name: this.projectName,
           selectedColor: this.selectedColor

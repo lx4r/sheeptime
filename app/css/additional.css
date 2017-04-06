@@ -162,7 +162,7 @@ button:focus {
 
 /* PDF report */
 @media print {
-    #project-list-table, #project-heading h1, #project-input, .report-button, .panel-title {
+    #project-list, #project-heading h1, #project-input, .report-button, .panel-title {
         display: none;
     }
     #report-table tbody {

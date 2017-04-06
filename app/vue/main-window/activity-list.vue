@@ -61,12 +61,12 @@
     activityToEditProperties: null
   }
 
+  // used for change detection
   let activityToEditPrevString = null;
 
   ipcRenderer.send('sheeptime:loggedActivities:send', 'main-window')
 
   ipcRenderer.on('sheeptime:loggedActivities:get', function (event, arg) {
-    console.log("Activities received")
     data.activities = arg
     data.dataReceived = true
   })
@@ -81,9 +81,8 @@
     data.activities = arg
   })
 
-  // save activity when the edit modal is closed
+  // check whether activity has been changed when the edit modal is closed
   $(document).on('hide.bs.modal','#edit-activity', function () {
-    //ipcRenderer.send('sheeptime:activity:edit', )
     if (!(JSON.stringify(data.activityToEdit) === activityToEditPrevString)){
       // activity has been changed -> save updated activities list
       ipcRenderer.send('sheeptime:activity:edit', data.activityToEdit)
@@ -123,7 +122,7 @@
           durationSeconds: activityDurationObject.seconds,
         }
         // save a stringified version of the activity to later determine whether it has been changed
-        activityToEditPrevString = JSON.stringify(newActivityToEdit);
+        activityToEditPrevString = JSON.stringify(newActivityToEdit)
       }
     },
     data(){
