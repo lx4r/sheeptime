@@ -113,7 +113,7 @@
         let activityDurationObject = formatTime.secondsToTimeObject(activityContent.duration)
         // additional data about the activity
         data.activityToEditProperties = {
-          durationObject: activityDurationObject, // serves as basis point for detecting changes to the duration
+          durationObjectPrev: activityDurationObject, // serves as basis point for detecting changes to the duration
           startTimeString : formatTime.timestampToTimeString(activityContent.startTime),
           endTimeString: formatTime.timestampToTimeString(activityContent.endTime),
           dateString: formatTime.timestampToDateString(activityContent.startTime),
