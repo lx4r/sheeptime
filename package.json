@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
-    "test": "standard && mocha test/test.js"
+    "test": "standard && mocha test/test.js",
+    "standard-fix": "standard --fix"
   },
   "repository": {
     "type": "git",

@@ -73,6 +73,7 @@
 
 <script>
   const formatTime = require('./../../formatTime')
+  const timeCalculations = require('./../../timeCalculations')
 
   export default {
     props: ['activityToEdit', 'projectList', 'activityToEditProperties'],
@@ -143,21 +144,29 @@
       },
       startTimeChanged: function (activityToEditProperties, activityToEditContent) {
         console.log(formatTime.timestampToTimeString(activityToEditProperties.startTimePrev) + "|" + activityToEditProperties.startTimeString)
-        if (activityToEditProperties.startTimeString < formatTime.timestampToTimeString(activityToEditProperties.startTimePrev)){
+        const startTimePrevString = formatTime.timestampToTimeString(activityToEditProperties.startTimePrev)
+        if (activityToEditProperties.startTimeString < startTimePrevString){
           // earlier start time
-
-          activityToEditProperties.startTimePrev = activityToEditProperties.startTimeString
-        } else if (activityToEditProperties.startTimeString > formatTime.timestampToTimeString(activityToEditProperties.startTimePrev)){
+          const timeDiff = timeCalculations.diffTimeStrings(startTimePrevString, activityToEditProperties.startTimeString)
+          if (timeDiff.hours !== 0) {
+            activityToEditContent.startTime = timeCalculations.subtractHoursFromTimestamp(timeDiff.hours, activityToEditContent.startTime)
+          }
+          if (timeDiff.minutes !== 0) {
+            activityToEditContent.startTime = timeCalculations.subtractMinutesFromTimestamp(timeDiff.minutes, activityToEditContent.startTime)
+          }
+        } else if (activityToEditProperties.startTimeString > startTimePrevString){
           // later start time
           console.log("later")
         }
       },
       updateEndTimeAndDuration: function (activityToEditProperties, activityToEditContent) {
-        // helper function to update end time and duration
         activityToEditProperties.endTimeString = formatTime.timestampToTimeString(activityToEditContent.endTime)
         // update duration object to be able to compare with it at the next change
         activityToEditProperties.durationObject = formatTime.secondsToTimeObject(activityToEditContent.duration)
       },
+      updateDuration: function () {
+        activityToEditProperties.durationObject = formatTime.secondsToTimeObject(activityToEditContent.duration)
+      }
       isValidInput: function (inputString) {
         return !(isNaN(inputString) || inputString.length > 2 || inputString.length < 1 || inputString < 0);
       }
