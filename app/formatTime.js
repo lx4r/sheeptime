@@ -79,6 +79,14 @@ function timestampToTimeString (timestamp) {
   return strftime('%H:%M', timestampToDateObject(timestamp))
 }
 
+function addLeadingZero (inputString) {
+  if (inputString.length === 1) {
+    return '0' + inputString
+  } else {
+    return inputString
+  }
+}
+
 function setMockConfig (mockConfigObject) {
   // mock config object must provide function readSettings
   // restoreRealConfig must be called after every test
@@ -91,13 +99,14 @@ function restoreRealConfig () {
 }
 
 module.exports = {
-  secondsToTimeObject: secondsToTimeObject,
-  secondsToTimeString: secondsToTimeString,
-  timestampToDateTimeString: timestampToDateTimeString,
-  timestampToDateString: timestampToDateString,
-  timestampToDateObject: timestampToDateObject,
-  timestampToTimeString: timestampToTimeString,
-  setMockConfig: setMockConfig,
-  restoreRealConfig: restoreRealConfig,
-  JSTimstampToUNIXTimestamp: JSTimstampToUNIXTimestamp
+  secondsToTimeObject,
+  secondsToTimeString,
+  timestampToDateTimeString,
+  timestampToDateString,
+  timestampToDateObject,
+  timestampToTimeString,
+  setMockConfig,
+  restoreRealConfig,
+  JSTimstampToUNIXTimestamp,
+  addLeadingZero
 }

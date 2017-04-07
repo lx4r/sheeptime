@@ -99,7 +99,7 @@
         }
         this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
         this.updateEndTime(activityToEditProperties, activityToEditContent)
-        activityToEditProperties.durationHours = this.addLeadingZero(activityToEditProperties.durationHours)
+        activityToEditProperties.durationHours = formatTime.addLeadingZero(activityToEditProperties.durationHours)
       },
       minutesChanged: function (activityToEditProperties, activityToEditContent) {
         if (!this.isValidInput(activityToEditProperties.durationMinutes) || activityToEditProperties.durationMinutes > 59){
@@ -121,7 +121,7 @@
         }
         this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
         this.updateEndTime(activityToEditProperties, activityToEditContent)
-        activityToEditProperties.durationMinutes = this.addLeadingZero(activityToEditProperties.durationMinutes)
+        activityToEditProperties.durationMinutes = formatTime.addLeadingZero(activityToEditProperties.durationMinutes)
       },
       secondsChanged: function (activityToEditProperties, activityToEditContent) {
         if (!this.isValidInput(activityToEditProperties.durationSeconds) || activityToEditProperties.durationSeconds > 59){
@@ -143,7 +143,7 @@
         }
         this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
         this.updateEndTime(activityToEditProperties, activityToEditContent)
-        activityToEditProperties.durationSeconds = this.addLeadingZero(activityToEditProperties.durationSeconds)
+        activityToEditProperties.durationSeconds = formatTime.addLeadingZero(activityToEditProperties.durationSeconds)
       },
       startTimeChanged: function (activityToEditProperties, activityToEditContent) {
         const startTimePrevString = formatTime.timestampToTimeString(activityToEditProperties.startTimePrev)
@@ -164,6 +164,12 @@
           if (timeDiff.minutes !== 0) {
             activityToEditContent.startTime = timeCalculations.addMinutesToTimestamp(timeDiff.minutesDiff, activityToEditContent.startTime)
           }
+        }
+        // reset start time if the user sets it to an invalid value
+        if (activityToEditContent.startTime > activityToEditContent.endTime) {
+          activityToEditContent.startTime = activityToEditProperties.startTimePrev
+          activityToEditProperties.startTimeString = startTimePrevString
+          return
         }
         activityToEditContent.duration = activityToEditContent.endTime - activityToEditContent.startTime
         this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
@@ -189,6 +195,12 @@
           if (timeDiff.minutes !== 0) {
             activityToEditContent.endTime = timeCalculations.addMinutesToTimestamp(timeDiff.minutesDiff, activityToEditContent.endTime)
           }
+        }
+        // reset end time if the user sets it to an invalid value
+        if (activityToEditContent.endTime < activityToEditContent.startTime) {
+          activityToEditContent.endTime = activityToEditProperties.endTimePrev
+          activityToEditProperties.endTimeString = endTimePrevString
+          return
         }
         activityToEditContent.duration = activityToEditContent.endTime - activityToEditContent.startTime
         this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
@@ -216,13 +228,6 @@
       },
       isValidInput: function (inputString) {
         return !(isNaN(inputString) || inputString.length > 2 || inputString.length < 1 || inputString < 0);
-      },
-      addLeadingZero: function (inputString) {
-        if (inputString.length === 1) {
-          return '0' + inputString
-        } else {
-          return inputString
-        }
       }
     }
   }
