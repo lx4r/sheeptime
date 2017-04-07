@@ -187,10 +187,10 @@
         } else if (activityToEditProperties.endTimeString > endTimePrevString){
           // later end time
           if (timeDiff.hours !== 0) {
-            activityToEditContent.startTime = timeCalculations.addHoursToTimestamp(timeDiff.hoursDiff, activityToEditContent.endTime)
+            activityToEditContent.endTime = timeCalculations.addHoursToTimestamp(timeDiff.hoursDiff, activityToEditContent.endTime)
           }
           if (timeDiff.minutes !== 0) {
-            activityToEditContent.startTime = timeCalculations.addMinutesToTimestamp(timeDiff.minutesDiff, activityToEditContent.endTime)
+            activityToEditContent.endTime = timeCalculations.addMinutesToTimestamp(timeDiff.minutesDiff, activityToEditContent.endTime)
           }
         }
         activityToEditContent.duration = activityToEditContent.endTime - activityToEditContent.startTime
