@@ -91,16 +91,15 @@
           let hoursDifference = activityToEditProperties.durationObjectPrev.hours - activityToEditProperties.durationHours
           activityToEditContent.endTime -= (hoursDifference * 3600)
           activityToEditContent.duration -= (hoursDifference * 3600)
-          this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
-          this.updateEndTime(activityToEditProperties, activityToEditContent)
         } else if (activityToEditProperties.durationHours > activityToEditProperties.durationObjectPrev.hours) {
           // hours increased
           let hoursDifference = activityToEditProperties.durationHours - activityToEditProperties.durationObjectPrev.hours
           activityToEditContent.endTime += (hoursDifference * 3600)
           activityToEditContent.duration += (hoursDifference * 3600)
-          this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
-          this.updateEndTime(activityToEditProperties, activityToEditContent)
         }
+        this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
+        this.updateEndTime(activityToEditProperties, activityToEditContent)
+        activityToEditProperties.durationHours = this.addLeadingZero(activityToEditProperties.durationHours)
       },
       minutesChanged: function (activityToEditProperties, activityToEditContent) {
         if (!this.isValidInput(activityToEditProperties.durationMinutes) || activityToEditProperties.durationMinutes > 59){
@@ -114,16 +113,15 @@
           let minutesDifference = activityToEditProperties.durationObjectPrev.minutes - activityToEditProperties.durationMinutes
           activityToEditContent.endTime -= (minutesDifference * 60)
           activityToEditContent.duration -= (minutesDifference * 60)
-          this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
-          this.updateEndTime(activityToEditProperties, activityToEditContent)
         } else if (activityToEditProperties.durationMinutes > activityToEditProperties.durationObjectPrev.minutes) {
           // minutes increased
           let minutesDifference = activityToEditProperties.durationMinutes - activityToEditProperties.durationObjectPrev.minutes
           activityToEditContent.endTime += (minutesDifference * 60)
           activityToEditContent.duration += (minutesDifference * 60)
-          this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
-          this.updateEndTime(activityToEditProperties, activityToEditContent)
         }
+        this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
+        this.updateEndTime(activityToEditProperties, activityToEditContent)
+        activityToEditProperties.durationMinutes = this.addLeadingZero(activityToEditProperties.durationMinutes)
       },
       secondsChanged: function (activityToEditProperties, activityToEditContent) {
         if (!this.isValidInput(activityToEditProperties.durationSeconds) || activityToEditProperties.durationSeconds > 59){
@@ -137,16 +135,15 @@
           let secondsDifference = activityToEditProperties.durationObjectPrev.seconds - activityToEditProperties.durationSeconds
           activityToEditContent.endTime -= secondsDifference
           activityToEditContent.duration -= secondsDifference
-          this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
-          this.updateEndTime(activityToEditProperties, activityToEditContent)
         } else if (activityToEditProperties.durationSeconds > activityToEditProperties.durationObjectPrev.seconds) {
           // seconds increased
           let secondsDifference = activityToEditProperties.durationSeconds - activityToEditProperties.durationObjectPrev.seconds
           activityToEditContent.endTime += secondsDifference
           activityToEditContent.duration += secondsDifference
-          this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
-          this.updateEndTime(activityToEditProperties, activityToEditContent)
         }
+        this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
+        this.updateEndTime(activityToEditProperties, activityToEditContent)
+        activityToEditProperties.durationSeconds = this.addLeadingZero(activityToEditProperties.durationSeconds)
       },
       startTimeChanged: function (activityToEditProperties, activityToEditContent) {
         const startTimePrevString = formatTime.timestampToTimeString(activityToEditProperties.startTimePrev)
@@ -219,6 +216,13 @@
       },
       isValidInput: function (inputString) {
         return !(isNaN(inputString) || inputString.length > 2 || inputString.length < 1 || inputString < 0);
+      },
+      addLeadingZero: function (inputString) {
+        if (inputString.length === 1) {
+          return '0' + inputString
+        } else {
+          return inputString
+        }
       }
     }
   }
