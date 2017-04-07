@@ -8,10 +8,10 @@ function diffTimeStrings (timeStringA, timeStringB) {
   if (timeStringA.indexOf(':') !== 2 || timeStringB.indexOf(':') !== 2) {
     throw Error('wrong time string format')
   }
-  const timeStringASplit = timeStringA.split(':')
-  const timeStringBSplit = timeStringB.split(':')
-  const hoursDiff = Math.abs(timeStringASplit[0] - timeStringBSplit[0])
-  const minutesDiff = Math.abs(timeStringASplit[1] - timeStringBSplit[1])
+  let timeStringASplit = timeStringA.split(':')
+  let timeStringBSplit = timeStringB.split(':')
+  let hoursDiff = Math.abs(timeStringASplit[0] - timeStringBSplit[0])
+  let minutesDiff = Math.abs(timeStringASplit[1] - timeStringBSplit[1])
 
   return {
     hoursDiff,

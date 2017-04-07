@@ -10,8 +10,8 @@ let realConfig = null // only used when config is overridden with mock config
 function secondsToTimeObject (secondsIn) {
   // converts seconds to time object with two digit hours, minutes, seconds (-> adds leading zeroes)
   // properties of the time object are strings
-  if (secondsIn < 0) {
-    throw Error('negative seconds')
+  if (secondsIn < 0 || isNaN(secondsIn)) {
+    throw Error('invalid seconds')
   }
   let hours = Math.floor(secondsIn / 3600)
   let minutes = Math.floor((secondsIn - (hours * 3600)) / 60)
