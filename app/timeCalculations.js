@@ -3,15 +3,17 @@
  */
 'use strict'
 
+// TODO: add tests
+
 function diffTimeStrings (timeStringA, timeStringB) {
   // time strings should have a ":" in the middle
   if (timeStringA.indexOf(':') !== 2 || timeStringB.indexOf(':') !== 2) {
     throw Error('wrong time string format')
   }
-  let timeStringASplit = timeStringA.split(':')
-  let timeStringBSplit = timeStringB.split(':')
-  let hoursDiff = Math.abs(timeStringASplit[0] - timeStringBSplit[0])
-  let minutesDiff = Math.abs(timeStringASplit[1] - timeStringBSplit[1])
+  const timeStringASplit = timeStringA.split(':')
+  const timeStringBSplit = timeStringB.split(':')
+  const hoursDiff = Math.abs(timeStringASplit[0] - timeStringBSplit[0])
+  const minutesDiff = Math.abs(timeStringASplit[1] - timeStringBSplit[1])
 
   return {
     hoursDiff,
@@ -27,8 +29,17 @@ function subtractHoursFromTimestamp (hours, timestamp) {
   return (timestamp - hours * 3600)
 }
 
+function addMinutesToTimestamp (minutes, timestamp) {
+  return (timestamp + minutes * 60)
+}
+
+function addHoursToTimestamp (hours, timestamp) {
+  return (timestamp + hours * 3600)
+}
 module.exports = {
   diffTimeStrings,
   subtractMinutesFromTimestamp,
-  subtractHoursFromTimestamp
+  subtractHoursFromTimestamp,
+  addMinutesToTimestamp,
+  addHoursToTimestamp
 }
