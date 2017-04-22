@@ -111,7 +111,7 @@
         data.activityToEdit = newActivityToEdit;
         let activityContent = newActivityToEdit[1];
         let activityDurationObject = formatTime.secondsToTimeObject(activityContent.duration)
-        // additional data about the activity
+        // additional data about the activity (everything beyond the data that is saved in the JSON file)
         data.activityToEditProperties = {
           durationObjectPrev: activityDurationObject, // serves as basis point for detecting changes to the duration
           startTimeString : formatTime.timestampToTimeString(activityContent.startTime),

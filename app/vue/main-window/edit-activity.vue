@@ -24,7 +24,7 @@
                     </div>
                     <div class="form-group">
                         <label for="activityName">Date</label>
-                        <input type="text" class="form-control" v-model="activityToEditProperties.dateString">
+                        <input type="text" class="form-control" v-model="activityToEditProperties.dateString" @change="dateChanged(activityToEditProperties, activityToEdit[1])">
                     </div>
                     <label for="activityDuration">Duration</label>
                     <div class="row" id="activityDuration">
@@ -79,76 +79,76 @@
     props: ['activityToEdit', 'projectList', 'activityToEditProperties'],
     methods: {
       // TODO: simplify code here, maybe move new time calculation to formatTime
-      hoursChanged: function (activityToEditProperties, activityToEditContent) {
-        if (!this.isValidInput(activityToEditProperties.durationHours)){
+      hoursChanged: function (activityToEditAdditional, activityToEditContent) {
+        if (!this.isValidInput(activityToEditAdditional.durationHours)){
           // reset hours if input was invalid
-          activityToEditProperties.durationHours = activityToEditProperties.durationObjectPrev.hours
+          activityToEditAdditional.durationHours = activityToEditAdditional.durationObjectPrev.hours
           return
         }
         // activityToEditProperties.durationObjectPrev contains the previous duration
-        if (activityToEditProperties.durationHours < activityToEditProperties.durationObjectPrev.hours) {
+        if (activityToEditAdditional.durationHours < activityToEditAdditional.durationObjectPrev.hours) {
           // hours decreased
-          let hoursDifference = activityToEditProperties.durationObjectPrev.hours - activityToEditProperties.durationHours
+          let hoursDifference = activityToEditAdditional.durationObjectPrev.hours - activityToEditAdditional.durationHours
           activityToEditContent.endTime -= (hoursDifference * 3600)
           activityToEditContent.duration -= (hoursDifference * 3600)
-        } else if (activityToEditProperties.durationHours > activityToEditProperties.durationObjectPrev.hours) {
+        } else if (activityToEditAdditional.durationHours > activityToEditAdditional.durationObjectPrev.hours) {
           // hours increased
-          let hoursDifference = activityToEditProperties.durationHours - activityToEditProperties.durationObjectPrev.hours
+          let hoursDifference = activityToEditAdditional.durationHours - activityToEditAdditional.durationObjectPrev.hours
           activityToEditContent.endTime += (hoursDifference * 3600)
           activityToEditContent.duration += (hoursDifference * 3600)
         }
-        this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
-        this.updateEndTime(activityToEditProperties, activityToEditContent)
-        activityToEditProperties.durationHours = formatTime.addLeadingZero(activityToEditProperties.durationHours)
+        this.updateDurationObjectPrev(activityToEditAdditional, activityToEditContent)
+        this.updateEndTime(activityToEditAdditional, activityToEditContent)
+        activityToEditAdditional.durationHours = formatTime.addLeadingZero(activityToEditAdditional.durationHours)
       },
-      minutesChanged: function (activityToEditProperties, activityToEditContent) {
-        if (!this.isValidInput(activityToEditProperties.durationMinutes) || activityToEditProperties.durationMinutes > 59){
+      minutesChanged: function (activityToEditAdditional, activityToEditContent) {
+        if (!this.isValidInput(activityToEditAdditional.durationMinutes) || activityToEditAdditional.durationMinutes > 59){
           // reset minutes if input was invalid
-          activityToEditProperties.durationMinutes = activityToEditProperties.durationObjectPrev.minutes
+          activityToEditAdditional.durationMinutes = activityToEditAdditional.durationObjectPrev.minutes
           return
         }
         // activityToEditProperties.durationObjectPrev contains the previous duration
-        if (activityToEditProperties.durationMinutes < activityToEditProperties.durationObjectPrev.minutes) {
+        if (activityToEditAdditional.durationMinutes < activityToEditAdditional.durationObjectPrev.minutes) {
           // minutes decreased
-          let minutesDifference = activityToEditProperties.durationObjectPrev.minutes - activityToEditProperties.durationMinutes
+          let minutesDifference = activityToEditAdditional.durationObjectPrev.minutes - activityToEditAdditional.durationMinutes
           activityToEditContent.endTime -= (minutesDifference * 60)
           activityToEditContent.duration -= (minutesDifference * 60)
-        } else if (activityToEditProperties.durationMinutes > activityToEditProperties.durationObjectPrev.minutes) {
+        } else if (activityToEditAdditional.durationMinutes > activityToEditAdditional.durationObjectPrev.minutes) {
           // minutes increased
-          let minutesDifference = activityToEditProperties.durationMinutes - activityToEditProperties.durationObjectPrev.minutes
+          let minutesDifference = activityToEditAdditional.durationMinutes - activityToEditAdditional.durationObjectPrev.minutes
           activityToEditContent.endTime += (minutesDifference * 60)
           activityToEditContent.duration += (minutesDifference * 60)
         }
-        this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
-        this.updateEndTime(activityToEditProperties, activityToEditContent)
-        activityToEditProperties.durationMinutes = formatTime.addLeadingZero(activityToEditProperties.durationMinutes)
+        this.updateDurationObjectPrev(activityToEditAdditional, activityToEditContent)
+        this.updateEndTime(activityToEditAdditional, activityToEditContent)
+        activityToEditAdditional.durationMinutes = formatTime.addLeadingZero(activityToEditAdditional.durationMinutes)
       },
-      secondsChanged: function (activityToEditProperties, activityToEditContent) {
-        if (!this.isValidInput(activityToEditProperties.durationSeconds) || activityToEditProperties.durationSeconds > 59){
+      secondsChanged: function (activityToEditAdditional, activityToEditContent) {
+        if (!this.isValidInput(activityToEditAdditional.durationSeconds) || activityToEditAdditional.durationSeconds > 59){
           // reset seconds if input was invalid
-          activityToEditProperties.durationSeconds = activityToEditProperties.durationObjectPrev.seconds
+          activityToEditAdditional.durationSeconds = activityToEditAdditional.durationObjectPrev.seconds
           return
         }
         // activityToEditProperties.durationObjectPrev contains the previous duration
-        if (activityToEditProperties.durationSeconds < activityToEditProperties.durationObjectPrev.seconds) {
+        if (activityToEditAdditional.durationSeconds < activityToEditAdditional.durationObjectPrev.seconds) {
           // seconds decreased
-          let secondsDifference = activityToEditProperties.durationObjectPrev.seconds - activityToEditProperties.durationSeconds
+          let secondsDifference = activityToEditAdditional.durationObjectPrev.seconds - activityToEditAdditional.durationSeconds
           activityToEditContent.endTime -= secondsDifference
           activityToEditContent.duration -= secondsDifference
-        } else if (activityToEditProperties.durationSeconds > activityToEditProperties.durationObjectPrev.seconds) {
+        } else if (activityToEditAdditional.durationSeconds > activityToEditAdditional.durationObjectPrev.seconds) {
           // seconds increased
-          let secondsDifference = activityToEditProperties.durationSeconds - activityToEditProperties.durationObjectPrev.seconds
+          let secondsDifference = activityToEditAdditional.durationSeconds - activityToEditAdditional.durationObjectPrev.seconds
           activityToEditContent.endTime += secondsDifference
           activityToEditContent.duration += secondsDifference
         }
-        this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
-        this.updateEndTime(activityToEditProperties, activityToEditContent)
-        activityToEditProperties.durationSeconds = formatTime.addLeadingZero(activityToEditProperties.durationSeconds)
+        this.updateDurationObjectPrev(activityToEditAdditional, activityToEditContent)
+        this.updateEndTime(activityToEditAdditional, activityToEditContent)
+        activityToEditAdditional.durationSeconds = formatTime.addLeadingZero(activityToEditAdditional.durationSeconds)
       },
-      startTimeChanged: function (activityToEditProperties, activityToEditContent) {
-        const startTimePrevString = formatTime.timestampToTimeString(activityToEditProperties.startTimePrev)
-        const timeDiff = timeCalculations.diffTimeStrings(startTimePrevString, activityToEditProperties.startTimeString)
-        if (activityToEditProperties.startTimeString < startTimePrevString){
+      startTimeChanged: function (activityToEditAdditional, activityToEditContent) {
+        const startTimePrevString = formatTime.timestampToTimeString(activityToEditAdditional.startTimePrev)
+        const timeDiff = timeCalculations.diffTimeStrings(startTimePrevString, activityToEditAdditional.startTimeString)
+        if (activityToEditAdditional.startTimeString < startTimePrevString){
           // earlier start time
           if (timeDiff.hours !== 0) {
             activityToEditContent.startTime = timeCalculations.subtractHoursFromTimestamp(timeDiff.hoursDiff, activityToEditContent.startTime)
@@ -156,7 +156,7 @@
           if (timeDiff.minutes !== 0) {
             activityToEditContent.startTime = timeCalculations.subtractMinutesFromTimestamp(timeDiff.minutesDiff, activityToEditContent.startTime)
           }
-        } else if (activityToEditProperties.startTimeString > startTimePrevString){
+        } else if (activityToEditAdditional.startTimeString > startTimePrevString){
           // later start time
           if (timeDiff.hours !== 0) {
             activityToEditContent.startTime = timeCalculations.addHoursToTimestamp(timeDiff.hoursDiff, activityToEditContent.startTime)
@@ -167,19 +167,19 @@
         }
         // reset start time if the user sets it to an invalid value
         if (activityToEditContent.startTime > activityToEditContent.endTime) {
-          activityToEditContent.startTime = activityToEditProperties.startTimePrev
-          activityToEditProperties.startTimeString = startTimePrevString
+          activityToEditContent.startTime = activityToEditAdditional.startTimePrev
+          activityToEditAdditional.startTimeString = startTimePrevString
           return
         }
         activityToEditContent.duration = activityToEditContent.endTime - activityToEditContent.startTime
-        this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
-        this.updateDurationMinutesHours(activityToEditProperties, activityToEditContent)
-        this.updateStartTimePrev(activityToEditProperties, activityToEditContent)
+        this.updateDurationObjectPrev(activityToEditAdditional, activityToEditContent)
+        this.updateDurationMinutesHours(activityToEditAdditional, activityToEditContent)
+        this.updateStartTimePrev(activityToEditAdditional, activityToEditContent)
       },
-      endTimeChanged: function (activityToEditProperties, activityToEditContent) {
-        const endTimePrevString = formatTime.timestampToTimeString(activityToEditProperties.endTimePrev)
-        const timeDiff = timeCalculations.diffTimeStrings(endTimePrevString, activityToEditProperties.endTimeString)
-        if (activityToEditProperties.endTimeString < endTimePrevString){
+      endTimeChanged: function (activityToEditAdditional, activityToEditContent) {
+        const endTimePrevString = formatTime.timestampToTimeString(activityToEditAdditional.endTimePrev)
+        const timeDiff = timeCalculations.diffTimeStrings(endTimePrevString, activityToEditAdditional.endTimeString)
+        if (activityToEditAdditional.endTimeString < endTimePrevString){
           // earlier end time
           if (timeDiff.hours !== 0) {
             activityToEditContent.endTime = timeCalculations.subtractHoursFromTimestamp(timeDiff.hoursDiff, activityToEditContent.endTime)
@@ -187,7 +187,7 @@
           if (timeDiff.minutes !== 0) {
             activityToEditContent.endTime = timeCalculations.subtractMinutesFromTimestamp(timeDiff.minutesDiff, activityToEditContent.endTime)
           }
-        } else if (activityToEditProperties.endTimeString > endTimePrevString){
+        } else if (activityToEditAdditional.endTimeString > endTimePrevString){
           // later end time
           if (timeDiff.hours !== 0) {
             activityToEditContent.endTime = timeCalculations.addHoursToTimestamp(timeDiff.hoursDiff, activityToEditContent.endTime)
@@ -198,14 +198,25 @@
         }
         // reset end time if the user sets it to an invalid value
         if (activityToEditContent.endTime < activityToEditContent.startTime) {
-          activityToEditContent.endTime = activityToEditProperties.endTimePrev
-          activityToEditProperties.endTimeString = endTimePrevString
+          activityToEditContent.endTime = activityToEditAdditional.endTimePrev
+          activityToEditAdditional.endTimeString = endTimePrevString
           return
         }
         activityToEditContent.duration = activityToEditContent.endTime - activityToEditContent.startTime
-        this.updateDurationObjectPrev(activityToEditProperties, activityToEditContent)
-        this.updateDurationMinutesHours(activityToEditProperties, activityToEditContent)
-        this.updateEndTimePrev(activityToEditProperties, activityToEditContent)
+        this.updateDurationObjectPrev(activityToEditAdditional, activityToEditContent)
+        this.updateDurationMinutesHours(activityToEditAdditional, activityToEditContent)
+        this.updateEndTimePrev(activityToEditAdditional, activityToEditContent)
+      },
+      dateChanged: function (activityToEditAdditional, activityToEditContent) {
+        const parsedDate = formatTime.parseDateString(activityToEditAdditional.dateString)
+        console.log(parsedDate)
+        if (!parsedDate) {
+          // reset date string
+          console.log('invalid')
+          activityToEditAdditional.dateString = formatTime.timestampToDateString(activityToEditContent.startTime)
+        } else {
+          console.log("yay, valid")
+        }
       },
       updateDurationObjectPrev: function (activityToEditProperties, activityToEditContent) {
         // update duration object to be able to compare with it at the next change

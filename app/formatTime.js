@@ -87,6 +87,38 @@ function addLeadingZero (inputString) {
   }
 }
 
+// return false if the date string is invalid
+function parseDateString (dateString) {
+  let resultDate
+  let dateStringParts
+  if (config.readSettings('time-format') === config.TIMESTAMP_AMERICAN) {
+    dateStringParts = dateString.split('/')
+    resultDate = new Date(dateStringParts[2], dateStringParts[0], dateStringParts[1])
+    // date is invalid if the parsed month and the month in the string differ
+    if (addLeadingZero(String(resultDate.getMonth() + 1)) !== dateStringParts[0]) {
+      console.log('invalid 1')
+      return false
+    }
+  } else {
+    // European time format
+    dateStringParts = dateString.split('.')
+    resultDate = new Date(dateStringParts[2], dateStringParts[1], dateStringParts[0])
+    // date is invalid if the parsed month and the month in the string differ
+    // see above
+    if (addLeadingZero(String(resultDate.getMonth() + 1)) !== dateStringParts[1]) {
+      console.log('invalid 2 ' + dateStringParts[1] + '|' + addLeadingZero(String(resultDate.getMonth())))
+      return false
+    }
+  }
+  // date is invalid if the parsed year and the year in the string differ
+  if (String(resultDate.getFullYear()) !== dateStringParts[2]) {
+    console.log('invalid 3')
+    return false
+  }
+  // date is valid -> return parts of the date
+  return dateStringParts
+}
+
 function setMockConfig (mockConfigObject) {
   // mock config object must provide function readSettings
   // restoreRealConfig must be called after every test
@@ -108,5 +140,6 @@ module.exports = {
   setMockConfig,
   restoreRealConfig,
   JSTimstampToUNIXTimestamp,
-  addLeadingZero
+  addLeadingZero,
+  parseDateString
 }
