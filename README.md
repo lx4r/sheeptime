@@ -40,7 +40,7 @@ can be found on [the project website](http://sheeptime.l3r.de)
 ### Building SheepTime
 
 ## Powered by
-[Electron](http://electron.atom.io), [Bootstrap](http://getbootstrap.com), [Paper](http://bootswatch.com/paper/), [jQuery](http://jquery.com), [strftime](https://github.com/samsonjs/strftime), [Mocha](https://mochajs.org), [Chai](http://chaijs.com), [Vue](http://vuejs.org/), [Vueify](https://github.com/vuejs/vueify), [Browserify](http://browserify.org), [Gulp](http://gulpjs.com)  
+[Electron](http://electron.atom.io), [Bootstrap](http://getbootstrap.com), [Paper](http://bootswatch.com/paper/), [jQuery](http://jquery.com), [strftime](https://github.com/samsonjs/strftime), [Mocha](https://mochajs.org), [Chai](http://chaijs.com), [Vue](http://vuejs.org/), [Vueify](https://github.com/vuejs/vueify), [Browserify](http://browserify.org), [Gulp](http://gulpjs.com), [Moment.js](http://momentjs.com)  
 structure and README inspired by [pixeldesu's Surfbird](https://github.com/surfbirdapp/surfbird)
 
 ----

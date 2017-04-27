@@ -4,8 +4,14 @@
 'use strict'
 
 const strftime = require('./js/strftime.min')
+const moment = require('moment')
 let config = require('./configuration') // not using "const" to be able to override with mock config
 let realConfig = null // only used when config is overridden with mock config
+
+// date formats
+const AMERICAN_DATE_FORMAT = 'MM/DD/YYYY'
+const EUROPEAN_DATE_FORMAT = 'DD.MM.YYYY'
+
 
 function secondsToTimeObject (secondsIn) {
   // converts seconds to time object with two digit hours, minutes, seconds (-> adds leading zeroes)
@@ -93,30 +99,17 @@ function parseDateString (dateString) {
   let resultDate
   let dateStringParts
   if (config.readSettings('time-format') === config.TIMESTAMP_AMERICAN) {
+    if (!moment(dateString, AMERICAN_DATE_FORMAT,true).isValid()) {
+      return false
+    }
     dateStringParts = dateString.split('/')
     resultDate = new Date(dateStringParts[2], dateStringParts[0], dateStringParts[1])
-    // date is invalid if the parsed month and the month in the string differ
-    if (monthStringOfJSDate(resultDate) !== dateStringParts[0]) {
-      console.log('invalid 1')
-      console.log(addLeadingZero(String(resultDate.getMonth() + 1)))
-      console.log(dateStringParts[0])
+  } else {
+    if (!moment(dateString, EUROPEAN_DATE_FORMAT,true).isValid()) {
       return false
     }
-  } else {
-    // European time format
     dateStringParts = dateString.split('.')
     resultDate = new Date(dateStringParts[2], dateStringParts[1], dateStringParts[0])
-    // date is invalid if the parsed month and the month in the string differ
-    // see above
-    if (monthStringOfJSDate(resultDate) !== dateStringParts[1]) {
-      return false
-    }
-    console.log(monthStringOfJSDate(resultDate) + '|' + dateStringParts[1])
-  }
-  // date is invalid if the parsed year and the year in the string differ
-  if (String(resultDate.getFullYear()) !== dateStringParts[2]) {
-    console.log('invalid 3')
-    return false
   }
   // date is valid -> return parts of the date
   return dateStringParts
