@@ -79,7 +79,8 @@ function timestampToTimeString (timestamp) {
   return strftime('%H:%M', timestampToDateObject(timestamp))
 }
 
-function addLeadingZero (inputString) {
+function addLeadingZero (inputNumber) {
+  const inputString = inputNumber + ''
   if (inputString.length === 1) {
     return '0' + inputString
   } else {
@@ -95,8 +96,10 @@ function parseDateString (dateString) {
     dateStringParts = dateString.split('/')
     resultDate = new Date(dateStringParts[2], dateStringParts[0], dateStringParts[1])
     // date is invalid if the parsed month and the month in the string differ
-    if (addLeadingZero(String(resultDate.getMonth() + 1)) !== dateStringParts[0]) {
+    if (monthStringOfJSDate(resultDate) !== dateStringParts[0]) {
       console.log('invalid 1')
+      console.log(addLeadingZero(String(resultDate.getMonth() + 1)))
+      console.log(dateStringParts[0])
       return false
     }
   } else {
@@ -105,10 +108,10 @@ function parseDateString (dateString) {
     resultDate = new Date(dateStringParts[2], dateStringParts[1], dateStringParts[0])
     // date is invalid if the parsed month and the month in the string differ
     // see above
-    if (addLeadingZero(String(resultDate.getMonth() + 1)) !== dateStringParts[1]) {
-      console.log('invalid 2 ' + dateStringParts[1] + '|' + addLeadingZero(String(resultDate.getMonth())))
+    if (monthStringOfJSDate(resultDate) !== dateStringParts[1]) {
       return false
     }
+    console.log(monthStringOfJSDate(resultDate) + '|' + dateStringParts[1])
   }
   // date is invalid if the parsed year and the year in the string differ
   if (String(resultDate.getFullYear()) !== dateStringParts[2]) {
@@ -117,6 +120,16 @@ function parseDateString (dateString) {
   }
   // date is valid -> return parts of the date
   return dateStringParts
+}
+
+// avoids problems with JS date objects of dates in December having 0 as month number, adds leading zeros to result
+function monthStringOfJSDate (dateObject) {
+  const jsMonth = dateObject.getMonth()
+  if (jsMonth === 0) {
+    return '12'
+  } else {
+    return addLeadingZero(jsMonth)
+  }
 }
 
 function setMockConfig (mockConfigObject) {
