@@ -12,7 +12,6 @@ let realConfig = null // only used when config is overridden with mock config
 const AMERICAN_DATE_FORMAT = 'MM/DD/YYYY'
 const EUROPEAN_DATE_FORMAT = 'DD.MM.YYYY'
 
-
 function secondsToTimeObject (secondsIn) {
   // converts seconds to time object with two digit hours, minutes, seconds (-> adds leading zeroes)
   // properties of the time object are strings
@@ -99,30 +98,20 @@ function parseDateString (dateString) {
   let resultDate
   let dateStringParts
   if (config.readSettings('time-format') === config.TIMESTAMP_AMERICAN) {
-    if (!moment(dateString, AMERICAN_DATE_FORMAT,true).isValid()) {
+    if (!moment(dateString, AMERICAN_DATE_FORMAT, true).isValid()) {
       return false
     }
     dateStringParts = dateString.split('/')
     resultDate = new Date(dateStringParts[2], dateStringParts[0], dateStringParts[1])
   } else {
-    if (!moment(dateString, EUROPEAN_DATE_FORMAT,true).isValid()) {
+    if (!moment(dateString, EUROPEAN_DATE_FORMAT, true).isValid()) {
       return false
     }
     dateStringParts = dateString.split('.')
     resultDate = new Date(dateStringParts[2], dateStringParts[1], dateStringParts[0])
   }
   // date is valid -> return parts of the date
-  return dateStringParts
-}
-
-// avoids problems with JS date objects of dates in December having 0 as month number, adds leading zeros to result
-function monthStringOfJSDate (dateObject) {
-  const jsMonth = dateObject.getMonth()
-  if (jsMonth === 0) {
-    return '12'
-  } else {
-    return addLeadingZero(jsMonth)
-  }
+  return resultDate
 }
 
 function setMockConfig (mockConfigObject) {

@@ -37,10 +37,6 @@ function addHoursToTimestamp (hours, timestamp) {
   return (timestamp + hours * 3600)
 }
 
-function isVali () {
-  
-}
-
 module.exports = {
   diffTimeStrings,
   subtractMinutesFromTimestamp,

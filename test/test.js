@@ -2,6 +2,7 @@
 /**
  * Created by lx4r on 01.09.16.
  */
+'use strict'
 
 var should = require('chai').should() // eslint-disable-line
 var formatTime = require('../app/formatTime')
