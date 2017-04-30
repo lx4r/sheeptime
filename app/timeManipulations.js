@@ -41,12 +41,16 @@ function addHoursToTimestamp (hours, timestamp) {
 }
 
 function changeDatesOfActivityTimes (activityStartTime, activityEndTime, newDateMoment) {
-  if (!activityStartTime || !activityEndTime || !newDateMoment) {
-    throw Error('empty parameter(s)')
+  if (!activityStartTime || !activityEndTime || !newDateMoment || (typeof newDateMoment !== 'object')) {
+    throw Error('empty parameter(s) or newDateMoment of wrong type')
   }
   const startMoment = moment.unix(activityStartTime)
   const endMoment = moment.unix(activityEndTime)
-  const daysDifference = startMoment.diff(endMoment, 'days')
+  let daysDifference = 0
+  if (startMoment.date() !== endMoment.date()) {
+    daysDifference = Math.ceil(endMoment.diff(startMoment, 'days', true)) // ceil needed here to move the end time even if the difference between start and end time isn't a whole day
+    // note that this solution fails if an activity spans more than a month (-> the start and end time have the same date)
+  }
   // set the start and end moment's date to the new date
   startMoment.year(newDateMoment.year()).month(newDateMoment.month()).date(newDateMoment.date())
   endMoment.year(newDateMoment.year()).month(newDateMoment.month()).date(newDateMoment.date())

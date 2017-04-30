@@ -6,8 +6,10 @@
 
 const should = require('chai').should() // eslint-disable-line
 const formatTime = require('../app/formatTime')
+const timeManipulations = require('../app/timeManipulations')
 const mapHandling = require('../app/mapHandling')
 const config = require('../app/configuration')
+const moment = require('moment')
 
 // helper functions
 function addLeadingZero (number) {
@@ -228,32 +230,40 @@ describe('formatTime', function () {
   })
 })
 
-/* describe('timeManipulations', function () {
-  describe('mapToArray', function () {
-    it('should convert an empty map to an empty array', function () {
-      mapHandling.mapToArray(new Map()).should.eql([])
+describe('timeManipulations', function () {
+  describe('changeDatesOfActivityTimes', function () {
+    it('should not accept wrong parameters', function () {
+      (function () {
+        timeManipulations.changeDatesOfActivityTimes('', '', {})
+      }).should.throw(Error);
+      (function () {
+        timeManipulations.changeDatesOfActivityTimes('yay', '', {})
+      }).should.throw(Error);
+      (function () {
+        timeManipulations.changeDatesOfActivityTimes('', 'yay', {})
+      }).should.throw(Error);
+      (function () {
+        timeManipulations.changeDatesOfActivityTimes('yay', 'yay', '')
+      }).should.throw(Error)
     })
-    it('should convert a map to an array', function () {
-      var map = new Map()
-      map.set(0, 'lorem')
-      map.set(42, 'ipsum')
-      var result = [[0, 'lorem'], [42, 'ipsum']]
-      mapHandling.mapToArray(map).should.eql(result)
+    it('should correctly change the dates of an activity that doesn\'t overlap midnight', function () {
+      const startTime = 7000000
+      const endTime = 7001000
+      const newDateMoment = moment('01.01.2017', 'DD.MM.YYYY', true)
+      const result = timeManipulations.changeDatesOfActivityTimes(startTime, endTime, newDateMoment)
+      result.startTime.should.equal(1483230400)
+      result.endTime.should.equal(1483231400)
+    })
+    it('should correctly change the dates of an activity that overlaps midnight', function () {
+      const startTime = 1451685600
+      const endTime = 1451692800
+      const newDateMoment = moment('01.01.2017', 'DD.MM.YYYY', true)
+      const result = timeManipulations.changeDatesOfActivityTimes(startTime, endTime, newDateMoment)
+      result.startTime.should.equal(1483308000)
+      result.endTime.should.equal(1483315200)
     })
   })
-  describe('arrayToMap', function () {
-    it('should convert an empty array to an empty map', function () {
-      mapHandling.arrayToMap([]).should.eql(new Map())
-    })
-    it('should convert an array to a map', function () {
-      var array = [[0, 'lorem'], [42, 'ipsum']]
-      var result = new Map()
-      result.set(0, 'lorem')
-      result.set(42, 'ipsum')
-      mapHandling.arrayToMap(array).should.eql(result)
-    })
-  })
-}) */
+})
 
 describe('mapHandling', function () {
   describe('mapToArray', function () {
