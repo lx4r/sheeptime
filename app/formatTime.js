@@ -3,6 +3,8 @@
  */
 'use strict'
 
+// TODO: move some of the functions in this file to timeManipulations.js
+
 const strftime = require('./js/strftime.min')
 const moment = require('moment')
 let config = require('./configuration') // not using "const" to be able to override with mock config
@@ -93,25 +95,19 @@ function addLeadingZero (inputNumber) {
   }
 }
 
-// return false if the date string is invalid
 function parseDateString (dateString) {
-  let resultDate
-  let dateStringParts
+  let resultMoment
   if (config.readSettings('time-format') === config.TIMESTAMP_AMERICAN) {
-    if (!moment(dateString, AMERICAN_DATE_FORMAT, true).isValid()) {
-      return false
-    }
-    dateStringParts = dateString.split('/')
-    resultDate = new Date(dateStringParts[2], dateStringParts[0], dateStringParts[1])
+    resultMoment = moment(dateString, AMERICAN_DATE_FORMAT, true)
   } else {
-    if (!moment(dateString, EUROPEAN_DATE_FORMAT, true).isValid()) {
-      return false
-    }
-    dateStringParts = dateString.split('.')
-    resultDate = new Date(dateStringParts[2], dateStringParts[1], dateStringParts[0])
+    resultMoment = moment(dateString, EUROPEAN_DATE_FORMAT, true)
   }
-  // date is valid -> return parts of the date
-  return resultDate
+  if (!resultMoment.isValid()) {
+    return false
+  } else {
+    // date is valid -> return moment
+    return resultMoment
+  }
 }
 
 function setMockConfig (mockConfigObject) {

@@ -73,7 +73,7 @@
 
 <script>
   const formatTime = require('./../../formatTime')
-  const timeCalculations = require('./../../timeCalculations')
+  const timeManipulations = require('../../timeManipulations')
 
   export default {
     props: ['activityToEdit', 'projectList', 'activityToEditProperties'],
@@ -147,22 +147,22 @@
       },
       startTimeChanged: function (activityToEditAdditional, activityToEditContent) {
         const startTimePrevString = formatTime.timestampToTimeString(activityToEditAdditional.startTimePrev)
-        const timeDiff = timeCalculations.diffTimeStrings(startTimePrevString, activityToEditAdditional.startTimeString)
+        const timeDiff = timeManipulations.diffTimeStrings(startTimePrevString, activityToEditAdditional.startTimeString)
         if (activityToEditAdditional.startTimeString < startTimePrevString){
           // earlier start time
           if (timeDiff.hours !== 0) {
-            activityToEditContent.startTime = timeCalculations.subtractHoursFromTimestamp(timeDiff.hoursDiff, activityToEditContent.startTime)
+            activityToEditContent.startTime = timeManipulations.subtractHoursFromTimestamp(timeDiff.hoursDiff, activityToEditContent.startTime)
           }
           if (timeDiff.minutes !== 0) {
-            activityToEditContent.startTime = timeCalculations.subtractMinutesFromTimestamp(timeDiff.minutesDiff, activityToEditContent.startTime)
+            activityToEditContent.startTime = timeManipulations.subtractMinutesFromTimestamp(timeDiff.minutesDiff, activityToEditContent.startTime)
           }
         } else if (activityToEditAdditional.startTimeString > startTimePrevString){
           // later start time
           if (timeDiff.hours !== 0) {
-            activityToEditContent.startTime = timeCalculations.addHoursToTimestamp(timeDiff.hoursDiff, activityToEditContent.startTime)
+            activityToEditContent.startTime = timeManipulations.addHoursToTimestamp(timeDiff.hoursDiff, activityToEditContent.startTime)
           }
           if (timeDiff.minutes !== 0) {
-            activityToEditContent.startTime = timeCalculations.addMinutesToTimestamp(timeDiff.minutesDiff, activityToEditContent.startTime)
+            activityToEditContent.startTime = timeManipulations.addMinutesToTimestamp(timeDiff.minutesDiff, activityToEditContent.startTime)
           }
         }
         // reset start time if the user sets it to an invalid value
@@ -178,22 +178,22 @@
       },
       endTimeChanged: function (activityToEditAdditional, activityToEditContent) {
         const endTimePrevString = formatTime.timestampToTimeString(activityToEditAdditional.endTimePrev)
-        const timeDiff = timeCalculations.diffTimeStrings(endTimePrevString, activityToEditAdditional.endTimeString)
+        const timeDiff = timeManipulations.diffTimeStrings(endTimePrevString, activityToEditAdditional.endTimeString)
         if (activityToEditAdditional.endTimeString < endTimePrevString){
           // earlier end time
           if (timeDiff.hours !== 0) {
-            activityToEditContent.endTime = timeCalculations.subtractHoursFromTimestamp(timeDiff.hoursDiff, activityToEditContent.endTime)
+            activityToEditContent.endTime = timeManipulations.subtractHoursFromTimestamp(timeDiff.hoursDiff, activityToEditContent.endTime)
           }
           if (timeDiff.minutes !== 0) {
-            activityToEditContent.endTime = timeCalculations.subtractMinutesFromTimestamp(timeDiff.minutesDiff, activityToEditContent.endTime)
+            activityToEditContent.endTime = timeManipulations.subtractMinutesFromTimestamp(timeDiff.minutesDiff, activityToEditContent.endTime)
           }
         } else if (activityToEditAdditional.endTimeString > endTimePrevString){
           // later end time
           if (timeDiff.hours !== 0) {
-            activityToEditContent.endTime = timeCalculations.addHoursToTimestamp(timeDiff.hoursDiff, activityToEditContent.endTime)
+            activityToEditContent.endTime = timeManipulations.addHoursToTimestamp(timeDiff.hoursDiff, activityToEditContent.endTime)
           }
           if (timeDiff.minutes !== 0) {
-            activityToEditContent.endTime = timeCalculations.addMinutesToTimestamp(timeDiff.minutesDiff, activityToEditContent.endTime)
+            activityToEditContent.endTime = timeManipulations.addMinutesToTimestamp(timeDiff.minutesDiff, activityToEditContent.endTime)
           }
         }
         // reset end time if the user sets it to an invalid value
@@ -208,14 +208,15 @@
         this.updateEndTimePrev(activityToEditAdditional, activityToEditContent)
       },
       dateChanged: function (activityToEditAdditional, activityToEditContent) {
-        const parsedDate = formatTime.parseDateString(activityToEditAdditional.dateString)
-        console.log(parsedDate)
-        if (!parsedDate) {
-          // reset date string
-          console.log('invalid')
+        const newDateMoment = formatTime.parseDateString(activityToEditAdditional.dateString)
+        if (!newDateMoment) {
+          // entered date is invalid -> reset date string
+          console.log('invalid date entered')
           activityToEditAdditional.dateString = formatTime.timestampToDateString(activityToEditContent.startTime)
         } else {
-          console.log("yay, valid")
+          const newTimestamps = timeManipulations.changeDatesOfActivityTimes(activityToEditContent.startTime, activityToEditContent.endTime, newDateMoment)
+          activityToEditContent.startTime = newTimestamps.startTime
+          activityToEditContent.endTime = newTimestamps.endTime
         }
       },
       updateDurationObjectPrev: function (activityToEditProperties, activityToEditContent) {
