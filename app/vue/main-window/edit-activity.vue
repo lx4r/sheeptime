@@ -228,7 +228,6 @@
       },
       updateDurationMinutesHours: function (activityToEditProperties, activityToEditContent) {
         let newDurationObject = formatTime.secondsToTimeObject(activityToEditContent.duration)
-        console.log(newDurationObject)
         activityToEditProperties.durationHours = newDurationObject.hours
         activityToEditProperties.durationMinutes = newDurationObject.minutes
       },

@@ -41,6 +41,9 @@ function addHoursToTimestamp (hours, timestamp) {
 }
 
 function changeDatesOfActivityTimes (activityStartTime, activityEndTime, newDateMoment) {
+  if (!activityStartTime || !activityEndTime || !newDateMoment) {
+    throw Error('empty parameter(s)')
+  }
   const startMoment = moment.unix(activityStartTime)
   const endMoment = moment.unix(activityEndTime)
   const daysDifference = startMoment.diff(endMoment, 'days')
