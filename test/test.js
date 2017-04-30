@@ -4,9 +4,10 @@
  */
 'use strict'
 
-var should = require('chai').should() // eslint-disable-line
-var formatTime = require('../app/formatTime')
-var mapHandling = require('../app/mapHandling')
+const should = require('chai').should() // eslint-disable-line
+const formatTime = require('../app/formatTime')
+const mapHandling = require('../app/mapHandling')
+const config = require('../app/configuration')
 
 // helper functions
 function addLeadingZero (number) {
@@ -53,7 +54,7 @@ describe('formatTime', function () {
       formatTime.setMockConfig({
         readSettings: function (settingName) {
           if (settingName === 'time-format') {
-            return 'european'
+            return config.TIMESTAMP_EUROPEAN
           } else {
             throw new Error('using wrong setting')
           }
@@ -68,7 +69,7 @@ describe('formatTime', function () {
       formatTime.setMockConfig({
         readSettings: function (settingName) {
           if (settingName === 'time-format') {
-            return 'american'
+            return config.TIMESTAMP_AMERICAN
           } else {
             throw new Error('using wrong setting')
           }
@@ -88,7 +89,7 @@ describe('formatTime', function () {
       formatTime.setMockConfig({
         readSettings: function (settingName) {
           if (settingName === 'time-format') {
-            return 'american'
+            return config.TIMESTAMP_AMERICAN
           } else {
             throw new Error('using wrong setting')
           }
@@ -103,7 +104,7 @@ describe('formatTime', function () {
       formatTime.setMockConfig({
         readSettings: function (settingName) {
           if (settingName === 'time-format') {
-            return 'european'
+            return config.TIMESTAMP_EUROPEAN
           } else {
             throw new Error('using wrong setting')
           }
@@ -155,7 +156,104 @@ describe('formatTime', function () {
       formatTime.JSTimstampToUNIXTimestamp(1000).should.equal(1)
     })
   })
+  describe('parseDateString', function () {
+    it('should detect an invalid European date string', function () {
+      formatTime.setMockConfig({
+        readSettings: function (settingName) {
+          if (settingName === 'time-format') {
+            return config.TIMESTAMP_EUROPEAN
+          } else {
+            throw new Error('using wrong setting')
+          }
+        }
+      })
+      formatTime.parseDateString('31.02.2017').should.equal(false)
+      formatTime.parseDateString('01.012017').should.equal(false)
+      formatTime.parseDateString('01.01..2017').should.equal(false)
+      formatTime.parseDateString('1.01.2017').should.equal(false)
+      formatTime.parseDateString('01.1.2017').should.equal(false)
+      formatTime.parseDateString('1.01.201').should.equal(false)
+      formatTime.restoreRealConfig()
+    })
+    it('should detect an invalid American date string', function () {
+      formatTime.setMockConfig({
+        readSettings: function (settingName) {
+          if (settingName === 'time-format') {
+            return config.TIMESTAMP_AMERICAN
+          } else {
+            throw new Error('using wrong setting')
+          }
+        }
+      })
+      formatTime.parseDateString('02/31/2017').should.equal(false)
+      formatTime.parseDateString('01/012017').should.equal(false)
+      formatTime.parseDateString('01/01//2017').should.equal(false)
+      formatTime.parseDateString('1/01/2017').should.equal(false)
+      formatTime.parseDateString('01/1/2017').should.equal(false)
+      formatTime.parseDateString('1/01/201').should.equal(false)
+      formatTime.restoreRealConfig()
+    })
+    it('should correctly parse an European date string', function () {
+      formatTime.setMockConfig({
+        readSettings: function (settingName) {
+          if (settingName === 'time-format') {
+            return config.TIMESTAMP_EUROPEAN
+          } else {
+            throw new Error('using wrong setting')
+          }
+        }
+      })
+      const parsedDate = formatTime.parseDateString('31.07.2017')
+      parsedDate.date().should.equal(31)
+      parsedDate.month().should.equal(6)
+      parsedDate.year().should.equal(2017)
+      formatTime.restoreRealConfig()
+    })
+    it('should correctly parse an American date string', function () {
+      formatTime.setMockConfig({
+        readSettings: function (settingName) {
+          if (settingName === 'time-format') {
+            return config.TIMESTAMP_EUROPEAN
+          } else {
+            throw new Error('using wrong setting')
+          }
+        }
+      })
+      const parsedDate = formatTime.parseDateString('31.07.2017')
+      parsedDate.date().should.equal(31)
+      parsedDate.month().should.equal(6)
+      parsedDate.year().should.equal(2017)
+      formatTime.restoreRealConfig()
+    })
+  })
 })
+
+/* describe('timeManipulations', function () {
+  describe('mapToArray', function () {
+    it('should convert an empty map to an empty array', function () {
+      mapHandling.mapToArray(new Map()).should.eql([])
+    })
+    it('should convert a map to an array', function () {
+      var map = new Map()
+      map.set(0, 'lorem')
+      map.set(42, 'ipsum')
+      var result = [[0, 'lorem'], [42, 'ipsum']]
+      mapHandling.mapToArray(map).should.eql(result)
+    })
+  })
+  describe('arrayToMap', function () {
+    it('should convert an empty array to an empty map', function () {
+      mapHandling.arrayToMap([]).should.eql(new Map())
+    })
+    it('should convert an array to a map', function () {
+      var array = [[0, 'lorem'], [42, 'ipsum']]
+      var result = new Map()
+      result.set(0, 'lorem')
+      result.set(42, 'ipsum')
+      mapHandling.arrayToMap(array).should.eql(result)
+    })
+  })
+}) */
 
 describe('mapHandling', function () {
   describe('mapToArray', function () {

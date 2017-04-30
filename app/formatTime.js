@@ -99,7 +99,7 @@ function parseDateString (dateString) {
   let resultMoment
   if (config.readSettings('time-format') === config.TIMESTAMP_AMERICAN) {
     resultMoment = moment(dateString, AMERICAN_DATE_FORMAT, true)
-  } else {
+  } else if (config.readSettings('time-format') === config.TIMESTAMP_EUROPEAN) {
     resultMoment = moment(dateString, EUROPEAN_DATE_FORMAT, true)
   }
   if (!resultMoment.isValid()) {
@@ -113,6 +113,8 @@ function parseDateString (dateString) {
 function setMockConfig (mockConfigObject) {
   // mock config object must provide function readSettings
   // restoreRealConfig must be called after every test
+  mockConfigObject.TIMESTAMP_EUROPEAN = config.TIMESTAMP_EUROPEAN // add constants to the mock config object
+  mockConfigObject.TIMESTAMP_AMERICAN = config.TIMESTAMP_AMERICAN
   realConfig = config
   config = mockConfigObject
 }
