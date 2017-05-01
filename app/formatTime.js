@@ -3,15 +3,22 @@
  */
 'use strict'
 
+// TODO: move some of the functions in this file to timeManipulations.js
+
 const strftime = require('./js/strftime.min')
+const moment = require('moment')
 let config = require('./configuration') // not using "const" to be able to override with mock config
 let realConfig = null // only used when config is overridden with mock config
+
+// date formats
+const AMERICAN_DATE_FORMAT = 'MM/DD/YYYY'
+const EUROPEAN_DATE_FORMAT = 'DD.MM.YYYY'
 
 function secondsToTimeObject (secondsIn) {
   // converts seconds to time object with two digit hours, minutes, seconds (-> adds leading zeroes)
   // properties of the time object are strings
-  if (secondsIn < 0) {
-    throw Error('negative seconds')
+  if (secondsIn < 0 || isNaN(secondsIn)) {
+    throw Error('invalid seconds')
   }
   let hours = Math.floor(secondsIn / 3600)
   let minutes = Math.floor((secondsIn - (hours * 3600)) / 60)
@@ -79,9 +86,35 @@ function timestampToTimeString (timestamp) {
   return strftime('%H:%M', timestampToDateObject(timestamp))
 }
 
+function addLeadingZero (inputNumber) {
+  const inputString = inputNumber + ''
+  if (inputString.length === 1) {
+    return '0' + inputString
+  } else {
+    return inputString
+  }
+}
+
+function parseDateString (dateString) {
+  let resultMoment
+  if (config.readSettings('time-format') === config.TIMESTAMP_AMERICAN) {
+    resultMoment = moment(dateString, AMERICAN_DATE_FORMAT, true)
+  } else if (config.readSettings('time-format') === config.TIMESTAMP_EUROPEAN) {
+    resultMoment = moment(dateString, EUROPEAN_DATE_FORMAT, true)
+  }
+  if (!resultMoment.isValid()) {
+    return false
+  } else {
+    // date is valid -> return moment
+    return resultMoment
+  }
+}
+
 function setMockConfig (mockConfigObject) {
   // mock config object must provide function readSettings
   // restoreRealConfig must be called after every test
+  mockConfigObject.TIMESTAMP_EUROPEAN = config.TIMESTAMP_EUROPEAN // add constants to the mock config object
+  mockConfigObject.TIMESTAMP_AMERICAN = config.TIMESTAMP_AMERICAN
   realConfig = config
   config = mockConfigObject
 }
@@ -91,13 +124,15 @@ function restoreRealConfig () {
 }
 
 module.exports = {
-  secondsToTimeObject: secondsToTimeObject,
-  secondsToTimeString: secondsToTimeString,
-  timestampToDateTimeString: timestampToDateTimeString,
-  timestampToDateString: timestampToDateString,
-  timestampToDateObject: timestampToDateObject,
-  timestampToTimeString: timestampToTimeString,
-  setMockConfig: setMockConfig,
-  restoreRealConfig: restoreRealConfig,
-  JSTimstampToUNIXTimestamp: JSTimstampToUNIXTimestamp
+  secondsToTimeObject,
+  secondsToTimeString,
+  timestampToDateTimeString,
+  timestampToDateString,
+  timestampToDateObject,
+  timestampToTimeString,
+  setMockConfig,
+  restoreRealConfig,
+  JSTimstampToUNIXTimestamp,
+  addLeadingZero,
+  parseDateString
 }

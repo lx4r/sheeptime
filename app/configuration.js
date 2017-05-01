@@ -12,6 +12,10 @@
 const os = require('os')
 const nconf = require('nconf').file({file: getUserHome() + '/sheeptime-config.json'})
 
+// constants for the configuration
+const TIMESTAMP_EUROPEAN = 'european'
+const TIMESTAMP_AMERICAN = 'american'
+
 function saveSettings (settingKey, settingValue) {
   nconf.set(settingKey, settingValue)
   nconf.save()
@@ -29,5 +33,7 @@ function getUserHome () {
 module.exports = {
   saveSettings: saveSettings,
   readSettings: readSettings,
-  getUserHome: getUserHome
+  getUserHome: getUserHome,
+  TIMESTAMP_EUROPEAN,
+  TIMESTAMP_AMERICAN
 }

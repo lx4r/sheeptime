@@ -2,10 +2,14 @@
 /**
  * Created by lx4r on 01.09.16.
  */
+'use strict'
 
-var should = require('chai').should() // eslint-disable-line
-var formatTime = require('../app/formatTime')
-var mapHandling = require('../app/mapHandling')
+const should = require('chai').should() // eslint-disable-line
+const formatTime = require('../app/formatTime')
+const timeManipulations = require('../app/timeManipulations')
+const mapHandling = require('../app/mapHandling')
+const config = require('../app/configuration')
+const moment = require('moment')
 
 // helper functions
 function addLeadingZero (number) {
@@ -52,7 +56,7 @@ describe('formatTime', function () {
       formatTime.setMockConfig({
         readSettings: function (settingName) {
           if (settingName === 'time-format') {
-            return 'european'
+            return config.TIMESTAMP_EUROPEAN
           } else {
             throw new Error('using wrong setting')
           }
@@ -67,7 +71,7 @@ describe('formatTime', function () {
       formatTime.setMockConfig({
         readSettings: function (settingName) {
           if (settingName === 'time-format') {
-            return 'american'
+            return config.TIMESTAMP_AMERICAN
           } else {
             throw new Error('using wrong setting')
           }
@@ -87,7 +91,7 @@ describe('formatTime', function () {
       formatTime.setMockConfig({
         readSettings: function (settingName) {
           if (settingName === 'time-format') {
-            return 'american'
+            return config.TIMESTAMP_AMERICAN
           } else {
             throw new Error('using wrong setting')
           }
@@ -102,7 +106,7 @@ describe('formatTime', function () {
       formatTime.setMockConfig({
         readSettings: function (settingName) {
           if (settingName === 'time-format') {
-            return 'european'
+            return config.TIMESTAMP_EUROPEAN
           } else {
             throw new Error('using wrong setting')
           }
@@ -152,6 +156,111 @@ describe('formatTime', function () {
   describe('JSTimstampToUNIXTimestamp', function () {
     it('should convert 1000 to 1', function () {
       formatTime.JSTimstampToUNIXTimestamp(1000).should.equal(1)
+    })
+  })
+  describe('parseDateString', function () {
+    it('should detect an invalid European date string', function () {
+      formatTime.setMockConfig({
+        readSettings: function (settingName) {
+          if (settingName === 'time-format') {
+            return config.TIMESTAMP_EUROPEAN
+          } else {
+            throw new Error('using wrong setting')
+          }
+        }
+      })
+      formatTime.parseDateString('31.02.2017').should.equal(false)
+      formatTime.parseDateString('01.012017').should.equal(false)
+      formatTime.parseDateString('01.01..2017').should.equal(false)
+      formatTime.parseDateString('1.01.2017').should.equal(false)
+      formatTime.parseDateString('01.1.2017').should.equal(false)
+      formatTime.parseDateString('1.01.201').should.equal(false)
+      formatTime.restoreRealConfig()
+    })
+    it('should detect an invalid American date string', function () {
+      formatTime.setMockConfig({
+        readSettings: function (settingName) {
+          if (settingName === 'time-format') {
+            return config.TIMESTAMP_AMERICAN
+          } else {
+            throw new Error('using wrong setting')
+          }
+        }
+      })
+      formatTime.parseDateString('02/31/2017').should.equal(false)
+      formatTime.parseDateString('01/012017').should.equal(false)
+      formatTime.parseDateString('01/01//2017').should.equal(false)
+      formatTime.parseDateString('1/01/2017').should.equal(false)
+      formatTime.parseDateString('01/1/2017').should.equal(false)
+      formatTime.parseDateString('1/01/201').should.equal(false)
+      formatTime.restoreRealConfig()
+    })
+    it('should correctly parse an European date string', function () {
+      formatTime.setMockConfig({
+        readSettings: function (settingName) {
+          if (settingName === 'time-format') {
+            return config.TIMESTAMP_EUROPEAN
+          } else {
+            throw new Error('using wrong setting')
+          }
+        }
+      })
+      const parsedDate = formatTime.parseDateString('31.07.2017')
+      parsedDate.date().should.equal(31)
+      parsedDate.month().should.equal(6)
+      parsedDate.year().should.equal(2017)
+      formatTime.restoreRealConfig()
+    })
+    it('should correctly parse an American date string', function () {
+      formatTime.setMockConfig({
+        readSettings: function (settingName) {
+          if (settingName === 'time-format') {
+            return config.TIMESTAMP_EUROPEAN
+          } else {
+            throw new Error('using wrong setting')
+          }
+        }
+      })
+      const parsedDate = formatTime.parseDateString('31.07.2017')
+      parsedDate.date().should.equal(31)
+      parsedDate.month().should.equal(6)
+      parsedDate.year().should.equal(2017)
+      formatTime.restoreRealConfig()
+    })
+  })
+})
+
+describe('timeManipulations', function () {
+  describe('changeDatesOfActivityTimes', function () {
+    it('should not accept wrong parameters', function () {
+      (function () {
+        timeManipulations.changeDatesOfActivityTimes('', '', {})
+      }).should.throw(Error);
+      (function () {
+        timeManipulations.changeDatesOfActivityTimes('yay', '', {})
+      }).should.throw(Error);
+      (function () {
+        timeManipulations.changeDatesOfActivityTimes('', 'yay', {})
+      }).should.throw(Error);
+      (function () {
+        timeManipulations.changeDatesOfActivityTimes('yay', 'yay', '')
+      }).should.throw(Error)
+    })
+    it('should correctly change the dates of an activity that doesn\'t overlap midnight', function () {
+      const startTime = 7000000
+      const endTime = 7001000
+      const newDateMoment = moment('01.01.2017', 'DD.MM.YYYY', true)
+      const result = timeManipulations.changeDatesOfActivityTimes(startTime, endTime, newDateMoment)
+      result.startTime.should.equal(1483230400)
+      result.endTime.should.equal(1483231400)
+    })
+    it('should correctly change the dates of an activity that overlaps midnight', function () {
+      const startTime = 1451685600
+      const endTime = 1451692800
+      const newDateMoment = moment('01.01.2017', 'DD.MM.YYYY', true)
+      const result = timeManipulations.changeDatesOfActivityTimes(startTime, endTime, newDateMoment)
+      result.startTime.should.equal(1483308000)
+      result.endTime.should.equal(1483315200)
     })
   })
 })
