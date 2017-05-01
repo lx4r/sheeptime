@@ -42,7 +42,7 @@
     "standard": "*",
     "vinyl-source-stream": "^1.1.0",
     "vinyl-transform": "^1.0.0",
-    "vueify": "^9.2.4"
+    "vueify": "^9.4.1"
   },
   "standard": {
     "globals": [

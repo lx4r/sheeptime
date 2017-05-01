@@ -41,13 +41,14 @@
     const getElementByID = require('./../../getElementByID')
     const activityModel = require('./../../storage/activityModel')
 
-    var data = {
+    let data = {
         stopwatchRunning: false,
         currentSeconds: 0,
         activityName: "",
     }
-    var intervalID
-    var startTime
+    let intervalID
+    let startTime
+
 
     export default {
         props: ['pl'],

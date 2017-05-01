@@ -23,7 +23,7 @@
                                     <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#edit-activity" v-on:click="setActivityToEdit(activity)">
                                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                     </button>
-                                    <button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="" v-on:click="">
+                                    <button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="" v-on:click="continueActivity(activity)">
                                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                                     </button>
                                 </div>
@@ -125,6 +125,9 @@
         }
         // save a stringified version of the activity to later determine whether it has been changed
         activityToEditPrevString = JSON.stringify(newActivityToEdit)
+      },
+      continueActivity: function (activity) {
+        console.log(this.bus)
       }
     },
     data(){
