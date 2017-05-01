@@ -12,7 +12,6 @@ const Vue = require('vue')
 
 Vue.component('main-window', require('./vue/main-window.vue'))
 Vue.component('activity-list', require('./vue/main-window/activity-list.vue'))
-Vue.component('projects-dropdown', require('./vue/main-window/projects-dropdown.vue'))
 Vue.component('activity-input', require('./vue/main-window/activity-input.vue'))
 Vue.component('edit-activity', require('./vue/main-window/edit-activity.vue'))
 

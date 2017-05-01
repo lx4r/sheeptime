@@ -3,7 +3,7 @@
         <div class="row">
             <h1 id="timer">{{secondsToTime(currentSeconds)}}</h1>
         </div>
-        <div class="row" v-if="pl.length > 0">
+        <div class="row">
             <form>
                 <div class="col-md-4 col-sm-12 col-xs-12 col-md-offset-2">
                     <input type="text" class="form-control" id="activityName" placeholder="activity" v-model="activityName">
@@ -27,9 +27,9 @@
 
         <div class="row" id="buttonRow">
             <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3">
-            <span v-if="pl.length > 0">
-                <button class="btn btn-success" v-if="stopwatchRunning == false" v-on:click="startstop()">Start</button>
-                <button class="btn btn-danger" v-else v-on:click="startstop()">Stop</button>
+            <span>
+                <button class="btn btn-success" v-show="stopwatchRunning == false" v-on:click="startstop()">Start</button>
+                <button class="btn btn-danger" v-show="stopwatchRunning" v-on:click="startstop()">Stop</button>
             </span>
                 <button class="btn btn-primary" id="projectsButton" v-on:click="openProjects()">Projects</button>
                 <button type="button" class="btn btn-default" v-on:click="openSettings()">
@@ -115,7 +115,8 @@
         that.bus.$on('continue-activity', function (activity) {
           if (!that.stopwatchRunning) {
             that.activityName = activity[1].name
-            that
+            that.activityProjectID = activity[1].projectID
+            that.startstop()
           }
         })
       })(this)
