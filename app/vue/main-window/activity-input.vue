@@ -9,14 +9,19 @@
                     <input type="text" class="form-control" id="activityName" placeholder="activity" v-model="activityName">
                 </div>
                 <div class="col-md-4 col-sm-12 col-xs-12">
-                    <projects-dropdown :pl="pl"></projects-dropdown>
+                    <select class="form-control" id="projectsDropdownActivityInput" v-model="activityProjectID" @change="updateProjectWarning()">
+                        <option disabled value="-1">Please select a project</option>
+                        <option v-for="project in pl" :value="project[0]">
+                            {{project[1].name}}
+                        </option>
+                    </select>
                 </div>
             </form>
         </div>
 
-        <div class="row" v-else>
+        <div class="row" v-show="showProjectWarning">
             <div class="col-md-8 col-md-offset-2">
-                <div class="alert alert-danger" role="alert">Please add a project before tracking activities</div>
+                <div class="alert alert-danger" role="alert">Please create and select a project before tracking activities</div>
             </div>
         </div>
 
@@ -45,6 +50,8 @@
     stopwatchRunning: false,
     currentSeconds: 0,
     activityName: "",
+    activityProjectID: -1,
+    showProjectWarning: false
   }
   let intervalID
   let startTime
@@ -61,23 +68,27 @@
           ipcRenderer.send('sheeptime:stopwatch:stopped')
 
           // Create the new activity
-          // TODO: Use Vue for this
-          let activityProjectID = parseInt(getElementByID('projectsDropdown').value)
           let endTime = formatTime.JSTimstampToUNIXTimestamp(Date.now())
 
-          let addedActivity = activityModel.createActivity(data.activityName, data.currentSeconds, activityProjectID, startTime, endTime)
+          let addedActivity = activityModel.createActivity(data.activityName, data.currentSeconds, data.activityProjectID, startTime, endTime)
           ipcRenderer.send('sheeptime:activity:add', addedActivity)
 
           data.activityName = ""
           data.currentSeconds = 0
           // stopwatch is not running -> button acts as start button
         } else {
-          startTime = formatTime.JSTimstampToUNIXTimestamp(Date.now())
-          data.stopwatchRunning = true
-          intervalID = setInterval(function () {
-            data.currentSeconds++
-          }, 1000)
-          ipcRenderer.send('sheeptime:stopwatch:started')
+          if (this.activityProjectID === -1){
+            // show the warning and don't start the stopwatch if no project has been selected
+            this.showProjectWarning = true
+          } else {
+            this.showProjectWarning = false
+            startTime = formatTime.JSTimstampToUNIXTimestamp(Date.now())
+            data.stopwatchRunning = true
+            intervalID = setInterval(function () {
+              data.currentSeconds++
+            }, 1000)
+            ipcRenderer.send('sheeptime:stopwatch:started')
+          }
         }
       },
       openProjects: function () {
@@ -89,15 +100,25 @@
       secondsToTime: function (seconds) {
         return formatTime.secondsToTimeString(seconds)
       },
+      updateProjectWarning: function () {
+        // remove project warning if a project is selected
+        if (this.showProjectWarning === true && this.activityProjectID !== -1){
+          this.showProjectWarning = false
+        }
+      }
     },
     data () {
       return data
     },
     mounted() {
-      // in component B's created hook
-      this.bus.$on('continue-activity', function (activity) {
-        console.log(activity)
-      })
+      (function (that){
+        that.bus.$on('continue-activity', function (activity) {
+          if (!that.stopwatchRunning) {
+            that.activityName = activity[1].name
+            that
+          }
+        })
+      })(this)
     },
   }
 </script>
