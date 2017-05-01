@@ -36,62 +36,68 @@
 </template>
 
 <script>
-    const ipcRenderer = require('electron').ipcRenderer
-    const formatTime = require('./../../formatTime')
-    const getElementByID = require('./../../getElementByID')
-    const activityModel = require('./../../storage/activityModel')
+  const ipcRenderer = require('electron').ipcRenderer
+  const formatTime = require('./../../formatTime')
+  const getElementByID = require('./../../getElementByID')
+  const activityModel = require('./../../storage/activityModel')
 
-    let data = {
-        stopwatchRunning: false,
-        currentSeconds: 0,
-        activityName: "",
-    }
-    let intervalID
-    let startTime
+  let data = {
+    stopwatchRunning: false,
+    currentSeconds: 0,
+    activityName: "",
+  }
+  let intervalID
+  let startTime
 
 
-    export default {
-        props: ['pl'],
-        methods: {
-            startstop: function () {
-                // stopwatch is running -> button acts as stop button
-                if (data.stopwatchRunning === true){
-                    clearInterval(intervalID)
-                    data.stopwatchRunning = false
-                    ipcRenderer.send('sheeptime:stopwatch:stopped')
+  export default {
+    props: ['pl', 'bus'],
+    methods: {
+      startstop: function () {
+        // stopwatch is running -> button acts as stop button
+        if (data.stopwatchRunning === true){
+          clearInterval(intervalID)
+          data.stopwatchRunning = false
+          ipcRenderer.send('sheeptime:stopwatch:stopped')
 
-                    // Create the new activity
-                    // TODO: Use Vue for this
-                    let activityProjectID = parseInt(getElementByID('projectsDropdown').value)
-                    let endTime = formatTime.JSTimstampToUNIXTimestamp(Date.now())
+          // Create the new activity
+          // TODO: Use Vue for this
+          let activityProjectID = parseInt(getElementByID('projectsDropdown').value)
+          let endTime = formatTime.JSTimstampToUNIXTimestamp(Date.now())
 
-                    let addedActivity = activityModel.createActivity(data.activityName, data.currentSeconds, activityProjectID, startTime, endTime)
-                    ipcRenderer.send('sheeptime:activity:add', addedActivity)
+          let addedActivity = activityModel.createActivity(data.activityName, data.currentSeconds, activityProjectID, startTime, endTime)
+          ipcRenderer.send('sheeptime:activity:add', addedActivity)
 
-                    data.activityName = ""
-                    data.currentSeconds = 0
-                    // stopwatch is not running -> button acts as start button
-                } else {
-                    startTime = formatTime.JSTimstampToUNIXTimestamp(Date.now())
-                    data.stopwatchRunning = true
-                    intervalID = setInterval(function () {
-                        data.currentSeconds++
-                    }, 1000)
-                    ipcRenderer.send('sheeptime:stopwatch:started')
-                }
-            },
-            openProjects: function () {
-                ipcRenderer.send('sheeptime:projects:open')
-            },
-            openSettings: function () {
-                ipcRenderer.send('sheeptime:settings:open')
-            },
-            secondsToTime: function (seconds) {
-                return formatTime.secondsToTimeString(seconds)
-            },
-        },
-        data () {
-            return data
+          data.activityName = ""
+          data.currentSeconds = 0
+          // stopwatch is not running -> button acts as start button
+        } else {
+          startTime = formatTime.JSTimstampToUNIXTimestamp(Date.now())
+          data.stopwatchRunning = true
+          intervalID = setInterval(function () {
+            data.currentSeconds++
+          }, 1000)
+          ipcRenderer.send('sheeptime:stopwatch:started')
         }
-    }
+      },
+      openProjects: function () {
+        ipcRenderer.send('sheeptime:projects:open')
+      },
+      openSettings: function () {
+        ipcRenderer.send('sheeptime:settings:open')
+      },
+      secondsToTime: function (seconds) {
+        return formatTime.secondsToTimeString(seconds)
+      },
+    },
+    data () {
+      return data
+    },
+    mounted() {
+      // in component B's created hook
+      this.bus.$on('continue-activity', function (activity) {
+        console.log(activity)
+      })
+    },
+  }
 </script>
