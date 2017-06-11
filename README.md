@@ -12,10 +12,6 @@
 
 SheepTime is not stable at all right now. Be prepared to encounter bugs when you use it.
 
-## Screenshots
-
-can be found on [the project website](http://sheeptime.l3r.de)
-
 ## Features
 
 - tracking of activities per project you work on
