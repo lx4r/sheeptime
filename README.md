@@ -1,5 +1,5 @@
 <div align='center'>
-  <img width='500px' src='http://files.l3r.de/SheepTime_Banner.png'>
+  <img width='500px' src='logo.png'>
 </div>
 
 <p align='center'>
